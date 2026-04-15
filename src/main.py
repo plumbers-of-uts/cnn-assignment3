@@ -1,7 +1,11 @@
+from __future__ import annotations
+
+from initial_experiments import main as run_initial_experiments
+
+
 def main() -> None:
-    """Serve as the main entry point for the application."""
-    # Ignore T20 rule (print statement prohibition)
-    print("Hello from starter!")  # noqa: T201
+    """CLI entrypoint that delegates to initial experiments."""
+    run_initial_experiments()
 
 
 if __name__ == "__main__":
