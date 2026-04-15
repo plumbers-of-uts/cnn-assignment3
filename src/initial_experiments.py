@@ -30,8 +30,8 @@ OPTIMIZER = "MuSGD"
 
 # Checkpoint behavior
 # When enabled, training attempts to continue from RESUME_CHECKPOINT_PATH.
-# Keep this False for clean runs from WEIGHTS_PATH.
-RESUME_TRAINING = False
+# Keep this True to automatically recover from interrupted runs.
+RESUME_TRAINING = True
 RESUME_CHECKPOINT_PATH = "runs/detect/train/weights/last.pt"
 
 # Long-tail imbalance controls
@@ -150,10 +150,35 @@ def resolve_data_yaml(data_yaml: str) -> Path:
     return path
 
 
+def resolve_resume_checkpoint_path(explicit_checkpoint_path: str) -> Path | None:
+    """
+    Resolve a usable resume checkpoint path.
+
+    Resolution order:
+    1) Explicit path in config, when it exists.
+    2) Most recently modified `runs/detect/*/weights/last.pt`.
+    3) None when no candidate exists.
+    """
+    explicit_path = Path(explicit_checkpoint_path).resolve()
+    if explicit_path.exists():
+        return explicit_path
+
+    runs_root = Path("runs/detect").resolve()
+    if not runs_root.exists():
+        return None
+
+    candidates = sorted(
+        runs_root.glob("*/weights/last.pt"),
+        key=lambda candidate: candidate.stat().st_mtime,
+        reverse=True,
+    )
+    return candidates[0] if candidates else None
+
+
 def load_model(
     weights: str,
     resume_training: bool = False,
-    resume_checkpoint_path: str = "",
+    resume_checkpoint_path: Path | None = None,
 ) -> Any:
     """
     Load YOLO26 model from Ultralytics in Python runtime.
@@ -165,12 +190,9 @@ def load_model(
     # If resume mode is enabled, load the checkpoint artifact directly.
     # Otherwise use the baseline pretrained weights.
     if resume_training:
-        checkpoint = Path(resume_checkpoint_path).resolve()
-        if not checkpoint.exists():
-            raise FileNotFoundError(
-                f"Resume checkpoint does not exist: {checkpoint}. "
-                "Set RESUME_TRAINING=False or provide a valid checkpoint path.",
-            )
+        checkpoint = resume_checkpoint_path
+        if checkpoint is None or not checkpoint.exists():
+            raise FileNotFoundError("Resume mode enabled but no valid checkpoint was resolved.")
         LOGGER.info("Loading model from checkpoint: %s", checkpoint)
         return YOLO(str(checkpoint))
 
@@ -565,12 +587,25 @@ def main() -> None:
             max_samples=PT_SANITY_MAX_SAMPLES,
         )
 
+    resume_checkpoint: Path | None = None
+    should_resume = RESUME_TRAINING
+    if RESUME_TRAINING:
+        resume_checkpoint = resolve_resume_checkpoint_path(RESUME_CHECKPOINT_PATH)
+        if resume_checkpoint is None:
+            should_resume = False
+            LOGGER.warning(
+                "RESUME_TRAINING=True but no last.pt checkpoint was found. "
+                "Falling back to a fresh run from baseline weights.",
+            )
+        else:
+            LOGGER.info("Resume checkpoint resolved: %s", resume_checkpoint)
+
     # Phase 2: model init
     LOGGER.info("Phase 2 - YOLO26 model initialization")
     model = load_model(
         WEIGHTS_PATH,
-        resume_training=RESUME_TRAINING,
-        resume_checkpoint_path=RESUME_CHECKPOINT_PATH,
+        resume_training=should_resume,
+        resume_checkpoint_path=resume_checkpoint,
     )
 
     # Phase 3: training
@@ -597,7 +632,7 @@ def main() -> None:
         device=train_device,
         optimizer=OPTIMIZER,
         class_importance_vector=class_importance_vector,
-        resume_training=RESUME_TRAINING,
+        resume_training=should_resume,
     )
 
     # Phase 4: validation + TensorRT export/inference
