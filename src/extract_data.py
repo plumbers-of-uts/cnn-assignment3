@@ -1,161 +1,204 @@
-"""
-Data Extraction Script
+"""Data extraction script.
 
-This script extracts images and labels from a YOLO-format dataset
-and saves them as .pt files into separate folders:
-
-- feature/ : image tensors
-- label/   : label tensors
-
-Image format: Tensor [C, H, W] (RGB, typically 640x640)
-Label format: Tensor [N, 5] (class, xc, yc, w, h)
+Extracts images and YOLO labels from a dataset and saves them as `.pt` tensors:
+- `feature/`: image tensors `[C, H, W]`
+- `label/`: label tensors `[N, 5]` (`class, xc, yc, w, h`)
 """
 
-import os
+import logging
+from argparse import ArgumentParser, Namespace
+from pathlib import Path
+from typing import cast
+
 import torch
-from torchvision import transforms
 from PIL import Image
+from torchvision import transforms
 
-# ─── Path Configuration ───────────────────────────────────────────────
-BASE_DIR    = r"F:\DNN_A3\D3\cnn-assignment3\src\data\sewage-yolo26\train"
-IMG_DIR     = os.path.join(BASE_DIR, "images")
-LABEL_DIR   = os.path.join(BASE_DIR, "labels")
-FEATURE_DIR = os.path.join(BASE_DIR, "feature")
-LABEL_OUT   = os.path.join(BASE_DIR, "label")
+DEFAULT_BASE_DIR = Path(__file__).resolve().parent / "data" / "sewage-yolo26" / "train"
+LOGGER = logging.getLogger(__name__)
 
-os.makedirs(FEATURE_DIR, exist_ok=True)
-os.makedirs(LABEL_OUT,   exist_ok=True)
-
-# ─── Image Preprocessing ──────────────────────────────────────────────
-# Converts PIL image → Float Tensor [C, H, W] normalized to [0,1]
+# Converts PIL image -> Float Tensor [C, H, W] normalized to [0,1]
 to_tensor = transforms.ToTensor()
 
 
-def load_image(img_path: str) -> torch.Tensor:
-    """
-    Load an image and convert it to an RGB tensor.
+def parse_args() -> Namespace:
+    """Parse command line arguments for dataset extraction."""
+    parser = ArgumentParser(description="Extract YOLO images/labels to .pt tensors.")
+    parser.add_argument(
+        "--base-dir",
+        type=Path,
+        default=DEFAULT_BASE_DIR,
+        help="Dataset split root directory (contains images/ and labels/).",
+    )
+    parser.add_argument(
+        "--image-ext",
+        type=str,
+        default=".jpg",
+        help="Image extension to process (e.g. .jpg, .png).",
+    )
+    parser.add_argument(
+        "--inspect-count",
+        type=int,
+        default=3,
+        help="How many extracted samples to inspect after extraction.",
+    )
+    parser.add_argument(
+        "--skip-inspect",
+        action="store_true",
+        help="Skip sample inspection output after extraction.",
+    )
+    return parser.parse_args()
 
-    Returns:
-        Tensor of shape [3, H, W], dtype=float32, values in [0.0, 1.0]
-    """
-    img = Image.open(img_path).convert("RGB")
-    return to_tensor(img)
+
+def load_image(img_path: Path) -> torch.Tensor:
+    """Load image and return RGB tensor `[3, H, W]` in `[0.0, 1.0]`."""
+    with Image.open(img_path) as img:
+        return cast("torch.Tensor", to_tensor(img.convert("RGB")))
 
 
-def load_label(txt_path: str) -> torch.Tensor:
-    """
-    Load YOLO-format label file.
-
-    Each line: class xc yc w h
-
-    Returns:
-        Tensor of shape [N, 5], dtype=float32
-        If file is empty or missing, returns an empty tensor [0, 5]
-    """
-    rows = []
-    if os.path.exists(txt_path):
-        with open(txt_path, "r") as f:
-            for line in f:
-                line = line.strip()
-                if line:
-                    vals = list(map(float, line.split()))
-                    rows.append(vals)
+def load_label(txt_path: Path) -> torch.Tensor:
+    """Load YOLO label file and return tensor `[N, 5]`; empty/missing -> `[0, 5]`."""
+    rows: list[list[float]] = []
+    if txt_path.exists():
+        with txt_path.open("r", encoding="utf-8") as label_file:
+            for line in label_file:
+                row = line.strip()
+                if row:
+                    rows.append(list(map(float, row.split())))
 
     if rows:
         return torch.tensor(rows, dtype=torch.float32)
-    else:
-        return torch.zeros((0, 5), dtype=torch.float32)
+    return torch.zeros((0, 5), dtype=torch.float32)
 
 
-# ─── Main Extraction Logic ────────────────────────────────────────────
-def extract_all():
+def extract_all(
+    *,
+    img_dir: Path,
+    label_dir: Path,
+    feature_dir: Path,
+    label_out: Path,
+    image_ext: str,
+) -> None:
+    """Extract all matching images and labels and store them as tensors."""
+    normalized_ext = image_ext.lower()
     img_files = sorted(
-        [f for f in os.listdir(IMG_DIR) if f.lower().endswith(".jpg")]
+        [file_path for file_path in img_dir.iterdir() if file_path.suffix.lower() == normalized_ext]
     )
 
-    print(f"Found {len(img_files)} images. Starting extraction...\n")
+    LOGGER.info("Found %d images. Starting extraction...", len(img_files))
+    LOGGER.info("")
 
-    for img_name in img_files:
-        stem = os.path.splitext(img_name)[0]
+    for img_path in img_files:
+        stem = img_path.stem
+        label_path = label_dir / f"{stem}.txt"
+        feat_out = feature_dir / f"{stem}.pt"
+        lbl_out = label_out / f"{stem}.pt"
 
-        img_path   = os.path.join(IMG_DIR,   img_name)
-        label_path = os.path.join(LABEL_DIR, stem + ".txt")
-        feat_out   = os.path.join(FEATURE_DIR, stem + ".pt")
-        lbl_out    = os.path.join(LABEL_OUT,   stem + ".pt")
-
-        # Extract image tensor
         feature_tensor = load_image(img_path)
         torch.save(feature_tensor, feat_out)
 
-        # Extract label tensor
         label_tensor = load_label(label_path)
         torch.save(label_tensor, lbl_out)
 
-    print("Extraction completed!")
-    print(f"  feature/ -> {FEATURE_DIR}")
-    print(f"  label/   -> {LABEL_OUT}\n")
+    LOGGER.info("Extraction completed!")
+    LOGGER.info("  feature/ -> %s", feature_dir)
+    LOGGER.info("  label/   -> %s", label_out)
+    LOGGER.info("")
 
 
-# ─── Test: Inspect First Three Samples ────────────────────────────────
-def test_first_three():
-    feat_files = sorted(
-        [f for f in os.listdir(FEATURE_DIR) if f.endswith(".pt")]
-    )[:3]
+def inspect_samples(*, feature_dir: Path, label_out: Path, inspect_count: int) -> None:
+    """Print a quick preview of extracted tensors."""
+    if inspect_count <= 0:
+        return
 
-    print("=" * 60)
-    print("Test: Inspect first three samples (INPUT and LABEL)")
-    print("=" * 60)
+    feat_files = sorted(feature_dir.glob("*.pt"))[:inspect_count]
 
-    for i, fname in enumerate(feat_files, 1):
-        stem = os.path.splitext(fname)[0]
+    LOGGER.info("=" * 60)
+    LOGGER.info("Test: Inspect first %d samples (INPUT and LABEL)", len(feat_files))
+    LOGGER.info("=" * 60)
 
-        feat  = torch.load(os.path.join(FEATURE_DIR, fname))
-        label = torch.load(os.path.join(LABEL_OUT,   stem + ".pt"))
+    for i, feat_path in enumerate(feat_files, 1):
+        stem = feat_path.stem
+        label_path = label_out / f"{stem}.pt"
 
-        C, H, W = feat.shape
-        N       = label.shape[0]
+        feat = torch.load(feat_path, map_location="cpu")
+        label = torch.load(label_path, map_location="cpu")
 
-        # ── INPUT Preview ─────────────────────────────────────────
-        # Display first 3 pixels from top-left corner
-        input_preview = []
-        for row in range(min(1, H)):
-            for col in range(min(3, W)):
+        _, height, width = feat.shape
+        num_boxes = label.shape[0]
+
+        input_preview: list[str] = []
+        for row in range(min(1, height)):
+            for col in range(min(3, width)):
                 r = feat[0, row, col].item()
                 g = feat[1, row, col].item()
                 b = feat[2, row, col].item()
-                input_preview.append(
-                    f"[RGB=({r:.3f},{g:.3f},{b:.3f}), W={col}, H={row}]"
-                )
+                input_preview.append(f"[RGB=({r:.3f},{g:.3f},{b:.3f}), W={col}, H={row}]")
 
-        # ── LABEL Preview ─────────────────────────────────────────
-        label_strs = []
-        for j in range(N):
-            cls, xc, yc, w, h = label[j].tolist()
+        label_strs: list[str] = []
+        for j in range(num_boxes):
+            cls, xc, yc, box_w, box_h = label[j].tolist()
             label_strs.append(
-                f"[class={int(cls)}, xc={xc:.4f}, yc={yc:.4f}, w={w:.4f}, h={h:.4f}]"
+                f"[class={int(cls)}, xc={xc:.4f}, yc={yc:.4f}, w={box_w:.4f}, h={box_h:.4f}]"
             )
 
-        print(f"\n── Sample {i}: {stem} ──")
-        print(f"  Tensor shape: feature={list(feat.shape)} (C×H×W)")
-        print(f"  dtype:        {feat.dtype}")
-        print(f"  Pixel range:  [{feat.min():.4f}, {feat.max():.4f}]")
-
-        print(f"\n  INPUT (top-left 3 pixels preview):")
-        for p in input_preview:
-            print(f"    {p}")
-        print(f"  … total pixels: {W * H}")
-
-        print(f"\n  LABEL ({N} bounding boxes):")
+        LOGGER.info("")
+        LOGGER.info("-- Sample %d: %s --", i, stem)
+        LOGGER.info("  Tensor shape: feature=%s (CxHxW)", list(feat.shape))
+        LOGGER.info("  dtype:        %s", feat.dtype)
+        LOGGER.info("  Pixel range:  [%.4f, %.4f]", feat.min(), feat.max())
+        LOGGER.info("")
+        LOGGER.info("  INPUT (top-left 3 pixels preview):")
+        for preview in input_preview:
+            LOGGER.info("    %s", preview)
+        LOGGER.info("  ... total pixels: %d", width * height)
+        LOGGER.info("")
+        LOGGER.info("  LABEL (%d bounding boxes):", num_boxes)
         if label_strs:
-            for ls in label_strs:
-                print(f"    {ls}")
+            for label_str in label_strs:
+                LOGGER.info("    %s", label_str)
         else:
-            print("    (no objects)")
+            LOGGER.info("    (no objects)")
 
-    print("\n" + "=" * 60)
+    LOGGER.info("")
+    LOGGER.info("%s", "=" * 60)
 
 
-# ─── Entry Point ──────────────────────────────────────────────────────
+def main() -> None:
+    """Script entry point."""
+    logging.basicConfig(level=logging.INFO, format="%(message)s")
+    args = parse_args()
+    base_dir = args.base_dir.resolve()
+
+    img_dir = base_dir / "images"
+    label_dir = base_dir / "labels"
+    feature_dir = base_dir / "feature"
+    label_out = base_dir / "label"
+
+    if not img_dir.exists():
+        msg = f"Image directory does not exist: {img_dir}"
+        raise FileNotFoundError(msg)
+    if not label_dir.exists():
+        msg = f"Label directory does not exist: {label_dir}"
+        raise FileNotFoundError(msg)
+
+    feature_dir.mkdir(parents=True, exist_ok=True)
+    label_out.mkdir(parents=True, exist_ok=True)
+
+    extract_all(
+        img_dir=img_dir,
+        label_dir=label_dir,
+        feature_dir=feature_dir,
+        label_out=label_out,
+        image_ext=args.image_ext,
+    )
+    if not args.skip_inspect:
+        inspect_samples(
+            feature_dir=feature_dir,
+            label_out=label_out,
+            inspect_count=args.inspect_count,
+        )
+
+
 if __name__ == "__main__":
-    extract_all()
-    test_first_three()
+    main()

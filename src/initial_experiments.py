@@ -19,6 +19,8 @@ WEIGHTS_PATH = "src/model/yolo26m.pt"
 EPOCHS = 200
 IMAGE_SIZE = 640
 BATCH_SIZE = 32
+# Lower batch size for CPU to avoid excessive RAM pressure and long step times.
+CPU_BATCH_SIZE = 8
 GPU_INDEX = 0
 OPTIMIZER = "MuSGD"
 
@@ -428,6 +430,13 @@ def main() -> None:
     LOGGER.info("Phase 3 - training")
     # Ultralytics accepts either integer GPU index or "cpu".
     train_device: str | int = GPU_INDEX if device_type == "cuda" else "cpu"
+    train_batch_size = BATCH_SIZE if device_type == "cuda" else CPU_BATCH_SIZE
+    if device_type != "cuda":
+        LOGGER.info(
+            "CPU mode detected: overriding batch size from %s to %s.",
+            BATCH_SIZE,
+            train_batch_size,
+        )
     class_importance_vector = build_class_importance_vector(
         data_yaml=data_yaml,
         class_importance_weights=CLASS_IMPORTANCE_WEIGHTS,
@@ -437,7 +446,7 @@ def main() -> None:
         data_yaml=data_yaml,
         imgsz=IMAGE_SIZE,
         epochs=EPOCHS,
-        batch=BATCH_SIZE,
+        batch=train_batch_size,
         device=train_device,
         optimizer=OPTIMIZER,
         class_importance_vector=class_importance_vector,

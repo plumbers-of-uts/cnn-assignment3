@@ -22,3 +22,11 @@ wheels/
 # Model checkpoints and large binary weights
 src/model/*.pt
 yolo26m.pt
+
+# Extracted tensor artifacts
+src/data/sewage-yolo26/**/feature/
+src/data/sewage-yolo26/**/label/
+src/data/sewage-yolo26/**/labels.cache
+
+# Training run artifacts
+runs/
