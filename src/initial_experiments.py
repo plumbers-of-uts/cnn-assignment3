@@ -117,7 +117,7 @@ def build_torch_augmentation() -> Any:
 
 
 def verify_environment(min_torch: tuple[int, int, int] = (1, 8, 0)) -> str:
-    """Verify local runtime and pick CUDA when available."""
+    """Verify local runtime and pick the best available accelerator."""
     import torch  # type: ignore[import-untyped]
 
     torch_version = _parse_version_tuple(torch.__version__)
@@ -129,13 +129,17 @@ def verify_environment(min_torch: tuple[int, int, int] = (1, 8, 0)) -> str:
         )
         raise RuntimeError(msg)
 
-    # Prefer CUDA automatically; caller decides final device argument format.
-    device_type = "cuda" if torch.cuda.is_available() else "cpu"
-    if device_type == "cuda":
+    # Prefer CUDA first, then Apple Metal (MPS), and finally CPU.
+    if torch.cuda.is_available():
+        device_type = "cuda"
         gpu_name = torch.cuda.get_device_name(0)
         vram_gb = torch.cuda.get_device_properties(0).total_memory / (1024**3)
         LOGGER.info("CUDA available: %s (VRAM %.1f GiB)", gpu_name, vram_gb)
+    elif torch.backends.mps.is_available():
+        device_type = "mps"
+        LOGGER.info("Apple Metal (MPS) detected: running on M1/M2 GPU backend.")
     else:
+        device_type = "cpu"
         LOGGER.warning("CUDA not detected: running in CPU mode.")
 
     return device_type
@@ -610,10 +614,10 @@ def main() -> None:
 
     # Phase 3: training
     LOGGER.info("Phase 3 - training")
-    # Ultralytics accepts either integer GPU index or "cpu".
-    train_device: str | int = GPU_INDEX if device_type == "cuda" else "cpu"
-    train_batch_size = BATCH_SIZE if device_type == "cuda" else CPU_BATCH_SIZE
-    if device_type != "cuda":
+    # Ultralytics accepts integer GPU index, "mps", or "cpu".
+    train_device: str | int = GPU_INDEX if device_type == "cuda" else device_type
+    train_batch_size = BATCH_SIZE if device_type in {"cuda", "mps"} else CPU_BATCH_SIZE
+    if device_type == "cpu":
         LOGGER.info(
             "CPU mode detected: overriding batch size from %s to %s.",
             BATCH_SIZE,
