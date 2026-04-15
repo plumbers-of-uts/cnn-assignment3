@@ -2,8 +2,12 @@ from __future__ import annotations
 
 import logging
 import re
+from collections import Counter
+from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
+
+import torch
 
 # Central logger for the whole experiment pipeline so all phases share one format.
 LOGGER = logging.getLogger("yolo26-experiment")
@@ -70,6 +74,15 @@ EXPORT_DYNAMIC = True
 EXPORT_HALF = False
 EXPORT_INT8 = True
 TEST_IMAGE_PATH = ""  # Leave empty to skip TensorRT inference smoke test.
+
+# .pt dataset sanity-check behavior (for outputs from extract_data.py)
+ENABLE_PT_SANITY_CHECK = True
+PT_SANITY_SPLIT = "train"
+# Use 0 to scan all files in the split.
+PT_SANITY_MAX_SAMPLES = 200
+PT_LABEL_NDIM = 2
+PT_LABEL_COLUMNS = 5
+PT_TOP_CLASS_COUNT = 5
 
 
 def _parse_version_tuple(version_text: str) -> tuple[int, int, int]:
@@ -407,6 +420,134 @@ def run_trt_inference(engine_path: str, test_image: str, device: str) -> Any:
     return trt_model.predict(test_image, device=device)
 
 
+@dataclass
+class PtBBoxStats:
+    """Aggregate bbox stats for extracted label tensors."""
+
+    total_boxes: int = 0
+    width_sum: float = 0.0
+    height_sum: float = 0.0
+    width_min: float | None = None
+    width_max: float | None = None
+    height_min: float | None = None
+    height_max: float | None = None
+
+    def update(self, label_tensor: torch.Tensor, class_counter: Counter[int]) -> None:
+        """Update class and bbox summary stats from one valid label tensor."""
+        boxes_in_file = int(label_tensor.shape[0])
+        self.total_boxes += boxes_in_file
+
+        for cls_value in label_tensor[:, 0].tolist():
+            class_counter[int(cls_value)] += 1
+
+        for box_w, box_h in label_tensor[:, 3:5].tolist():
+            box_w_float = float(box_w)
+            box_h_float = float(box_h)
+
+            self.width_sum += box_w_float
+            self.height_sum += box_h_float
+
+            self.width_min = (
+                box_w_float if self.width_min is None else min(self.width_min, box_w_float)
+            )
+            self.width_max = (
+                box_w_float if self.width_max is None else max(self.width_max, box_w_float)
+            )
+            self.height_min = (
+                box_h_float if self.height_min is None else min(self.height_min, box_h_float)
+            )
+            self.height_max = (
+                box_h_float if self.height_max is None else max(self.height_max, box_h_float)
+            )
+
+
+def _resolve_pt_dirs(data_yaml: Path, split: str) -> tuple[Path, Path] | None:
+    """Resolve feature/label directories for extracted pt tensors."""
+    split_root = data_yaml.parent / split
+    feature_dir = split_root / "feature"
+    label_dir = split_root / "label"
+
+    if not label_dir.exists():
+        LOGGER.warning("PT sanity-check skipped: label directory not found: %s", label_dir)
+        return None
+    if not feature_dir.exists():
+        LOGGER.warning("PT sanity-check skipped: feature directory not found: %s", feature_dir)
+        return None
+    return feature_dir, label_dir
+
+
+def run_pt_sanity_check(data_yaml: Path, split: str, max_samples: int) -> None:
+    """Inspect extracted `.pt` labels and log dataset health before training."""
+    resolved_dirs = _resolve_pt_dirs(data_yaml=data_yaml, split=split)
+    if resolved_dirs is None:
+        return
+
+    feature_dir, label_dir = resolved_dirs
+
+    label_files = sorted(label_dir.glob("*.pt"))
+    if not label_files:
+        LOGGER.warning("PT sanity-check skipped: no label .pt files found in %s", label_dir)
+        return
+
+    if max_samples > 0:
+        label_files = label_files[:max_samples]
+
+    total_files = len(label_files)
+    malformed_count = 0
+    empty_label_count = 0
+    missing_feature_count = 0
+    bbox_stats = PtBBoxStats()
+    class_counter: Counter[int] = Counter()
+
+    for label_path in label_files:
+        feature_path = feature_dir / label_path.name
+        if not feature_path.exists():
+            missing_feature_count += 1
+
+        label_tensor = torch.load(label_path, map_location="cpu")
+        if label_tensor.ndim != PT_LABEL_NDIM or label_tensor.shape[1] != PT_LABEL_COLUMNS:
+            malformed_count += 1
+            continue
+
+        if int(label_tensor.shape[0]) == 0:
+            empty_label_count += 1
+            continue
+
+        bbox_stats.update(label_tensor=label_tensor, class_counter=class_counter)
+
+    mean_boxes_per_file = bbox_stats.total_boxes / total_files if total_files else 0.0
+    mean_width = bbox_stats.width_sum / bbox_stats.total_boxes if bbox_stats.total_boxes else 0.0
+    mean_height = bbox_stats.height_sum / bbox_stats.total_boxes if bbox_stats.total_boxes else 0.0
+    top_classes = class_counter.most_common(PT_TOP_CLASS_COUNT)
+
+    LOGGER.info(
+        "PT sanity-check (%s) | files=%s | malformed=%s | empty_labels=%s | missing_features=%s",
+        split,
+        total_files,
+        malformed_count,
+        empty_label_count,
+        missing_feature_count,
+    )
+    LOGGER.info(
+        "PT sanity-check (%s) | total_boxes=%s | mean_boxes/file=%.2f | top_classes=%s",
+        split,
+        bbox_stats.total_boxes,
+        mean_boxes_per_file,
+        top_classes,
+    )
+    LOGGER.info(
+        "PT sanity-check (%s) | bbox_w(min/mean/max)=%.4f/%.4f/%.4f | "
+        "bbox_h(min/mean/max)=%.4f/%.4f/%.4f",
+        split,
+        bbox_stats.width_min if bbox_stats.width_min is not None else 0.0,
+        mean_width,
+        bbox_stats.width_max if bbox_stats.width_max is not None else 0.0,
+        bbox_stats.height_min if bbox_stats.height_min is not None else 0.0,
+        mean_height,
+        bbox_stats.height_max if bbox_stats.height_max is not None else 0.0,
+    )
+
+
 def main() -> None:
     """Run end-to-end YOLO26 local experiment pipeline."""
     logging.basicConfig(level=logging.INFO, format="%(asctime)s | %(levelname)s | %(message)s")
@@ -417,6 +558,12 @@ def main() -> None:
     data_yaml = resolve_data_yaml(DATA_YAML_PATH)
     # This call documents/validates the augmentation recipe used for custom datasets.
     _ = build_torch_augmentation()
+    if ENABLE_PT_SANITY_CHECK:
+        run_pt_sanity_check(
+            data_yaml=data_yaml,
+            split=PT_SANITY_SPLIT,
+            max_samples=PT_SANITY_MAX_SAMPLES,
+        )
 
     # Phase 2: model init
     LOGGER.info("Phase 2 - YOLO26 model initialization")
