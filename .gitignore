@@ -18,3 +18,7 @@ wheels/
 
 # OS
 .DS_Store
+
+# Model checkpoints and large binary weights
+src/model/*.pt
+yolo26m.pt

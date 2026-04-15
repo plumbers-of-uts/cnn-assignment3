@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import argparse
 import logging
 import re
 from pathlib import Path
@@ -8,6 +7,67 @@ from typing import Any
 
 # Central logger for the whole experiment pipeline so all phases share one format.
 LOGGER = logging.getLogger("yolo26-experiment")
+
+# ---------------------------------------------------------------------------
+# Experiment configuration (edit these constants instead of passing CLI args).
+# ---------------------------------------------------------------------------
+DATA_YAML_PATH = "src/data/sewage-yolo26/data.yaml"
+# Baseline pretrained checkpoint path used for transfer learning.
+WEIGHTS_PATH = "src/model/yolo26m.pt"
+
+# Training hyperparameters
+EPOCHS = 200
+IMAGE_SIZE = 640
+BATCH_SIZE = 32
+GPU_INDEX = 0
+OPTIMIZER = "MuSGD"
+
+# Checkpoint behavior
+# When enabled, training attempts to continue from RESUME_CHECKPOINT_PATH.
+# Keep this False for clean runs from WEIGHTS_PATH.
+RESUME_TRAINING = False
+RESUME_CHECKPOINT_PATH = "runs/detect/train/weights/last.pt"
+
+# Long-tail imbalance controls
+# Enable this to print explicit reminders about YOLO26 long-tail behaviors
+# (e.g., STAL/ProgLoss) during training startup.
+ENABLE_LONG_TAIL_LOGGING = True
+
+# Optional class importance weights for severe class imbalance.
+# Keep this mapping aligned with class names in data.yaml.
+# Example:
+# {
+#     "Buckling": 1.0,
+#     "Crack": 2.5,
+#     "Debris": 1.0,
+#     "Hole": 2.0,
+#     "Joint offset": 1.4,
+#     "Obstacle": 1.2,
+#     "Utility intrusion": 2.8,
+# }
+# Default class weighting for sewage long-tail imbalance.
+# Frequent/less-severe classes remain near 1.0, while rare/high-impact defects
+# get larger weights to improve recall during optimization.
+CLASS_IMPORTANCE_WEIGHTS: dict[str, float] | None = {
+    "Buckling": 1.8,
+    "Crack": 2.6,
+    "Debris": 1.0,
+    "Hole": 2.4,
+    "Joint offset": 1.7,
+    "Obstacle": 1.2,
+    "Utility intrusion": 2.8,
+}
+USE_CLASS_IMPORTANCE_WEIGHTS = True
+
+# Export and inference behavior
+SKIP_EXPORT = False
+TENSORRT_WORKSPACE_GIB = 4
+EXPORT_DYNAMIC = True
+# INT8 is enabled by default to maximize throughput and memory efficiency.
+# Keep FP16 off by default when INT8 is enabled to avoid mixed-intent config.
+EXPORT_HALF = False
+EXPORT_INT8 = True
+TEST_IMAGE_PATH = ""  # Leave empty to skip TensorRT inference smoke test.
 
 
 def _parse_version_tuple(version_text: str) -> tuple[int, int, int]:
@@ -75,7 +135,11 @@ def resolve_data_yaml(data_yaml: str) -> Path:
     return path
 
 
-def load_model(weights: str) -> Any:
+def load_model(
+    weights: str,
+    resume_training: bool = False,
+    resume_checkpoint_path: str = "",
+) -> Any:
     """
     Load YOLO26 model from Ultralytics in Python runtime.
 
@@ -83,8 +147,134 @@ def load_model(weights: str) -> Any:
     """
     from ultralytics import YOLO  # type: ignore[import-untyped]
 
+    # If resume mode is enabled, load the checkpoint artifact directly.
+    # Otherwise use the baseline pretrained weights.
+    if resume_training:
+        checkpoint = Path(resume_checkpoint_path).resolve()
+        if not checkpoint.exists():
+            raise FileNotFoundError(
+                f"Resume checkpoint does not exist: {checkpoint}. "
+                "Set RESUME_TRAINING=False or provide a valid checkpoint path.",
+            )
+        LOGGER.info("Loading model from checkpoint: %s", checkpoint)
+        return YOLO(str(checkpoint))
+
     # Ultralytics handles local file loading and remote asset download behavior.
+    LOGGER.info("Loading baseline weights: %s", weights)
     return YOLO(weights)
+
+
+def _extract_yaml_class_names(data_yaml: Path) -> list[str]:
+    """
+    Read class names from data.yaml.
+
+    This helper isolates yaml parsing so imbalance logic remains transparent.
+    """
+    import yaml  # type: ignore[import-untyped]
+
+    with data_yaml.open("r", encoding="utf-8") as file:
+        payload = yaml.safe_load(file) or {}
+
+    names = payload.get("names", [])
+    if isinstance(names, dict):
+        # Handle dict-form names: {0: "class_a", 1: "class_b", ...}
+        return [str(names[idx]) for idx in sorted(names)]
+    if isinstance(names, list):
+        return [str(name) for name in names]
+    return []
+
+
+def build_class_importance_vector(
+    data_yaml: Path,
+    class_importance_weights: dict[str, float] | None,
+) -> list[float] | None:
+    """
+    Build per-class weight vector aligned with data.yaml class order.
+
+    Returns None when weights are disabled or not provided.
+    """
+    if not USE_CLASS_IMPORTANCE_WEIGHTS or not class_importance_weights:
+        return None
+
+    class_names = _extract_yaml_class_names(data_yaml)
+    if not class_names:
+        LOGGER.warning(
+            "Could not resolve class names from data.yaml; class importance weights are skipped.",
+        )
+        return None
+
+    # Default to weight=1.0 for any class omitted by user config.
+    vector = [float(class_importance_weights.get(name, 1.0)) for name in class_names]
+    LOGGER.info("Class importance weights enabled: %s", dict(zip(class_names, vector, strict=False)))
+    return vector
+
+
+def _as_float(value: Any) -> float | None:
+    """Safely convert scalar-like values to float."""
+    if value is None:
+        return None
+    try:
+        if hasattr(value, "item"):
+            return float(value.item())
+        return float(value)
+    except (TypeError, ValueError):
+        return None
+
+
+def _best_f1_score(f1_values: Any) -> float | None:
+    """
+    Extract a single representative F1 score from Ultralytics outputs.
+
+    Ultralytics may expose class-wise arrays/tensors. For imbalance-heavy
+    datasets, the best F1 across confidence thresholds is often practical to log.
+    """
+    if f1_values is None:
+        return None
+
+    if hasattr(f1_values, "tolist"):
+        f1_values = f1_values.tolist()
+
+    if isinstance(f1_values, (list, tuple)):
+        stack = list(f1_values)
+        flattened: list[float] = []
+        while stack:
+            item = stack.pop()
+            if isinstance(item, (list, tuple)):
+                stack.extend(item)
+                continue
+            scalar = _as_float(item)
+            if scalar is not None:
+                flattened.append(scalar)
+        return max(flattened) if flattened else None
+
+    return _as_float(f1_values)
+
+
+def _format_metric(value: float | None) -> str:
+    """Format optional metric value for stable console logging."""
+    return f"{value:.4f}" if value is not None else "N/A"
+
+
+def log_domain_metrics(metrics: Any) -> None:
+    """
+    Log sewage-domain-friendly metrics in a compact, comparable format.
+
+    The goal is to track key detection quality metrics across runs:
+    - mAP@0.5
+    - mAP@0.5:0.95
+    - F1-score (best extracted value)
+    """
+    box_metrics = getattr(metrics, "box", None)
+    map50 = _as_float(getattr(box_metrics, "map50", None))
+    map50_95 = _as_float(getattr(box_metrics, "map", None))
+    f1_best = _best_f1_score(getattr(box_metrics, "f1", None))
+
+    LOGGER.info(
+        "Domain metrics | mAP@0.5=%s | mAP@0.5:0.95=%s | F1(best)=%s",
+        _format_metric(map50),
+        _format_metric(map50_95),
+        _format_metric(f1_best),
+    )
 
 
 def train_model(
@@ -95,6 +285,8 @@ def train_model(
     batch: int,
     device: str | int,
     optimizer: str = "MuSGD",
+    class_importance_vector: list[float] | None = None,
+    resume_training: bool = False,
 ) -> Any:
     """Run YOLO26 training with fallback for unsupported optimizer."""
     # The default settings are tuned for the requested 640 training setup and
@@ -107,6 +299,7 @@ def train_model(
         "device": device,
         "optimizer": optimizer,
         "plots": True,
+        "resume": resume_training,
         # Sewage-pipe-friendly augmentation/tuning (Ultralytics built-in)
         "hsv_v": 0.25,
         "hsv_s": 0.5,
@@ -114,12 +307,45 @@ def train_model(
         "mosaic": 0.8,
         "patience": 30,
     }
-    LOGGER.info("Training started: optimizer=%s, epochs=%s, batch=%s", optimizer, epochs, batch)
+    if class_importance_vector is not None:
+        # Some Ultralytics versions may not expose class-weight args publicly.
+        # We still try to pass them, then gracefully fallback if unsupported.
+        train_kwargs["cls_weights"] = class_importance_vector
+
+    if ENABLE_LONG_TAIL_LOGGING:
+        LOGGER.info(
+            "Long-tail strategy check: YOLO26 relies on built-in STAL/ProgLoss behavior; "
+            "custom CIW is %s.",
+            "enabled" if class_importance_vector is not None else "disabled",
+        )
+
+    LOGGER.info(
+        "Training started: optimizer=%s, epochs=%s, batch=%s, resume=%s",
+        optimizer,
+        epochs,
+        batch,
+        resume_training,
+    )
 
     # Try YOLO26-specific optimizer first when the runtime supports it.
+    active_kwargs = dict(train_kwargs)
     try:
-        return model.train(**train_kwargs)
+        return model.train(**active_kwargs)
     except Exception as exc:
+        # If class-importance argument is rejected by this runtime, retry
+        # without it to keep experiments runnable.
+        if "cls_weights" in active_kwargs:
+            LOGGER.warning(
+                "Class importance weights were not accepted by the current trainer (%s). "
+                "Retrying without cls_weights.",
+                exc,
+            )
+            active_kwargs.pop("cls_weights", None)
+            try:
+                return model.train(**active_kwargs)
+            except Exception as retry_exc:
+                exc = retry_exc
+
         if optimizer != "MuSGD":
             raise
 
@@ -128,8 +354,8 @@ def train_model(
             exc,
         )
         # Fallback keeps the run executable on environments where MuSGD is absent.
-        train_kwargs["optimizer"] = "SGD"
-        return model.train(**train_kwargs)
+        active_kwargs["optimizer"] = "SGD"
+        return model.train(**active_kwargs)
 
 
 def validate_model(model: Any, data_yaml: Path, imgsz: int, device: str | int) -> Any:
@@ -142,16 +368,29 @@ def validate_model(model: Any, data_yaml: Path, imgsz: int, device: str | int) -
 def export_tensorrt(
     model: Any,
     half: bool = True,
+    int8: bool = False,
     dynamic: bool = True,
     workspace: int = 4,
 ) -> str:
     """Export model to TensorRT engine for high-speed local deployment."""
-    # `half=True` generally gives the best latency/accuracy balance on RTX GPUs.
-    LOGGER.info("TensorRT export started: half=%s, dynamic=%s, workspace=%sGiB", half, dynamic, workspace)
+    # INT8 and FP16 are both quantization modes. If both are enabled, prefer INT8
+    # and disable FP16 explicitly to avoid ambiguous export intent.
+    if int8 and half:
+        LOGGER.warning("Both INT8 and FP16 were enabled. Prioritizing INT8 and disabling FP16.")
+        half = False
+
+    LOGGER.info(
+        "TensorRT export started: half=%s, int8=%s, dynamic=%s, workspace=%sGiB",
+        half,
+        int8,
+        dynamic,
+        workspace,
+    )
     export_result = model.export(
         format="engine",
         dynamic=dynamic,
         half=half,
+        int8=int8,
         workspace=workspace,
     )
     return str(export_result)
@@ -166,76 +405,75 @@ def run_trt_inference(engine_path: str, test_image: str, device: str) -> Any:
     return trt_model.predict(test_image, device=device)
 
 
-def build_arg_parser() -> argparse.ArgumentParser:
-    # Keep all runtime knobs in CLI flags so experiments are reproducible.
-    parser = argparse.ArgumentParser(description="YOLO26 sewage defect experiment pipeline")
-    parser.add_argument(
-        "--data",
-        default="src/data/sewage-yolo26/data.yaml",
-        help="Path to training/validation dataset yaml",
-    )
-    parser.add_argument("--weights", default="yolo26m.pt", help="Initial pretrained weights file (.pt)")
-    parser.add_argument("--epochs", type=int, default=200)
-    parser.add_argument("--imgsz", type=int, default=640)
-    parser.add_argument("--batch", type=int, default=32)
-    parser.add_argument("--gpu-index", type=int, default=0, help="CUDA GPU index")
-    parser.add_argument("--optimizer", default="MuSGD", help="Training optimizer")
-    parser.add_argument("--workspace", type=int, default=4, help="TensorRT conversion workspace VRAM (GiB)")
-    parser.add_argument("--test-image", default="", help="Test image path for TensorRT inference")
-    parser.add_argument("--skip-export", action="store_true", help="Skip TensorRT export step")
-    return parser
-
-
 def main() -> None:
     """Run end-to-end YOLO26 local experiment pipeline."""
     logging.basicConfig(level=logging.INFO, format="%(asctime)s | %(levelname)s | %(message)s")
-    # Parse once at startup; every phase reads from the same immutable config.
-    args = build_arg_parser().parse_args()
 
     # Phase 1: local environment + data setup
     LOGGER.info("Phase 1 - environment check and data path validation")
     device_type = verify_environment()
-    data_yaml = resolve_data_yaml(args.data)
+    data_yaml = resolve_data_yaml(DATA_YAML_PATH)
     # This call documents/validates the augmentation recipe used for custom datasets.
     _ = build_torch_augmentation()
 
     # Phase 2: model init
     LOGGER.info("Phase 2 - YOLO26 model initialization")
-    model = load_model(args.weights)
+    model = load_model(
+        WEIGHTS_PATH,
+        resume_training=RESUME_TRAINING,
+        resume_checkpoint_path=RESUME_CHECKPOINT_PATH,
+    )
 
     # Phase 3: training
     LOGGER.info("Phase 3 - training")
     # Ultralytics accepts either integer GPU index or "cpu".
-    train_device: str | int = args.gpu_index if device_type == "cuda" else "cpu"
+    train_device: str | int = GPU_INDEX if device_type == "cuda" else "cpu"
+    class_importance_vector = build_class_importance_vector(
+        data_yaml=data_yaml,
+        class_importance_weights=CLASS_IMPORTANCE_WEIGHTS,
+    )
     _ = train_model(
         model=model,
         data_yaml=data_yaml,
-        imgsz=args.imgsz,
-        epochs=args.epochs,
-        batch=args.batch,
+        imgsz=IMAGE_SIZE,
+        epochs=EPOCHS,
+        batch=BATCH_SIZE,
         device=train_device,
-        optimizer=args.optimizer,
+        optimizer=OPTIMIZER,
+        class_importance_vector=class_importance_vector,
+        resume_training=RESUME_TRAINING,
     )
 
     # Phase 4: validation + TensorRT export/inference
     LOGGER.info("Phase 4 - validation and deployment")
-    metrics = validate_model(model=model, data_yaml=data_yaml, imgsz=args.imgsz, device=train_device)
+    metrics = validate_model(model=model, data_yaml=data_yaml, imgsz=IMAGE_SIZE, device=train_device)
+    log_domain_metrics(metrics)
     LOGGER.info("Validation metrics object: %s", metrics)
 
-    if args.skip_export:
+    if SKIP_EXPORT:
         # Useful for quick iteration when only training/validation is needed.
         LOGGER.info("Skipping TensorRT export as requested.")
         return
 
-    engine_path = export_tensorrt(model=model, half=True, dynamic=True, workspace=args.workspace)
+    engine_path = export_tensorrt(
+        model=model,
+        half=EXPORT_HALF,
+        int8=EXPORT_INT8,
+        dynamic=EXPORT_DYNAMIC,
+        workspace=TENSORRT_WORKSPACE_GIB,
+    )
     LOGGER.info("TensorRT engine created: %s", engine_path)
 
-    if args.test_image:
-        trt_device = f"cuda:{args.gpu_index}" if device_type == "cuda" else "cpu"
-        results = run_trt_inference(engine_path=engine_path, test_image=args.test_image, device=trt_device)
+    if TEST_IMAGE_PATH:
+        trt_device = f"cuda:{GPU_INDEX}" if device_type == "cuda" else "cpu"
+        results = run_trt_inference(
+            engine_path=engine_path,
+            test_image=TEST_IMAGE_PATH,
+            device=trt_device,
+        )
         LOGGER.info("TensorRT inference completed: %s", results)
     else:
-        LOGGER.info("No --test-image provided: skipping TensorRT inference test.")
+        LOGGER.info("TEST_IMAGE_PATH is empty: skipping TensorRT inference test.")
 
 
 if __name__ == "__main__":
