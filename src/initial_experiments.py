@@ -20,13 +20,47 @@ DATA_YAML_PATH = "src/data/sewage-yolo26/data.yaml"
 WEIGHTS_PATH = "src/model/yolo26m.pt"
 
 # Training hyperparameters
-EPOCHS = 200
+EPOCHS = 50
 IMAGE_SIZE = 640
 BATCH_SIZE = 32
+# Lower batch size for Apple MPS to reduce out-of-memory risk.
+# MuSGD lacks MPS kernels (silent CPU fallback → ~580s/batch), so we use SGD
+# below; batch=4 keeps per-step memory tractable on M1 Pro 16 GiB.
+MPS_BATCH_SIZE = 4
 # Lower batch size for CPU to avoid excessive RAM pressure and long step times.
 CPU_BATCH_SIZE = 8
 GPU_INDEX = 0
-OPTIMIZER = "MuSGD"
+# MuSGD on MPS triggers CPU fallback for most ops (~580s/batch). Use SGD on
+# MPS/CPU and switch back to MuSGD only when CUDA is available.
+OPTIMIZER = "SGD"
+# Disable AMP on MPS — mixed-precision kernels for YOLO26 are not fully
+# implemented yet and cause further fallbacks. Keep AMP on for CUDA.
+AMP_ENABLED = False
+
+# ---------------------------------------------------------------------------
+# Tier 2 (high-resolution + P2 head + aggressive augmentation) — targets the
+# small/thin defect classes (Crack, Hole, Joint offset) that drag baseline mAP.
+# Enable for the boosted retraining run; keep disabled for the baseline.
+# ---------------------------------------------------------------------------
+TIER2_ENABLE = False
+TIER2_MODEL_YAML = "yolo26-p2.yaml"  # Adds stride-4 P2 head for small objects.
+TIER2_IMAGE_SIZE = 1280
+TIER2_EPOCHS = 300
+TIER2_PATIENCE = 50
+TIER2_BATCH_SIZE = 8  # imgsz=1280 quadruples VRAM vs 640 — lower batch by default.
+TIER2_AUGMENT_OVERRIDES: dict[str, float] = {
+    "mosaic": 1.0,
+    "close_mosaic": 20,
+    "mixup": 0.10,
+    "copy_paste": 0.30,
+    "scale": 0.6,
+    "degrees": 10.0,
+    "translate": 0.10,
+    "hsv_v": 0.3,
+    "hsv_s": 0.6,
+    "fliplr": 0.5,
+}
+TIER2_COSINE_LR = True
 
 # Checkpoint behavior
 # When enabled, training attempts to continue from RESUME_CHECKPOINT_PATH.
@@ -183,11 +217,17 @@ def load_model(
     weights: str,
     resume_training: bool = False,
     resume_checkpoint_path: Path | None = None,
+    architecture_yaml: str | None = None,
 ) -> Any:
     """
     Load YOLO26 model from Ultralytics in Python runtime.
 
     yolo26m.pt must be available locally or via Ultralytics download.
+
+    architecture_yaml:
+        When provided, builds the model from this Ultralytics yaml (e.g.,
+        "yolo26-p2.yaml" to add a P2 small-object head) and loads pretrained
+        weights on top via `.load()`. Ignored when resume_training=True.
     """
     from ultralytics import YOLO  # type: ignore[import-untyped]
 
@@ -199,6 +239,25 @@ def load_model(
             raise FileNotFoundError("Resume mode enabled but no valid checkpoint was resolved.")
         LOGGER.info("Loading model from checkpoint: %s", checkpoint)
         return YOLO(str(checkpoint))
+
+    if architecture_yaml:
+        # Build the alternate architecture (e.g., +P2 head) then transfer
+        # compatible pretrained weights from `weights` for faster convergence.
+        LOGGER.info(
+            "Loading architecture from yaml=%s with pretrained transfer from %s",
+            architecture_yaml,
+            weights,
+        )
+        model = YOLO(architecture_yaml)
+        try:
+            model.load(weights)
+        except Exception as exc:  # noqa: BLE001 — transfer is best-effort.
+            LOGGER.warning(
+                "Pretrained transfer from %s failed (%s); continuing from scratch.",
+                weights,
+                exc,
+            )
+        return model
 
     # Ultralytics handles local file loading and remote asset download behavior.
     LOGGER.info("Loading baseline weights: %s", weights)
@@ -296,6 +355,12 @@ def _format_metric(value: float | None) -> str:
     return f"{value:.4f}" if value is not None else "N/A"
 
 
+def _is_mps_oom_error(exc: BaseException) -> bool:
+    """Return True when exception message indicates MPS out-of-memory."""
+    text = str(exc).lower()
+    return "mps backend out of memory" in text or ("out of memory" in text and "mps" in text)
+
+
 def log_domain_metrics(metrics: Any) -> None:
     """
     Log sewage-domain-friendly metrics in a compact, comparable format.
@@ -328,6 +393,10 @@ def train_model(
     optimizer: str = "MuSGD",
     class_importance_vector: list[float] | None = None,
     resume_training: bool = False,
+    patience: int = 30,
+    extra_train_overrides: dict[str, Any] | None = None,
+    *,
+    cosine_lr: bool = False,
 ) -> Any:
     """Run YOLO26 training with fallback for unsupported optimizer."""
     # The default settings are tuned for the requested 640 training setup and
@@ -341,13 +410,19 @@ def train_model(
         "optimizer": optimizer,
         "plots": True,
         "resume": resume_training,
+        "amp": AMP_ENABLED,
+        "workers": 0 if device == "mps" else 8,
         # Sewage-pipe-friendly augmentation/tuning (Ultralytics built-in)
         "hsv_v": 0.25,
         "hsv_s": 0.5,
         "fliplr": 0.5,
         "mosaic": 0.8,
-        "patience": 30,
+        "patience": patience,
+        "cos_lr": cosine_lr,
     }
+    if extra_train_overrides:
+        # Tier 2 augmentation/scheduling overrides go through here.
+        train_kwargs.update(extra_train_overrides)
     if class_importance_vector is not None:
         # Some Ultralytics versions may not expose class-weight args publicly.
         # We still try to pass them, then gracefully fallback if unsupported.
@@ -370,33 +445,48 @@ def train_model(
 
     # Try YOLO26-specific optimizer first when the runtime supports it.
     active_kwargs = dict(train_kwargs)
-    try:
-        return model.train(**active_kwargs)
-    except Exception as exc:
-        # If class-importance argument is rejected by this runtime, retry
-        # without it to keep experiments runnable.
-        if "cls_weights" in active_kwargs:
+    while True:
+        try:
+            return model.train(**active_kwargs)
+        except Exception as exc:
+            # If class-importance argument is rejected by this runtime, retry
+            # without it to keep experiments runnable.
+            if "cls_weights" in active_kwargs:
+                LOGGER.warning(
+                    "Class importance weights were not accepted by the current trainer (%s). "
+                    "Retrying without cls_weights.",
+                    exc,
+                )
+                active_kwargs.pop("cls_weights", None)
+                continue
+
+            # If MPS memory is exhausted, reduce batch and retry automatically.
+            if active_kwargs.get("device") == "mps" and _is_mps_oom_error(exc):
+                current_batch = int(active_kwargs["batch"])
+                if current_batch <= 1:
+                    raise
+                next_batch = max(1, current_batch // 2)
+                LOGGER.warning(
+                    "MPS out of memory at batch=%s (%s). Retrying with batch=%s.",
+                    current_batch,
+                    exc,
+                    next_batch,
+                )
+                active_kwargs["batch"] = next_batch
+                if hasattr(torch, "mps") and hasattr(torch.mps, "empty_cache"):
+                    torch.mps.empty_cache()
+                continue
+
+            if optimizer != "MuSGD":
+                raise
+
             LOGGER.warning(
-                "Class importance weights were not accepted by the current trainer (%s). "
-                "Retrying without cls_weights.",
+                "MuSGD failed (%s). Falling back to SGD because this Ultralytics version may not support it.",
                 exc,
             )
-            active_kwargs.pop("cls_weights", None)
-            try:
-                return model.train(**active_kwargs)
-            except Exception as retry_exc:
-                exc = retry_exc
-
-        if optimizer != "MuSGD":
-            raise
-
-        LOGGER.warning(
-            "MuSGD failed (%s). Falling back to SGD because this Ultralytics version may not support it.",
-            exc,
-        )
-        # Fallback keeps the run executable on environments where MuSGD is absent.
-        active_kwargs["optimizer"] = "SGD"
-        return model.train(**active_kwargs)
+            # Fallback keeps the run executable on environments where MuSGD is absent.
+            active_kwargs["optimizer"] = "SGD"
+            return model.train(**active_kwargs)
 
 
 def validate_model(model: Any, data_yaml: Path, imgsz: int, device: str | int) -> Any:
@@ -606,42 +696,63 @@ def main() -> None:
 
     # Phase 2: model init
     LOGGER.info("Phase 2 - YOLO26 model initialization")
+    architecture_yaml = TIER2_MODEL_YAML if (TIER2_ENABLE and not should_resume) else None
     model = load_model(
         WEIGHTS_PATH,
         resume_training=should_resume,
         resume_checkpoint_path=resume_checkpoint,
+        architecture_yaml=architecture_yaml,
     )
 
     # Phase 3: training
-    LOGGER.info("Phase 3 - training")
+    LOGGER.info("Phase 3 - training (tier2=%s)", TIER2_ENABLE)
     # Ultralytics accepts integer GPU index, "mps", or "cpu".
     train_device: str | int = GPU_INDEX if device_type == "cuda" else device_type
-    train_batch_size = BATCH_SIZE if device_type in {"cuda", "mps"} else CPU_BATCH_SIZE
+    baseline_batch = TIER2_BATCH_SIZE if TIER2_ENABLE else BATCH_SIZE
+    if device_type == "cuda":
+        train_batch_size = baseline_batch
+    elif device_type == "mps":
+        train_batch_size = min(MPS_BATCH_SIZE, baseline_batch)
+        LOGGER.info(
+            "MPS mode detected: overriding batch size from %s to %s.",
+            baseline_batch,
+            train_batch_size,
+        )
+    else:
+        train_batch_size = min(CPU_BATCH_SIZE, baseline_batch)
     if device_type == "cpu":
         LOGGER.info(
             "CPU mode detected: overriding batch size from %s to %s.",
-            BATCH_SIZE,
+            baseline_batch,
             train_batch_size,
         )
     class_importance_vector = build_class_importance_vector(
         data_yaml=data_yaml,
         class_importance_weights=CLASS_IMPORTANCE_WEIGHTS,
     )
+    active_imgsz = TIER2_IMAGE_SIZE if TIER2_ENABLE else IMAGE_SIZE
+    active_epochs = TIER2_EPOCHS if TIER2_ENABLE else EPOCHS
+    active_patience = TIER2_PATIENCE if TIER2_ENABLE else 30
+    active_augment_overrides = TIER2_AUGMENT_OVERRIDES if TIER2_ENABLE else None
+    active_cosine_lr = TIER2_COSINE_LR if TIER2_ENABLE else False
     _ = train_model(
         model=model,
         data_yaml=data_yaml,
-        imgsz=IMAGE_SIZE,
-        epochs=EPOCHS,
+        imgsz=active_imgsz,
+        epochs=active_epochs,
         batch=train_batch_size,
         device=train_device,
         optimizer=OPTIMIZER,
         class_importance_vector=class_importance_vector,
         resume_training=should_resume,
+        patience=active_patience,
+        extra_train_overrides=active_augment_overrides,
+        cosine_lr=active_cosine_lr,
     )
 
     # Phase 4: validation + TensorRT export/inference
     LOGGER.info("Phase 4 - validation and deployment")
-    metrics = validate_model(model=model, data_yaml=data_yaml, imgsz=IMAGE_SIZE, device=train_device)
+    metrics = validate_model(model=model, data_yaml=data_yaml, imgsz=active_imgsz, device=train_device)
     log_domain_metrics(metrics)
     LOGGER.info("Validation metrics object: %s", metrics)
 
