@@ -14,7 +14,13 @@ dependencies = [
     "seaborn>=0.13.2",
     "torch>=2.11.0",
     "torchvision>=0.26.0",
-    "ultralytics>=8.4.37",
+    "ultralytics>=8.4.51",
+    "sahi>=0.11.18",
+    "pycocotools>=2.0.7",
+    "onnx>=1.17.0",
+    "onnxslim>=0.1.71",
+    "onnxruntime>=1.20.0",
+    "coremltools>=8.0",
 ]
 
 [dependency-groups]
@@ -25,6 +31,7 @@ dev = [
     "pytest>=8.4.1",
     "pytest-cov>=6.2.1",
     "poethepoet>=0.36.0",
+    "types-PyYAML>=6.0.12",
 ]
 
 [tool.pytest.ini_options]
@@ -32,6 +39,7 @@ pythonpath = ["src"]
 
 [tool.poe.tasks]
 run = "python src/initial_experiments.py"
+sahi = "python src/sahi_inference.py"
 test = "pytest tests"
 test-cov = "pytest tests --cov=src"
 lint = "ruff check src/ tests/"
