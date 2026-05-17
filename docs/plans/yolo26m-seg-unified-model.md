@@ -22,20 +22,22 @@ Both plans MUST agree on this contract; either side can change it only via paire
 
 | Item | Value |
 |---|---|
-| HF model repo | `plumbers-of-uts/pipevision-yolo26m-seg` |
+| HF model repo | `gracefullight/pipevision-yolo26m-seg` |
 | ONNX file name | `yolo26m-seg-fp16.onnx` |
 | Input | `images: float32 [1, 3, 640, 640]`, NCHW, RGB, `0..1`, letterboxed |
-| Output 0 — detections | `float32 [1, 4+7+32, N]` (nc-first layout, N≈8400) |
-|   bytes 0..3 | cx, cy, w, h in normalised 640-space `[0,1]` |
-|   bytes 4..10 | class scores (sigmoid applied) |
-|   bytes 11..42 | 32 mask coefficients (no activation) |
+| Output 0 — detections | `float32 [1, 300, 38]` (post-NMS, fixed max_det=300) |
+|   cols 0..3 | x, y, w, h in original pixel space (letterboxed 640 grid) |
+|   col 4 | confidence (already sigmoided × class prob) |
+|   col 5 | class_id (float, cast to int) |
+|   cols 6..37 | 32 mask coefficients (no activation) |
 | Output 1 — prototypes | `float32 [1, 32, 160, 160]` |
-| Mask decode | `mask = sigmoid(prototypes.T @ coefficients).reshape(160, 160)` → threshold 0.5 → crop to bbox → resize to original |
+| Mask decode | `mask = sigmoid(coefficients @ prototypes.reshape(32, 25600)).reshape(160, 160)` → threshold 0.5 → crop to bbox → resize to original |
 | Class IDs | 0 Buckling, 1 Crack, 2 Debris, 3 Hole, 4 Joint offset, 5 Obstacle, 6 Utility intrusion |
-| Inference defaults | conf=0.25, iou=0.45, max_det=100 |
-| NMS | not embedded — done in TS client |
+| Inference defaults | conf=0.25, iou=0.45 (NMS embedded) |
+| NMS | **embedded** in ONNX graph — TS client only filters by conf and unpads zero-rows |
 | Opset | 17 |
-| SHA-256 | published in metadata.yaml after upload |
+| Precision | FP16 weights, FP32 I/O |
+| SHA-256 | `3015a5cca1cce704912aebc01c24d2287af4e07514f279cf81c6cbcc63b4b922` |
 
 If any contract field changes, **bump the HF file name** (`-v2`) and update both plans.
 
@@ -133,11 +135,11 @@ exported_path = model.export(
     simplify=True,
     imgsz=640,
     opset=17,
-    nms=False,
+    nms=True,                  # end-to-end NMS embedded, max_det=300
 )
 ```
 
-Ultralytics auto-detects `task=segment` from the .pt and emits the dual output. Verify with `onnx.checker.check_model(loaded)` + visualise on netron.app — confirm 2 outputs, second of shape `[1, 32, 160, 160]`.
+Ultralytics auto-detects `task=segment` from the .pt and emits the dual output. Verify with `onnx.checker.check_model(loaded)` + visualise on netron.app — confirm 2 outputs, second of shape `[1, 32, 160, 160]` and first of shape `[1, 300, 38]` (4 bbox + conf + class_id + 32 mask coeffs).
 
 Smoke-test in Python:
 
@@ -146,7 +148,7 @@ import onnxruntime as ort
 import numpy as np
 sess = ort.InferenceSession('yolo26m-seg-fp16.onnx')
 out = sess.run(None, {'images': np.random.rand(1, 3, 640, 640).astype(np.float32)})
-print([o.shape for o in out])   # expect [(1, 43, 8400), (1, 32, 160, 160)]
+print([o.shape for o in out])   # expect [(1, 300, 38), (1, 32, 160, 160)]
 ```
 
 ## Phase 5 — HuggingFace Hub Upload
@@ -157,7 +159,7 @@ Use `huggingface_hub` SDK (already a transitive dep via ultralytics). Token via 
 from huggingface_hub import HfApi, create_repo
 
 api = HfApi()
-repo_id = 'plumbers-of-uts/pipevision-yolo26m-seg'
+repo_id = 'gracefullight/pipevision-yolo26m-seg'
 create_repo(repo_id, private=False, exist_ok=True)
 
 api.upload_folder(
@@ -225,9 +227,9 @@ After Phase 1 script lands: `uv run poe lint && uv run poe type-check`.
 
 ## Definition of done
 
-- [ ] `src/generate_seg_labels.py` runs on full dataset, produces polygon labels for ≥ 95% of bbox annotations.
-- [ ] `runs/segment/tier2_seg/weights/best.pt` exists with test mask mAP@0.5 ≥ 0.40.
-- [ ] `yolo26m-seg-fp16.onnx` passes the smoke-test (correct output shapes).
-- [ ] HuggingFace repo public, with model card and `metadata.yaml`.
-- [ ] SHA-256 hash committed to **both** plans.
+- [x] `src/generate_seg_labels.py` runs on full dataset, produces polygon labels for ≥ 95% of bbox annotations.
+- [x] `runs/segment/tier2_seg/weights/best.pt` exists with test mask mAP@0.5 ≥ 0.40 (achieved **0.475**).
+- [x] `yolo26m-seg-fp16.onnx` passes the smoke-test (correct output shapes `[1, 300, 38]` + `[1, 32, 160, 160]`).
+- [x] HuggingFace repo public ([`gracefullight/pipevision-yolo26m-seg`](https://huggingface.co/gracefullight/pipevision-yolo26m-seg)), with model card and `metadata.yaml`.
+- [x] SHA-256 hash (`3015a5cc…`) committed to **both** plans.
 - [ ] `docs/cnn-ass3-PartC-experimental-report.md` extended with seg results section.
