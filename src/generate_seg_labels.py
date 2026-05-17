@@ -22,6 +22,7 @@ Usage:
 from __future__ import annotations
 
 import logging
+import os
 from collections import Counter
 from dataclasses import dataclass
 from pathlib import Path
@@ -165,11 +166,10 @@ def _format_polygon_line(cls_id: int, polygon: np.ndarray[Any, Any]) -> str:
 
 
 def _ensure_image_symlink(src_image: Path, dst_image: Path) -> None:
-    """Symlink the source image into the destination dir if missing."""
+    """Symlink the source image into the destination dir (idempotent)."""
     dst_image.parent.mkdir(parents=True, exist_ok=True)
     if dst_image.exists() or dst_image.is_symlink():
         return
-    # Resolve to absolute path for the symlink target to avoid breakage if cwd moves.
     dst_image.symlink_to(src_image.resolve())
 
 
@@ -177,6 +177,8 @@ def _process_split(
     split: str,
     sam: SAM,
     stats: GenerationStats,
+    *,
+    force: bool = False,
 ) -> None:
     """Generate seg labels for one dataset split."""
     src_images_dir = SOURCE_DATASET / split / "images"
@@ -196,17 +198,25 @@ def _process_split(
     )
     LOGGER.info("Split %s: %d images", split, len(image_files))
 
+    skipped_existing = 0
     for image_path in image_files:
         stats.images_processed += 1
+        dst_label_path = dst_labels_dir / f"{image_path.stem}.txt"
+        dst_image_path = dst_images_dir / image_path.name
+        _ensure_image_symlink(image_path, dst_image_path)
+
+        # Resume mode: skip the (expensive) SAM call if the seg label already exists.
+        if not force and dst_label_path.exists():
+            skipped_existing += 1
+            continue
+
         label_path = src_labels_dir / f"{image_path.stem}.txt"
         bboxes, classes = _read_yolo_bbox_labels(label_path)
 
         if not bboxes:
             stats.images_with_no_labels += 1
-            # Symlink the image and write an empty seg label so the dataset
-            # counts are consistent with the bbox version.
-            _ensure_image_symlink(image_path, dst_images_dir / image_path.name)
-            (dst_labels_dir / f"{image_path.stem}.txt").write_text("", encoding="utf-8")
+            # Empty seg label keeps dataset counts consistent with the bbox version.
+            dst_label_path.write_text("", encoding="utf-8")
             continue
 
         stats.bboxes_total += len(bboxes)
@@ -241,8 +251,9 @@ def _process_split(
         )
 
     LOGGER.info(
-        "Split %s done | bboxes=%d masks_kept=%d empty=%d too_small=%d degenerate=%d",
+        "Split %s done | resumed=%d bboxes=%d masks_kept=%d empty=%d too_small=%d degenerate=%d",
         split,
+        skipped_existing,
         stats.bboxes_total,
         stats.masks_kept,
         stats.masks_dropped_empty,
@@ -291,22 +302,27 @@ def _load_sam_model() -> SAM:
 
 
 def main() -> None:
-    """Entry point — generate seg labels for the entire dataset."""
+    """Entry point — generate seg labels for the entire dataset.
+
+    Resumes by default: images whose seg label + image symlink already exist
+    are skipped. Set the env var ``FORCE_REGENERATE=1`` to redo everything.
+    """
     logging.basicConfig(level=logging.INFO, format="%(asctime)s | %(levelname)s | %(message)s")
 
     _verify_source_dataset()
 
+    force = os.environ.get("FORCE_REGENERATE", "").lower() in {"1", "true", "yes"}
     if OUTPUT_DATASET.exists():
-        LOGGER.warning(
-            "Output dir %s already exists; existing files may be overwritten.",
-            OUTPUT_DATASET,
-        )
+        if force:
+            LOGGER.warning("FORCE_REGENERATE=1 — every image will be re-processed.")
+        else:
+            LOGGER.info("Resuming: existing seg labels in %s will be skipped.", OUTPUT_DATASET)
 
     sam = _load_sam_model()
 
     stats = GenerationStats()
     for split in SPLITS:
-        _process_split(split=split, sam=sam, stats=stats)
+        _process_split(split=split, sam=sam, stats=stats, force=force)
 
     yaml_path = _write_dataset_yaml()
 
