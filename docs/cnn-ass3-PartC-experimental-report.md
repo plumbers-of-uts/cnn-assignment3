@@ -425,3 +425,142 @@ The model is shippable: PyTorch, ONNX and Core ML artefacts all match on
 a smoke-test image. The next meaningful experiment is a CUDA-backed
 training run with the P2 detection head (`yolo26m-p2.yaml`) to push
 Buckling back up, documented in `src/colab_train.ipynb`.
+
+---
+
+## 10. Experiment C — Unified Instance Segmentation (yolo26m-seg)
+
+To unblock the pipevision-ai web client roadmap (per-defect mask overlay on
+CCTV frames instead of bbox-only callouts), a second training pipeline was
+built on top of the same Roboflow split. This section documents the
+end-to-end story from pseudo-label generation through HuggingFace handoff.
+
+### 10.1 Pipeline Overview
+
+```
+Roboflow YOLO bboxes
+        │
+        ▼
+src/generate_seg_labels.py     ── SAM 2.1_b prompted with bboxes ──┐
+        │                                                          │
+        ▼                                                          ▼
+sewage-yolo26-seg/             contours → approxPolyDP(eps=2.0) → normalised
+{train,valid,test}/labels      polygons (cls x1 y1 ... xn yn per row)
+        │
+        ▼
+src/sagemaker_seg_train.ipynb  ── ml.g5/g4dn SageMaker GPU ──
+   yolo26m-seg.pt → MuSGD + cos_lr + cls_weights, 200 ep, patience 50
+        │
+        ▼
+runs/segment/.../weights/best.pt
+        │
+        ├─ model.val(split='test') → box + mask mAP per class
+        ├─ export(format='onnx', half=True, opset=17, nms=True)
+        │  → yolo26m-seg-fp16.onnx
+        │     • output0 [1, 300, 38] (post-NMS, fixed max_det)
+        │     • output1 [1, 32, 160, 160] (mask prototypes)
+        └─ HuggingFace Hub: gracefullight/pipevision-yolo26m-seg
+            (best.pt + onnx + metadata.yaml + qualitative samples + curves)
+```
+
+### 10.2 Training Recipe (vs. Detection-only)
+
+| Knob | Detection (§3) | Segmentation |
+|---|---|---|
+| Task | `detect` | `segment` |
+| Base | `yolo26m.pt` | `yolo26m-seg.pt` (COCO seg pretrained) |
+| Hardware | M1 Pro MPS | SageMaker GPU (g4dn/g5) |
+| Optimizer | SGD (MPS fallback) | **MuSGD** + cosine LR |
+| AMP | False | True |
+| imgsz / batch | 640 / 4 | 640 / 8 |
+| epochs / patience | 50 / 30 | 200 / 50 |
+| Augmentation | mosaic 0.8, hsv_v 0.25 | mosaic 1.0, close_mosaic 20, mixup 0.10, copy_paste 0.30, scale 0.6, degrees 10 |
+| Class weights | dropped silently in 8.4.37 | applied via 8.4.51 `cls_weights` |
+| Mask labels | n/a | SAM 2.1_b pseudo-polygons (one-time pass) |
+
+### 10.3 Test Metrics (98 images, 229 instances)
+
+| Metric | Box | Mask |
+|---|---:|---:|
+| mAP@0.5 | **0.534** | **0.475** |
+| mAP@0.5:0.95 | **0.302** | **0.271** |
+
+Per-class (test split):
+
+| Class | AP50 (box) | AP (box) | AP50 (mask) | AP (mask) |
+|---|---:|---:|---:|---:|
+| Utility intrusion | 0.901 | 0.594 | **0.920** | **0.628** |
+| Hole | 0.832 | 0.555 | 0.508 | 0.328 |
+| Obstacle | 0.704 | 0.347 | 0.683 | 0.376 |
+| Debris | 0.597 | 0.260 | 0.604 | 0.313 |
+| Crack | 0.397 | 0.208 | 0.266 | 0.109 |
+| Joint offset | 0.225 | 0.104 | 0.296 | 0.124 |
+| **Buckling** | 0.080 | 0.044 | 0.048 | 0.016 |
+
+Box mAP@0.5 is roughly on par with the §7 detection-only retrain
+(0.534 seg vs. 0.536 detect), so adding the mask head did **not** trade
+off detection quality. Mask mAP@0.5 of 0.475 clears the plan's 0.40
+Definition-of-Done threshold.
+
+Buckling collapsed (0.04 vs. 0.14 in the detection run). The class is
+inherently under-represented (17 test / 48 train instances) and SAM masks
+on the curvy, low-contrast pipe-wall folds are noisy, so the mask coeffs
+add gradient noise the detection-only head escaped. The fix is a short
+fine-tune from `best.pt` with `cls_weights={Buckling: 3.0}` and either
+manual polygon clean-up or a stricter `approxPolyDP(epsilon=1.0)` on the
+Buckling subset.
+
+### 10.4 ONNX Export and Smoke Test
+
+```python
+exported = model.export(
+    format='onnx', half=True, dynamic=False,
+    simplify=True, imgsz=640, opset=17, nms=True,
+)
+# Verify
+import onnxruntime as ort, numpy as np
+sess = ort.InferenceSession('yolo26m-seg-fp16.onnx')
+det, proto = sess.run(None, {'images': np.random.rand(1, 3, 640, 640).astype('float32')})
+assert det.shape == (1, 300, 38) and proto.shape == (1, 32, 160, 160)
+```
+
+Note the plan originally specified `nms=False` with a `[1, 4+nc+32, 8400]`
+detections tensor. The actual export was emitted with **end-to-end NMS
+embedded** (max_det=300, layout `[1, 300, 38]` = 4 bbox + conf + class_id +
+32 mask coeffs). The contract sections of both `docs/plans/yolo26m-seg-
+unified-model.md` and `pipevision-ai/docs/plans/yolo26m-seg-web-integration.md`
+have been updated to match what shipped; the TS client therefore filters
+on conf and unpads zero-rows instead of running its own NMS.
+
+### 10.5 Deployment Artefact
+
+| Field | Value |
+|---|---|
+| HF repo | [`gracefullight/pipevision-yolo26m-seg`](https://huggingface.co/gracefullight/pipevision-yolo26m-seg) |
+| ONNX file | `yolo26m-seg-fp16.onnx` (47 MB, FP16, opset 17) |
+| SHA-256 | `3015a5cca1cce704912aebc01c24d2287af4e07514f279cf81c6cbcc63b4b922` |
+| Mask decode | `sigmoid(coeffs @ proto.reshape(32, 25600)).reshape(160, 160)` → ≥ 0.5 → crop to bbox → resize |
+| Companion files | `best.pt`, `metadata.yaml`, `classes.json`, `per_class_metrics.csv`, training curves, `qualitative/` samples |
+
+The web team pins `VITE_MODEL_SHA256` to the same hash; CI on the web
+side fails the build if the downloaded ONNX does not match — the
+contract is hash-gated, not name-gated, so any future re-train must bump
+the file name (`-v2`) or republish under a new SHA.
+
+### 10.6 Lessons
+
+1. **SAM 2.1_b on bboxes is good enough for "shippable" masks** on blocky
+   classes (Utility intrusion, Obstacle, Debris) but degrades on thin /
+   ambiguous classes (Crack, Buckling). Manual cleanup or a stricter
+   polygon simplification is required before pushing mask mAP past ~0.5.
+2. **Always introspect the exported ONNX before pinning a contract.**
+   The plan's `[1, 4+nc+32, 8400]` was a guess based on Ultralytics docs;
+   the actual `model.export(..., nms=True)` produced `[1, 300, 38]`. The
+   SHA-256 + introspection step in `model/metadata.yaml` caught this
+   before the web team wired up the postprocess pipeline.
+3. **One trained model, two heads, two artefacts** (detection-only PT for
+   the report + segmentation ONNX for the product) is cheaper than
+   training twice. The seg model strictly dominates the detect model for
+   deployment because the bbox channels in output0 are identical
+   semantics; the web client can ignore mask coeffs if a future use case
+   needs bbox-only.
