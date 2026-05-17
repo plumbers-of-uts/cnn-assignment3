@@ -203,29 +203,44 @@ size-stratified AP/AR.
 | sahi-384 | 0.4150 | 0.1880 | 0.500 | 0.067 | 0.205 |
 | sahi-512 | 0.4118 | 0.2027 | 0.600 | 0.055 | 0.224 |
 
-### 4.3 Interpretation
+### 4.3 Interpretation — why SAHI provides no lift here
 
 SAHI **degrades** every overall metric on this dataset. The cause is
-structural rather than a hyperparameter miss:
+structural — SAHI's design premise does not hold for our input regime —
+rather than a hyperparameter miss.
 
-1. **Inputs are already at native scale.** Frames are 640 × 480 px and
-   YOLO26m trains at 640 px. The stride-8 P3 head sees defects at roughly
-   30–80 px, which is the model's design sweet spot. Slicing into 256–512
-   px tiles removes contextual pixels without making the defects
-   meaningfully larger relative to the receptive field.
+**1. SAHI's premise does not match this dataset.**
+SAHI is built for the "*source image ≫ model input, object ≪ model
+input*" regime — typically satellite or drone imagery at 1080p–4K+ where
+each object occupies tens of pixels in a multi-megapixel frame. Neither
+condition is true here.
 
-2. **mAP_small is already saturated** for standard inference (0.700).
-   There is no missing small-object recall left for SAHI to recover; all
-   slicing can do is introduce tile-boundary false positives.
+**2. Dataset resolution already equals the model's input resolution.**
+The Roboflow sewage frames are pre-resized to **640 × 480 px** and YOLO26m
+trains and infers at **640 × 640 px**. A single letterbox feeds the
+original pixels straight into the backbone, so there is no down-sampling
+information loss for slicing to *recover* in the first place.
 
-3. **Tile-edge GREEDYNMM merges cost recall.** Defects that straddle tile
-   boundaries get two partial predictions that the IOS post-processor
-   either over-merges or rejects, producing the consistent ~5 mAP drop on
-   `mAP_large`.
+**3. Slicing actively destroys information instead of revealing it.**
+With `SLICE_HEIGHT/WIDTH ∈ {256, 384, 512}`, each tile is **up-sampled**
+back to the 640 model input — this adds bilinear interpolation noise but
+no new pixel detail. Worse, elongated defects (cracks, root intrusions,
+joint offsets) that straddle a tile boundary are split into two partial
+predictions, and the `GREEDYNMM / IOS @ 0.50` post-processor then either
+over-merges or rejects the fragments, depressing both confidence and
+recall. This matches the observed ~5 mAP drop on `mAP_large`.
 
-4. **SAHI's design target is megapixel-plus imagery** (satellite, drone,
-   microscopy) where each object covers a tiny fraction of the frame.
-   That is not the case here.
+**4. The "small object" definition does not apply at this scale.**
+COCO defines `small` as `area < 32² px²`. At 640 × 480, sewage defects
+typically occupy 30–80 px on the longer side — already in the model's
+stride-8 P3 sweet spot. `mAP_small` is already **0.700** under standard
+inference, leaving no recall headroom for tile-based recovery.
+
+**One-line summary.**
+SAHI recovers "*small objects in much larger source images*". Our frames
+are already at the model's native 640 px scale, so slicing adds
+boundary-split and up-sampling noise without exposing any new resolution
+— the net effect is a mAP regression across all overall metrics.
 
 **Decision**: keep `src/sahi_inference.py` in the repository as an
 evaluation tool, but exclude SAHI from the deployed inference path. If we
