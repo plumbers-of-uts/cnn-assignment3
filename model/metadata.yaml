@@ -1,0 +1,28 @@
+model:
+  name: yolo26m-seg-pipevision-fp16
+  format: onnx
+  input_shape: [1, 3, 640, 640]
+  precision: fp16
+  opset: 17
+  outputs:
+    - name: output0
+      role: detections
+      shape: [1, 300, 38]
+      channels: [x, y, w, h, conf, class_id, mask_0..mask_31]
+    - name: output1
+      role: prototypes
+      shape: [1, 32, 160, 160]
+  sha256: "3015a5cca1cce704912aebc01c24d2287af4e07514f279cf81c6cbcc63b4b922"
+mask:
+  channels: 32
+  resolution: 160
+inference:
+  conf_threshold: 0.25
+  iou_threshold: 0.45
+  max_detections: 100
+metrics:
+  test:
+    mAP_box_0_5: 0.5336
+    mAP_box_0_5_0_95: 0.3017
+    mAP_mask_0_5: 0.4749
+    mAP_mask_0_5_0_95: 0.2708
