@@ -73,13 +73,13 @@ What is Artificial Intelligence?
 
 - Speech Recognition
 
-**Hey Google… What’s the weather today? …**
+**Hey Google... What’s the weather today? ...**
 
 - Speech Recognition - Technology Challenges!
 
 - Natural Language Processing
 
-“Beware though, bots have the illusion of simplicity on the front end but there are many hurdles to overcome to create a great experience. So much work to be done. Analytics, flow optimization, keeping up with ever changing platforms that have no standard. For deeper integrations and real commerce like Assist powers, you have error checking, integrations to APIs, routing and escalation to live human support, understanding NLP, no back buttons, no home button, etc etc. We have to unlearn everything we learned the past 20 years to create an amazing experience in this new browser.” —Shane Mac, CEO of Assist
+“Beware though, bots have the illusion of simplicity on the front end but there are many hurdles to overcome to create a great experience. So much work to be done. Analytics, flow optimization, keeping up with ever changing platforms that have no standard. For deeper integrations and real commerce like Assist powers, you have error checking, integrations to APIs, routing and escalation to live human support, understanding NLP, no back buttons, no home button, etc etc. We have to unlearn everything we learned the past 20 years to create an amazing experience in this new browser.” —Shane Mac, CEO of Assist
 
 - ChatGPT!
 
@@ -120,7 +120,9 @@ Getting insight about complex problems and a large amount of data
 
 - Check:
 
-**Unreasonable Effectiveness of data 2Revisiting the Unreasonable Effectiveness of Data**
+- The Unreasonable Effectiveness of Data
+
+- Revisiting the Unreasonable Effectiveness of Data
 
 - Overfitting example
 
@@ -458,7 +460,7 @@ Truestate
 
 Recall: TP/Cancer True States
 
-**Precision= (𝑇𝑃)/(𝑇𝑃+𝐹𝑃) · Recall = (𝑇𝑃)/(𝑇𝑃+𝐹𝑁)**
+**Precision= (TP)/(TP+FP) · Recall = (TP)/(TP+FN)**
 
 - Intersection over Union (IoU):
 
@@ -474,7 +476,7 @@ Image Processing Basics
 - It is an array, or a matrix of Pixels arranges in columns and rows.
 - Each Pixel has its own intensity value, or brightness
 - Intensity values in digital images are defined by bits
-- For a standard 8 bits image, a pixel can have 28= 256 (0 – 255) values.
+- For a standard 8-bit image, a pixel can have 2^8 = 256 (0 – 255) values.
 - Black & White images have a single 8-bits intensity range.
 
 How computer sees Image?
@@ -544,16 +546,16 @@ So, 24-bit colour depth
 
 Image Processing - Types
 
-- 1. Image Enhancement
-- 2. Image Restoration
-- 3. Image Segmentation
-- 4. Image Recognition & Classification
-- 5. Image Compression
-- 6. Image Transformation
-- 7. Image Filtering
-- 8. Morphological Processing
-- 9. Colour Image Processing
-- 10. 3D Image Processing
+1. Image Enhancement
+1. Image Restoration
+1. Image Segmentation
+1. Image Recognition & Classification
+1. Image Compression
+1. Image Transformation
+1. Image Filtering
+1. Morphological Processing
+1. Colour Image Processing
+1. 3D Image Processing
 
 ### Image Enhancement, Restoration
 
@@ -588,7 +590,7 @@ Peaks, valleys and curvature of the histogram are analysed.
 No.ofPixels
 
 **- Clustering based:**
-The 1Otsu method, very good for bimodal distribution
+The Otsu method, very good for bimodal distribution
 
 **Threshold · - Adaptive thresholding:**
 Gray-scale
@@ -616,8 +618,7 @@ Canny Edge detection Sobel Edge detection
 
 |1|0|-1|
 
-# \*
-
+*(convolution)*
 |Convolution operator| |
 
 3 X 3 filter/Kernel
@@ -637,8 +638,7 @@ Canny Edge detection Sobel Edge detection
 
 -
 
-# \*
-
+*(convolution)*
 |100|100|100|100|100|100|
 |---|---|---|---|---|---|
 |0|0|0|0|0|0|
@@ -653,9 +653,7 @@ Canny Edge detection Sobel Edge detection
 |0|0|0|
 |-1|-1|-1|
 
-# \*
-
-# \*
+*(convolution)*
 
 ### Edge detection filters
 
@@ -753,12 +751,14 @@ Direction
 
 |gx= |-70 + 120| = 50 gy = |-100 + 50| = 50 |
 
-**Gradient Magnitude = ~70.7 Direction/Angle = 45o · Step -2: Create orientation histogram:**
+**Gradient Magnitude ≈ 70.7, Direction/Angle = 45°**
+
+**Step-2: Create orientation histogram**
 
 - Divide the image into small connected regions called Cells which is a 8 X 8 patch
 - Create cell histogram based on gradient direction and magnitude
 - 64 (8 X 8) gradient vectors are put into a 9-bin histogram
-- The bins are the gradient directions (Ꝋ) quantized into 9-bins
+- The bins are the gradient directions (θ) quantized into 9-bins
 
 **Pixel with blue circle has an angle of 80 degrees and magnitude of 2**
 
@@ -806,7 +806,7 @@ An 8-digit binary number is obtained by consideringthe thresholding result, star
 - There can be 28 = 256 possible values
 - Hence, the LBP histogram will have 256 bins →feature vector
 
-**00111110 = (0 × 2⁷) + (0 × 2⁶) + (1 × 2⁵) + (1 × 2⁴) + (1 × 2³) + (1 × 2²) + (1 × 2¹) + (0 × 2⁰) = 62 · An Example of LBP Computation:**
+**00111110 = (0 × 27) + (0 × 26) + (1 × 25) + (1 × 24) + (1 × 23) + (1 × 22) + (1 × 21) + (0 × 20) = 62 · An Example of LBP Computation:**
 
 ## Neural Network Basics
 
@@ -864,13 +864,9 @@ Mechanism to reduce the loss in the model
 
 Gradient
 
-# 1
-
 Target
 
 **Model ANN Architecture + Parameters**
-
-# 0
 
 Output (y)
 
@@ -895,23 +891,23 @@ Image dimension: 64X128 = 8192 Pixels
 
 image.reshape(image.shape[0]\*image.shape[1]\*image.shape[2],1)
 
-x1 x2 x3 … xn-1 xn
+x1 x2 x3 ... xn-1 xn
 
-128 56 89 … 250 255
+128 56 89 ... 250 255
 
-𝑤𝑇𝑥 +𝑏 s 0.82
+`wᵀx + b → σ(·) = 0.82`
 
 0.82 > 0.5
 
-… … Shark
+... ... Shark
 
-## **Problem of Binary Classification → Logistic Regression (Shark ? → 1 | Not Shark? → 0)** **𝑤𝑇 𝑥** **𝑏**
+## Problem of Binary Classification — Logistic Regression (Shark = 1 / Not Shark = 0)
 
 → Linear function of input x
 
 s =
 
-**𝑤1𝑥1 + 𝑤2𝑥2 + …+ 𝑤𝑛𝑥𝑛 + 𝑏**
+**w1x1 + w2x2 + ...+ wnxn + b**
 (Sigmoid function)
 
 Where, Weighted sum of inputs
@@ -922,24 +918,24 @@ Where, Weighted sum of inputs
 **Rule of thumb: In case of binary classification, Sigmoid function is the obvious choice for output layer**
 Problem of Binary Classification → Logistic Regression (Shark ? → 1 | Not Shark? → 0)
 
-**Parameters: 1. w (weight) 2. b (bias) 3. Output a = s(𝒘𝑻𝒙+𝒃) · Loss function for Logistic Regression:**
-L (a, y) =- 𝑦 log𝑎 + 1 − 𝑦 log(1 − 𝑎)
+Parameters: `w` (weight), `b` (bias). Output `a = σ(wᵀx + b)`. Loss function for Logistic Regression:
+`L(a, y) = −[y · log(a) + (1 − y) · log(1 − a)]`
 
 Logistic Regression pipeline with the math looks like:
 
 **X W B · L**
-|𝒘𝑻 𝒙 + 𝒃| |
+`wᵀx + b`
 
-**a = s(𝒘𝑻 𝒙 + 𝒃) · L (a, y) · Problem of Binary Classification → Logistic Regression (Shark ? → 1 | Not Shark? → 0)**
+`a = σ(wᵀx + b)`, loss `L(a, y)`.
 Gradient Descent for learning parameters: It is an iterative approach for error correction in a machine learning model.
 
 GD(w)
 
-For 1 Sample the loss function is: L (a, y)=- 𝑦 log𝑎 + 1 − 𝑦 log(1 − 𝑎)
+For 1 Sample the loss function is: L (a, y)=- y loga + 1 − y log(1 − a)
 
 GDmin(w)
 
-For m Sample the loss function is: GD(w, b) =𝑥 = ∑ L (a, y)
+For m Sample the loss function is: GD(w, b) =x = ∑ L (a, y)
 
 Question: Find w and b that will minimize GD(w, b)
 
@@ -973,7 +969,7 @@ Function to calculate Loss/error
 Mechanism to reduce the loss/error
 
 **Problem of Binary Classification:**
-Dog? → 1 Cat ( not Dog)? → 0
+Dog? → 1 Cat (≈ not Dog)? → 0
 
 **Error/ Loss**
 Gradient
@@ -984,8 +980,6 @@ Target
 
 **Model ANN Architecture + Parameters**
 
-# 0
-
 Output (y)
 
 Input (x)
@@ -993,36 +987,36 @@ Input (x)
 **Activation function**
 Problem of Binary Classification → Logistic Regression (Dog ? → 1 | Not Dog? → 0)
 
-**Parameters: 1. w (weight) 2. b (bias) 3. Output a= (𝒘𝑻𝒙+𝒃) · Loss function for Logistic Regression: · L (a, y) =- 𝑦 log𝑎 + 1 − 𝑦 log(1 − 𝑎)**
+**Parameters: 1. w (weight) 2. b (bias) 3. Output a= σ(wᵀx+b) · Loss function for Logistic Regression: · `L(a, y) = −[y · log(a) + (1 − y) · log(1 − a)]`**
 Logistic Regression pipeline with the math looks like:
 
 **X W B**
-|𝒘𝑻 𝒙 + 𝒃| |
+`wᵀx + b`
 
-**a = (𝒘𝑻 𝒙 + 𝒃) · L (a, y) · L**
+**a = σ(wᵀx + b) · L (a, y) · L**
 Logistic Regression pipeline with the math looks like:
 
-**Where, W → Weights X → Inputs b → Bias term  → Activation function · X · ŷ**
-|𝒘𝑻 𝒙 + 𝒃| |
+**Where, W → Weights X → Inputs b → Bias term σ → Activation function · X · ŷ**
+`wᵀx + b`
 
-|a = (𝒘𝑻 𝒙 + 𝒃)| |
+|a = σ(wᵀx + b)| |
 
 - W b
 
 | |L (a, y)|
 
-**Parameters: 1. w (weight) 2. b (bias) 3. Output a=(𝑤𝑇 𝑥 +𝑏)**
+**Parameters: 1. w (weight) 2. b (bias) 3. Output a=σ(wᵀx +b)**
 Activation function
 
-**a= = 1+𝑒1−𝑥 · Loss function for Logistic Regression: · L (a, y) =- 𝑦 log𝑎 + 1 − 𝑦 log(1 − 𝑎)**
+**a=σ = 1+e1−x · Loss function for Logistic Regression: · `L(a, y) = −[y · log(a) + (1 − y) · log(1 − a)]`**
 Logistic Regression pipeline with the math looks like:
 
 Activation function
 
-**a= = 1+𝑒1−𝑥 · ŷ**
-|𝒘𝑻 𝒙 + 𝒃| |
+**a=σ = 1+e1−x · ŷ**
+`wᵀx + b`
 
-|a = (𝒘𝑻 𝒙 + 𝒃)| |
+|a = σ(wᵀx + b)| |
 
 - W b
 
@@ -1033,13 +1027,13 @@ If y = 1:L (a, y) =-log a
 **Loss function for Logistic Regression:**
 If y = 0:L (a, y) =-log (1– a)
 
-**L (a, y) =- 𝑦 log𝑎 + 1 − 𝑦 log(1 − 𝑎)**
+**`L(a, y) = −[y · log(a) + (1 − y) · log(1 − a)]`**
 Logistic Regression pipeline with the math looks like:
 
-**Where, W → Weights X → Inputs b → Bias term  → Activation function · X**
-|𝒘𝑻 𝒙 + 𝒃| |
+**Where, W → Weights X → Inputs b → Bias term σ → Activation function · X**
+`wᵀx + b`
 
-|a = (𝒘𝑻 𝒙 + 𝒃)||L |(a, y)|
+|a = σ(wᵀx + b)||L |(a, y)|
 
 |L |(a, y)|
 
@@ -1047,55 +1041,52 @@ W b
 
 Forward Pass
 
-**Back Propagation · Parameters: 1. w (weight) 2. b (bias) 3. Output a=(𝑤𝑇 𝑥 +𝑏) · repeatedly adjust the weights to minimize the difference between actual output and desired output**
+**Back Propagation · Parameters: 1. w (weight) 2. b (bias) 3. Output a=σ(wᵀx +b) · repeatedly adjust the weights to minimize the difference between actual output and desired output**
 Activation function
 
-**a= = 1+𝑒1−𝑥 · Loss function for Logistic Regression: · L (a, y) =- 𝑦 log𝑎 + 1 − 𝑦 log(1 − 𝑎)**
+**a=σ = 1+e1−x · Loss function for Logistic Regression: · `L(a, y) = −[y · log(a) + (1 − y) · log(1 − a)]`**
 
 #### Optimization techniques
 
-**Generic Algorithm: Step 1: Initialize w and b Step 2: Perform Forward pass operation/calculations Step 3: Compute Loss/Cost function L (a, y) Step 4: Compute change in w and b (Take the partial derivative of the cost function with respect to Weights and bias (dw and db). Step 5: Update w and b w := w – dw b := b – db Step 6: Repeat from Step 2 with new values of w and b for ‘n’ number of iterations. · Gradient Descent for learning parameters: It is an iterative approach for error correction in a machine learning model. · Question: Find w and b that will minimize GD(w, b)**
+**Generic Algorithm: Step 1: Initialize w and b Step 2: Perform Forward pass operation/calculations Step 3: Compute Loss/Cost function L (a, y) Step 4: Compute change in w and b (Take the partial derivative of the cost function with respect to Weights and bias (dw and db). Step 5: Update w and b w := w – αdw b := b – αdb Step 6: Repeat from Step 2 with new values of w and b for ‘n’ number of iterations. · Gradient Descent for learning parameters: It is an iterative approach for error correction in a machine learning model. · Question: Find w and b that will minimize GD(w, b)**
 Required: Loss/cost function
 
 **(L)LossFn**
-|Example the loss function is: L (a, y)=- 𝑦log𝑎 + 1 − 𝑦 log(1 − 𝑎) | | |
+|Example the loss function is: L (a, y)=- yloga + 1 − y log(1 − a) | | |
 |---|---|---|
-| | → Learning rate| |
+| |α → Learning rate| |
 
 GDmin(w)
 
-**Gradient Descent for learning parameters: Learning rate() issues:**
-(L)LossFn
-
-(L)LossFn
+**Gradient Descent for learning parameters: Learning rate(α) issues:**
 
 **- It is a hyper-parameter**
 
-**Learning rate(): more intuitions**
+**Learning rate(α): more intuitions**
 
 Gradient Descent Types
 
 There are three main types of Gradient Descent Algorithms:
 
-- 1. Batch Gradient Descent (BGD)
-- 2. Stochastic Gradient Descent (SGD)
-- 3. Mini-Batch Gradient Descent (MBGD)
+1. Batch Gradient Descent (BGD)
+1. Stochastic Gradient Descent (SGD)
+1. Mini-Batch Gradient Descent (MBGD)
 
 Batch Gradient Descent (BGD)
 
 **Issues: · Generic steps: -Process each input sample and find the cost -Find the average cost over all input samples -Update w and b, and -repeat the steps for ‘n’ epochs(iterations)**
 
-- 1. It uses the complete dataset to calculate the gradients at every steps
-- 2. Slow when training set is large
-- 3. Difficult to find the learning rate
-- 4. Difficult to ascertain the number of epochs(iterations)
+1. It uses the complete dataset to calculate the gradients at every steps
+1. Slow when training set is large
+1. Difficult to find the learning rate
+1. Difficult to ascertain the number of epochs(iterations)
 
 **Advantage: · Stochastic → Random**
 
-- 1. Computes gradient based on single input sample: memory efficient
-- 2. Much faster compared to BGD
-- 3. Possible to train on large dataset
-- 4. Randomness is a good escape from local minima problem
+1. Computes gradient based on single input sample: memory efficient
+1. Much faster compared to BGD
+1. Possible to train on large dataset
+1. Randomness is a good escape from local minima problem
 
 Due to the random nature, the
 
@@ -1123,11 +1114,11 @@ Mini-Batch Gradient Descent (MBGD)
 
 **Advantage: · Generic steps: -Divide the training set into mini-batches (set of random samples on fixed number) -Process all the samples in a Mini-batch and find the average cost -Update w and b, and -repeat the steps for ‘n’ iterations/epochs on the training samples**
 
-- 1. Computes gradient based on small sets of input sample
-- 2. Much faster compared to BGD
-- 3. Possible to train on large dataset
-- 4. Performance boost on matrix operations using GPUs!
-- 5. Might not reach the optimal value, but very close to it, and possibly better than SGD
+1. Computes gradient based on small sets of input sample
+1. Much faster compared to BGD
+1. Possible to train on large dataset
+1. Performance boost on matrix operations using GPUs!
+1. Might not reach the optimal value, but very close to it, and possibly better than SGD
 
 **Issues:**
 
@@ -1142,56 +1133,68 @@ minima.
 - One of the popular algorithm for smoothing sequential data
 - Also called Moving Average
 - Weight the number of observations and using their average
-- Example: Temperatureover ‘n’ days Days
+- Example: Temperature θ over ‘n’ days Days
 
 Temperature
 
 Vt : Moving average on day ‘t’
 
-So, let V0 = 0 V1 = 0.9 V0 + 0.1 1 V2 = 0.9 V1 + 0.1 2 V3 = 0.9 V2 + 0.1 3
+So, let V0 = 0 V1 = 0.9 V0 + 0.1 θ1 V2 = 0.9 V1 + 0.1 θ2 V3 = 0.9 V2 + 0.1 θ3
 
 Temperature
 
-: : Vt = 0.9 Vt-1 + 0.1 t
+: : Vt = 0.9 Vt-1 + 0.1 θt
 
 Days
 
-Vt = 0.9 Vt-1 + 0.1 t If  = 0.9,
+Vt = 0.9 Vt-1 + 0.1 θt If β = 0.9,
 
 Temperature
 
-**Vt =  Vt-1 + (1- ) t**
+**Vt = β Vt-1 + (1- β) θt**
 This equation gives the moving average
 
 shown by the red line.
 
 Days
 
-**Vt =  Vt-1 + (1- ) t**
+**Vt = β Vt-1 + (1- β) θt**
 Temperature
 
-Vt is approximate average over 1−1
+Vt is approximate average over ≈1−1
 
- days
+β days
 
-So,  = 0.9 is closer to 10 days temperature  = 0.98 is closer to 50 days temperature  = 0.5 is closer to 2 days temperature
+So, β = 0.9 is closer to 10 days temperature β = 0.98 is closer to 50 days temperature β = 0.5 is closer to 2 days temperature
 
 Days
 
 What is Exponentially Weighted Averages doing?
 
-Vt =  Vt-1 + (1- ) t
+Vt = β Vt-1 + (1- β) θt
 
-For, V100= 0.9 V99 + 0.1 100 V99= 0.9 V98 + 0.1 99
+For, V100= 0.9 V99 + 0.1 θ100 V99= 0.9 V98 + 0.1 θ99
 
-Substituting, V99 V100= 0.1 100+ 0.9 (0.9 V98 + 0.1 99) V100= 0.1 100+ 0.9 ( 0.1 99+ 0.9 (0.9 V97+ 0.1 V98)) ..
+Substituting, V99 V100= 0.1 θ100+ 0.9 (0.9 V98 + 0.1 θ99) V100= 0.1 θ100+ 0.9 ( 0.1 θ99+ 0.9 (0.9 V97+ 0.1 V98)) ..
 
 - “Compute the Exponentially weighted average of the gradients and use that gradient to update weights” - Andrew NG
 - One of the most popular algorithms
 - Helps to accelerate the gradient vectors in right direction and reduces oscillation
 - Always faster than the SGD
 
-**Algorithm: At iteration t: Calculate 𝑑𝑤 𝑎𝑛𝑑 𝑑𝑏 on the current mini-batch V𝑑𝑤 =  V𝑑w + (1 - ) 𝑑𝑤 ➔ Vt =  Vt-1 + (1- ) t V𝑑𝑏=  V𝑑𝑏 + (1 - ) 𝑑𝑏 Update w and b: w = w -  V𝑑𝑤 ,b = b -  V𝑑𝑏 Hyper-parameters: , **
+Algorithm (Momentum) — at iteration t, on the current mini-batch compute `dw, db`:
+
+```text
+V_dw = β·V_dw + (1 − β)·dw          # V_t = β·V_{t−1} + (1 − β)·θ_t
+V_db = β·V_db + (1 − β)·db
+
+Update parameters:
+  w = w − α · V_dw
+  b = b − α · V_db
+
+Hyper-parameters: learning rate α, momentum β (≈ 0.9)
+```
+
 SGD Without Momentum SGD With Momentum
 
 Faster convergence and reduced oscillation
@@ -1201,67 +1204,118 @@ Faster convergence and reduced oscillation
 - RMSProp also reduces oscillation but in a different way than Momentum
 - RMSprop as well divides the learning rate by an exponentially decaying average of squared gradients.
 
-**Algorithm: At iteration t: Calculate 𝑑𝑤 𝑎𝑛𝑑 𝑑𝑏 on the current mini-batch S𝑑𝑤 = 2 S𝑑w + (1 - 2) 𝑑𝑤2 S𝑑𝑏= 2 S𝑑𝑏 + (1 - 2) 𝑑𝑏2 Update w and b: w = w -  𝑑𝑤S 𝑑𝑤 , b = b -  𝑑𝑏S 𝑑𝑏 Squaring the derivatives Square root of derivatives · Intuition: · →Slow**
-S𝑑𝑤 → Smaller number expected S𝑑𝑏→ Larger number expected
+Algorithm (RMSProp) — at iteration t, on the current mini-batch compute `dw, db`:
+
+```text
+S_dw = β_2·S_dw + (1 − β_2)·dw^2       # square the derivatives
+S_db = β_2·S_db + (1 − β_2)·db^2
+
+Update parameters (ε ≈ 10⁻⁸ for numerical stability):
+  w = w − α · dw / (√S_dw + ε)
+  b = b − α · db / (√S_db + ε)
+```
+
+Intuition: when an oscillating dimension produces a large `S`, the effective step size shrinks; a small `S` keeps the step size large — faster convergence with reduced oscillation.
 
 So,
-
-**Fast →**
-w = w -  𝑑𝑤S
-
-**, b = b -  𝑑𝑏S · In Practice add ε :**
-𝑑𝑤
-
-w = w -  S𝑑𝑤
-
-𝑑𝑤+ε , b = b -  S𝑑𝑏
-
-**Smaller number So, w is larger**
-Larger number So, b is small
-
-𝑑𝑏+ ε
-
-ε → small number, 10-8
 
 - Adam → Adaptive Moment Estimation
 - Combination of RMSProp and Momentum
 - Work well for a wide range of deep learning architecture
 
-**Algorithm: Initialize V𝑑𝑤 = 0, V𝑑𝑏= 0, S𝑑𝑤 = 0, S𝑑𝑏 = 0 At iteration t: Calculate 𝑑𝑤 𝑎𝑛𝑑 𝑑𝑏 on the current mini-batch V𝑑𝑤 = 1 V𝑑w + (1 - 1) 𝑑𝑤, V𝑑𝑏= 1 V𝑑𝑏 + (1 - 1) 𝑑𝑏  From Momentum, 1 S𝑑𝑤 = 2 S𝑑w + (1 - 2) 𝑑𝑤2, S𝑑𝑏= 2 S𝑑𝑏 + (1 - 2) 𝑑𝑏2  From RMSProp, 2 Update w and b: w = w -  V 𝑑𝑤 S𝑑𝑤+ε, b = b -  V 𝑑𝑏 S𝑑𝑏+ ε · In practice: Bias correction is required as V𝑑𝑤, V𝑑𝑏, S𝑑𝑤, S𝑑𝑏 are initialized to 0 and are biased towards zero. Hence, a bias correction is required as follows: V′𝑑𝑤 = V 𝑑w ( 1− 1 ) , V′𝑑b = V 𝑑b (1− 1) S′𝑑𝑤 = S 𝑑w (1 − 2) , S′𝑑b = S 𝑑b (1 − 2) Update w and b: w = w -  V ′ 𝑑𝑤 S′𝑑𝑤+ε , b = b -  V ′ 𝑑𝑏 S′𝑑𝑏+ ε · https://vis.ensmallen.org/ Hyper parameter guide:  (Learning rate)→ should be tunned, start with 0.001 1(Momentum term) → 0.9 (dw) 2(moving weighted average) → 0.999 (dw2) ε → 10-8 Optimization Demo: https://vis.ensmallen.org/**
-Learning Rate Decay
+Algorithm (Adam) — initialize `V_dw = V_db = S_dw = S_db = 0`. At iteration t, on the current mini-batch compute `dw, db`:
 
-**Speed-up the learning algorithm by slowing decreasing the 𝛼 (Learning rate)**
+```text
+# From Momentum (β_1):
+V_dw = β_1·V_dw + (1 − β_1)·dw
+V_db = β_1·V_db + (1 − β_1)·db
+
+# From RMSProp (β_2):
+S_dw = β_2·S_dw + (1 − β_2)·dw^2
+S_db = β_2·S_db + (1 − β_2)·db^2
+
+# Bias correction (V, S are initialised to 0 and biased toward 0):
+V'_dw = V_dw / (1 − β_1^t),   V'_db = V_db / (1 − β_1^t)
+S'_dw = S_dw / (1 − β_2^t),   S'_db = S_db / (1 − β_2^t)
+
+# Update:
+w = w − α · V'_dw / (√S'_dw + ε)
+b = b − α · V'_db / (√S'_db + ε)
+```
+
+Hyper-parameter guide:
+
+- α (learning rate) — tune; start with 0.001
+- β_1 (momentum term, on dw) — 0.9
+- β_2 (squared-grad average, on dw^2) — 0.999
+- ε — 10⁻⁸
+
+### Learning Rate Decay
+
+**Speed-up the learning algorithm by slowing decreasing the α (Learning rate)**
 
 #### Activation Functions
 
 Activation Functions: Sigmoid
 
-**= 1+1𝑒−𝑥**
+`σ(x) = 1 / (1 + e^(-x))`
 
-Sigmoid function:
+Characteristics:
 
-**Characteristics: - Non-linear in nature - Range(0, 1) - Tends to bring the activations to either side of the curve: good for a classifier - Suffers from vanishing gradient problem · Vanishing Gradient: Towards to the end of the curve, the value of Y change very less to the changes in X values. Hence gradient at the region will be very small. The network will refuse or learning extremely slowly.**
+- Non-linear in nature
+- Range (0, 1)
+- Tends to bring activations to either side of the curve: good for a classifier
+- Suffers from the vanishing gradient problem
+
+Vanishing Gradient: Toward the ends of the curve, Y changes very little with changes in X; the gradient becomes very small and the network learns extremely slowly.
 
 Activation Functions: tanh
 
-**Hyperbolic tangent: tanh 𝑥 = 2 1 + 𝑒−2𝑥 − 1 · Characteristics: - Non-linear in nature - Range(-1, 1) - Stronger gradient than sigmoid - Also suffers from vanishing gradient problem**
-Activation Functions: ReLu
+`tanh(x) = 2 / (1 + e^(-2x)) − 1`
 
-**Rectified Linear Unit (ReLu) 𝐴(𝑥) = max(0, x)**
-i.e. : if x < 0, A(x) = 0, if x > 0, A(x) = x
+Characteristics:
 
-**Characteristics: - Non-linear in nature - Range[0, inf] - Stronger gradient than sigmoid - Computationally less expensive than Sigmoid and Tanh - Best used in hidden layers - Dying ReLu problem · Avoids and rectifies vanishing gradient problem**
-Activation Functions: Leaky ReLu
+- Non-linear in nature
+- Range (-1, 1)
+- Stronger gradient than sigmoid
+- Also suffers from the vanishing gradient problem
+  Activation Functions: ReLu
 
-**Leak · Leaky Rectified Linear Unit (Leaky ReLu) 𝐴(𝑥) = max(0.01𝑥,x) · i.e. : if x < 0, A(x) = 0.01x, if x > 0, A(x) = x · Characteristics: - Non-linear in nature - Range[0, inf] - Leaky ReLUs are one attempt to fix the “dying ReLU” problem**
+`A(x) = max(0, x)` — if x < 0, A(x) = 0; if x ≥ 0, A(x) = x
+
+Characteristics:
+
+- Non-linear in nature
+- Range \[0, ∞)
+- Stronger gradient than sigmoid
+- Computationally less expensive than sigmoid and tanh
+- Best used in hidden layers
+- Dying ReLU problem
+- Avoids/rectifies vanishing gradient problem
+  Activation Functions: Leaky ReLu
+
+`A(x) = max(0.01x, x)` — if x < 0, A(x) = 0.01x; if x ≥ 0, A(x) = x
+
+Characteristics:
+
+- Non-linear in nature
+- Range (-∞, ∞)
+- Leaky ReLU is one attempt to fix the "dying ReLU" problem
 
 Activation Functions: Softmax
 
-| |Softmax 𝑆 𝑦𝑖 = 𝑒𝑦𝑖  𝑗 𝑒𝑦𝑗 for j = 1, …, K.| |
-|---|---|---|
-|Characteristics: - Non-linear in nature - Turns numbers in probabilities that sum to one. - Useful when we have more than one output - Used for classification in the output layer - Less computationally expensive than Sigmoid and Tanh | |Y|
+`Softmax: S(y_i) = e^(y_i) / Σ_j e^(y_j)` for j = 1, ..., K
 
-**Illustration: · = [ 2.0, 1.0, 0.1] Softmax(Y) = [0.7, 0.2, 0.1] (approx.)**
+Characteristics:
+
+- Non-linear in nature
+- Turns numbers into probabilities that sum to one
+- Useful when there is more than one output
+- Used for classification in the output layer
+- Less computationally expensive than sigmoid and tanh
+  |---|---|---|
+
+Illustration: `Y = [2.0, 1.0, 0.1] → Softmax(Y) ≈ [0.7, 0.2, 0.1]`
 
 Logistic Regression with Backpropagation
 
@@ -1270,15 +1324,15 @@ Average cost over all training ‘m’ samples
 
 X W
 
-**a = (𝒘𝑻 𝒙 + 𝒃)**
+**a = σ(wᵀx + b)**
 | |L (a, y) |
 
-𝒘𝑻 𝒙 + 𝒃
+`wᵀx + b`
 
-**Avg Loss(J) = 𝟏 𝒎 ෍ 𝒊=𝟏 𝒎 L(ai,yi)**
+Average loss over `m` samples: `J = (1/m) Σ_{i=1..m} L(a_i, y_i)`
 b
 
-**Batch GD Step 1: Initialize w and b Step 2: Perform Forward pass operation/calculations Step 2: Compute Loss/Cost function L (a, y) Step 3: Find the average cost over all input samples (Take the partial derivative of the cost function with respect to Weights and bias (dw and db). Step 4: Update w and b w := w – dw b := b – db Step 5: Repeat from Step 2 with new values of w and b for ‘n’ number of iterations. · dw = 𝜕𝑤𝜕𝐽 , db = 𝜕𝑏𝜕𝐽 · 𝑤 ≔ 𝑤 − dw b := b – db · Size #Bedroom #Bathroom Garden Location · Price**
+**Batch GD Step 1: Initialize w and b Step 2: Perform Forward pass operation/calculations Step 2: Compute Loss/Cost function L (a, y) Step 3: Find the average cost over all input samples (Take the partial derivative of the cost function with respect to Weights and bias (dw and db). Step 4: Update w and b w := w – αdw b := b – αdb Step 5: Repeat from Step 2 with new values of w and b for ‘n’ number of iterations. · dw = ∂w∂J , db = ∂b∂J · w ≔ w − αdw b := b – αdb · Size #Bedroom #Bathroom Garden Location · Price**
 Y
 
 Hidden Layer→ Adding more neurons in between input and output layer
@@ -1331,9 +1385,9 @@ Dog
 **CNNs are the foundations of modern state-of-the-art deep · learning based computer vision. Layers in a CNN:**
 Three main type of layers used to build a CNN architecture
 
-- 1. Convolutional Layer (CONV)
-- 2. Pooling Layer (POOL)
-- 3. Fully Connected layer (FC) These three types of layers are stacked together to form a CNN architecture!
+1. Convolutional Layer (CONV)
+1. Pooling Layer (POOL)
+1. Fully Connected layer (FC) These three types of layers are stacked together to form a CNN architecture!
 
 **Sample CNN architecture (LENET-5): · CONV Layer · FC Layer · POOL Layer · Sample CNN architecture:**
 
@@ -1356,8 +1410,7 @@ Convolution Operation
 
 |1|0|-1|
 
-# \*
-
+*(convolution)*
 |Convolution operator| |
 
 3 X 3 filter/Kernel
@@ -1375,8 +1428,7 @@ Convolution Operation
 
 |1|0|-1|
 
-# \*
-
+*(convolution)*
 |Convolution operator| |
 
 3 X 3 filter/Kernel
@@ -1423,8 +1475,7 @@ Image Convolved Feature
 |Convolution operator| |
 |0|-1|
 
-# \*
-
+*(convolution)*
 | |3 X 3 1|
 |---|---|
 |Convolution operator| |
@@ -1432,33 +1483,33 @@ Image Convolved Feature
 filter/Kernel
 
 **6 X 6 dimension matrix 8 X 8 dimension matrix == Input Matrix dimension**
-||(𝒏 + 𝟐𝒑 − 𝒇 + 𝟏) 𝑿 (𝒏 + 𝟐𝒑 − 𝒇 + 𝟏)|
+
 |---|---|
-|(𝒏 𝑿 𝒏) ∗ (𝒇 𝑿 𝒇)|
-Input Matrix Dimension : 𝑛 𝑥 𝑛 Filter size: 𝑓 𝑥 𝑓 Padding (𝑝) : 1 So, ( will produce ( e.g.: 6 𝑋 6 ∗ 3 𝑋 3 → 6 𝑋 6 Output matrix Input Matrix Output Matrix |
+|(n X n) ∗ (f X f)|
+Input Matrix Dimension : n x n Filter size: f x f Padding (p) : 1 So, ( will produce ( e.g.: 6 X 6 ∗ 3 X 3 → 6 X 6 Output matrix Input Matrix Output Matrix |
 
-Given: Input Matrix Dimension : 𝑛 𝑥 𝑛
+Given: Input Matrix Dimension : n x n
 
-**Filter size: 𝑓 𝑥 𝑓**
-Required Output Size = 𝒏 + 𝟐𝒑 − 𝒇 + 𝟏 𝑿 𝒏 + 𝟐𝒑 − 𝒇 + 𝟏 Question: What is pad size (𝒑) so that the input and output matrix are of same
+**Filter size: f x f**
+Required output size with stride `s = 1`: `(n + 2p − f) + 1` along each side.
 
 sizes?
 
-So, 𝑛 + 2𝑝 − 𝑓 + 1 = 𝑛
+So, n + 2p − f + 1 = n
 
-𝑝 = (𝑓2−1)
+p = (f2−1)
 
 #### Padding (Same and Valid)
 
-**Valid Padding:  No Padding (Padding 𝒑 = 0) So, Output size will be → 𝒏 − 𝒇 + 𝟏 𝑿 𝒏 − 𝒇 + 𝟏 Same Padding:  Output size and input size is same, this requires appropriate padding. Hence use 𝑝 = (𝑓2−1), for calculate the required padding.**
+**Valid Padding: ≈ No Padding (Padding p = 0) So, Output size will be → n − f + 1 X n − f + 1 Same Padding: ≈ Output size and input size is same, this requires appropriate padding. Hence use p = (f2−1), for calculate the required padding.**
 Stride
 
 It is the number of pixels by which we slide the filter over the input
 
 matrix Example:
 
-- 1. Stride(s) = 1: Move the filter by one pixel horizontally and vertically
-- 2. Stride(s) = 2: Move the filter by two pixels horizontally and vertically
+1. Stride(s) = 1: Move the filter by one pixel horizontally and vertically
+1. Stride(s) = 2: Move the filter by two pixels horizontally and vertically
 
 #### Stride and Padding illustration
 
@@ -1472,12 +1523,16 @@ padding (p) = 1
 
 Output size with Stride and padding
 
-Given: Input Matrix Dimension : 𝑛 𝑥 𝑛
+Given: Input Matrix Dimension : n x n
 
-**Filter size: 𝑓 𝑥 𝑓 · Padding:p Stride :s · Output Size = 𝑛 +2𝑝𝑠 −𝑓 + 𝟏 𝑿 𝑛 +2𝑝𝑠 −𝑓 + 𝟏**
-Example:
+- Filter size: `f × f`
+- Padding: `p`
+- Stride: `s`
+- Output size: `⌊(n + 2p − f) / s⌋ + 1` along each spatial dimension
+  so the output is `(⌊(n + 2p − f)/s⌋ + 1) × (⌊(n + 2p − f)/s⌋ + 1)`
+  Example:
 
-Input Matrix Dimension : 7 𝑥 7, Filter size: 3 𝑥 3
+Input Matrix Dimension : 7 x 7, Filter size: 3 x 3
 
 Padding:0, Stride :2
 
@@ -1593,18 +1648,18 @@ Rule of Thumb: Validation and Test set should come from the same distribution
 
 - It is a value that allows to shift the activation function to left or right, to better fit the data
 
-**With bias · Without bias · a = s(𝒘𝑻 𝒙) · a = s(𝒘𝑻 𝒙 + 𝒃)**
+Compare: without bias `a = σ(wᵀx)` vs with bias `a = σ(wᵀx + b)`.
 
 - Changes in ‘w’ alters the steepness of the curve, keeping the origin at (0,0) or same/unchanged
 - Without bias we may get a poor fit to training data
 
-**a = s(𝒘𝑻 𝒙) · Without bias**
+Without bias: `a = σ(wᵀx)`
 
 - Changes in ‘b’ shifts the curve to left or right
 - With bias the curve/line will not always pass through origin
 - We get a better fit to training data
 
-**a = s(𝒘𝑻 𝒙 + 𝒃) · With bias**
+With bias: `a = σ(wᵀx + b)`
 Variance
 
 - It is the change in prediction accuracy of Machine Learning model between training data and test data.
@@ -1709,7 +1764,9 @@ smaller weight matrices leads to simpler model
 
 - L2 regularization:
 
-**l 2𝑚 ∗ 𝑤**
+Cost function = Loss + `(λ / 2m) · Σ w2` (λ is a hyper-parameter)
+
+Also known as weight decay — it pushes weights toward zero, but not exactly zero.
 Cost func on = Loss + lis a hyper-parameter
 
 Also known as weight decay, as it forces the weight to decay towards zero, but not exactly zero.
@@ -1718,7 +1775,13 @@ Also known as weight decay, as it forces the weight to decay towards zero, but n
 
 Cost func on = Loss +
 
-**l 2𝑚 ∗ 𝑤**
+Cost function = Loss + `(λ / 2m) · Σ |w|`
+
+- Penalises the absolute value of `w`
+
+- Weights may reduce exactly to zero
+
+- Useful for model compression
 
 - Penalize the absolute value of the ‘w’
 
@@ -1855,9 +1918,9 @@ Transfer Learning
 
 Transfer Learning Benefits
 
-- 1. Less training data required: Don’t have enough data to train a Deep Learning model from scratch. Model trained using a large (similar) dataset can be used.
-- 2. Faster training : Training can converge faster, due the use to existing knowledge (weights) to start with rather than from scratch.
-- 3. Better model generalization: Model is trained to identify features which can be applied to new contexts.
+1. Less training data required: Don’t have enough data to train a Deep Learning model from scratch. Model trained using a large (similar) dataset can be used.
+1. Faster training : Training can converge faster, due the use to existing knowledge (weights) to start with rather than from scratch.
+1. Better model generalization: Model is trained to identify features which can be applied to new contexts.
 
 #### Option-1: (VGG-16 considered as an example) Use pre-trained (ImageNet) model for prediction, without any training.
 
@@ -1972,7 +2035,7 @@ X 32 (# of filters)
 
 X 32 (# of filters)
 
-#### So, (6 X 6 X 64) → (6 X 6 X 32) … reduced!
+#### So, (6 X 6 X 64) → (6 X 6 X 32) ... reduced!
 
 **Relu**
 1 X 1 Conv 128 filters
@@ -2011,7 +2074,7 @@ Computation cost
 
 28 X 28 X 192
 
-**Computation Cost: 28 X 28 X 32 X 5 X 5 X 192  120M multiplications! Quite expensive !**
+**Computation Cost: 28 X 28 X 32 X 5 X 5 X 192 ≈ 120M multiplications! Quite expensive !**
 Reduce Computation cost using 1X1 CONV
 
 28 X 28 X 32
@@ -2029,7 +2092,7 @@ Reduce Computation cost using 1X1 CONV
 **28 X 28 X 16**
 28 X 28 X 192
 
-Computation Cost: 1X1: 28 X 28 X 16 X 192  2.4M multiplications! 5X5: 28 X 28 X 32 X 5 X 5 X 16  10M multiplications! Total : 12.4M multiplications!  Reduced by 10 times!
+Computation Cost: 1X1: 28 X 28 X 16 X 192 ≈ 2.4M multiplications! 5X5: 28 X 28 X 32 X 5 X 5 X 16 ≈ 10M multiplications! Total : 12.4M multiplications! → Reduced by 10 times!
 
 ## Bottleneck Layer
 
@@ -2226,25 +2289,25 @@ Detection as a regression problem
 
 **Output : Dog, (x, y, Ht, Wd) · Cat, (x, y, Ht, Wd) Cat, (x, y, Ht, Wd)**
 
-- 1. Apply Sliding Window technique
-- 2. Apply CNN to different Windows and get a prediction
+1. Apply Sliding Window technique
+1. Apply CNN to different Windows and get a prediction
 
 **Output : Dog? No Cat? No · CNN · Background? Yes**
 
-- 1. Apply Sliding Window technique
-- 2. Apply CNN to different Windows and get a prediction
+1. Apply Sliding Window technique
+1. Apply CNN to different Windows and get a prediction
 
 **Output : Dog? No Cat? Yes Background? No · CNN**
 
-- 1. Apply Sliding Window technique
-- 2. Apply CNN to different Windows and get a prediction
+1. Apply Sliding Window technique
+1. Apply CNN to different Windows and get a prediction
 
 **Output : Dog? No Cat? Yes Background? No · CNN · Issue with Sliding Window technique**
 
-- 1. Apply CNN on large number of windows
-- 2. Multiple scale and locations of windows
-- 3. Inaccurate bounding boxes
-- 4. Computationally expensive
+1. Apply CNN on large number of windows
+1. Multiple scale and locations of windows
+1. Inaccurate bounding boxes
+1. Computationally expensive
 
 **Region Proposal Technique:**
 
@@ -2260,9 +2323,9 @@ Classify each region with SVMs
 
 **SVMs · Bbox Reg**
 
-- 1. Resized to match the input to CNN requirement.
-- 2. mAP: 62.4% for 2007 PASCAL VOC
-- 3. Problem: Very Slow!
+1. Resized to match the input to CNN requirement.
+1. mAP: 62.4% for 2007 PASCAL VOC
+1. Problem: Very Slow!
 
 Pass each region through ConvNet
 
@@ -2288,17 +2351,17 @@ Run whole image through ConvNet
 
 **ConvNet**
 
-- 1. Reduce computation
-- 2. ROIs from feature maps using selective search
-- 3. mAP: 70% for 2007 PASCAL VOC
+1. Reduce computation
+1. ROIs from feature maps using selective search
+1. mAP: 70% for 2007 PASCAL VOC
 
 Case Study: FASTER- R-CNN
 
-- 1. Use CNNs to make proposals
+1. Use CNNs to make proposals
 
-- 2. Introduced RPN (Region Proposal Network)
+1. Introduced RPN (Region Proposal Network)
 
-- 3. mAP: 78.8% for 2007 PASCAL VOC
+1. mAP: 78.8% for 2007 PASCAL VOC
 
 - RCNN → Look at every patch one by one
 
@@ -2427,10 +2490,10 @@ In practice: The grid is finer, 19 X 19 instead of 3 X 3 So, Target will be of s
 
 **Issues with Object Detection:**
 
-- 1. Each object has one midpoint
-- 2. Each cells are subjected to object localization + classification
-- 3. Hence, neighbouring cells might assume that it has the mid-point
-- 4. Hence, Multiple detection bounding box
+1. Each object has one midpoint
+1. Each cells are subjected to object localization + classification
+1. Hence, neighbouring cells might assume that it has the mid-point
+1. Hence, Multiple detection bounding box
 
 **Sample prediction: For C1: Box1: 0.9 (Confidence Score) Box2: 0.79 Box3: 0.82**
 
@@ -2438,9 +2501,9 @@ In practice: The grid is finer, 19 X 19 instead of 3 X 3 So, Target will be of s
 
 NMS cleans/removes the multiple detection and only keeps the one with very high confidence
 
-- 1. Check the probabilities of each detection and keep ones with score > Threshold (0.7)
+1. Check the probabilities of each detection and keep ones with score > Threshold (0.7)
 
-- 2. For remaining boxes:
+1. For remaining boxes:
 
 - Box with highest score is the detection results.
 
@@ -2459,8 +2522,8 @@ Anchor Box 1 Anchor Box 2
 **Anchor Box 1 · Associate each object to:**
 Predicted BB
 
-- 1. A cell which contains its mid-point and
-- 2. Anchor box for the cell with highest IoU
+1. A cell which contains its mid-point and
+1. Anchor box for the cell with highest IoU
 
 Anchor Box 1
 
@@ -2596,8 +2659,8 @@ Anchor Box 1 Anchor Box 2
 **Anchor Box 1 · Associate each object to:**
 Predicted BB
 
-- 1. A cell which contains its mid-point and
-- 2. Anchor box for the cell with highest IoU
+1. A cell which contains its mid-point and
+1. Anchor box for the cell with highest IoU
 
 Anchor Box 1
 
@@ -2644,9 +2707,9 @@ Anchor-free detector
 
 Localize objects without using boxes as proposals Two board categories:
 
-- 1. Key-point based
+1. Key-point based
 
-- 2. Center-based
+1. Center-based
 
 - Locates key object parts in an image
 
@@ -2849,7 +2912,7 @@ Semantic segmentation classifies object pixels on specific classes/category
 
 00000000000001100000000000000000000000 00000000000001110000000011000000000000 00000000000011111111111111000000000000 00000000000011111111111111000000000000 00000000000011111111111110000000000000 00000000000011111111111111100000000000 00000000000011111111111111110000000000 00000000000011111111111111110000000000 00000000000001111111111111110000000000 00000000000000111111111111100000000000 00000000000000011111111111000000000000 00000000000000011111111111000000000000 00000000000000011111111100000000000000
 
-…
+...
 
 {
 
@@ -2930,7 +2993,7 @@ X2
 
 Input
 
-𝑦 = 𝑓(𝑥 , ℎ )
+y = f(x , h )
 
 Output Input Past Memory/ state
 
@@ -2940,7 +3003,7 @@ y’t
 
 Weights w
 
-ℎ = 𝑓 (𝑥 , ℎ )
+h = f (x , h )
 
 RNN
 
@@ -2949,13 +3012,13 @@ Output Input Past state
 **Recurrence Relation**
 Xt
 
-𝑦 = 𝑊 ℎ OutputVector
+y = W h OutputVector
 
 y’t
 
 Output
 
-ℎ = 𝑡𝑎𝑛ℎ (𝑊 ℎ + 𝑊 𝑥 )
+h = tanh (W h + W x )
 
 RNN
 
@@ -2969,7 +3032,7 @@ Forward Pass Backward Pass
 
 L0 L1 Lt
 
-…
+...
 
 y’0
 
@@ -2981,7 +3044,7 @@ y’t
 
 RNN ht
 
-𝑊 𝑊
+W W
 
 ≈
 
@@ -2991,7 +3054,7 @@ RNN
 
 RNN
 
-…
+...
 
 X0
 
@@ -3029,7 +3092,7 @@ y’t-2
 
 y’t-1
 
-…
+...
 
 #### Features
 
@@ -3045,15 +3108,15 @@ Xt-2
 
 Xt-1
 
-𝑦 𝑦 𝑦 𝑦 𝑦 𝑦
+y y y y y y
 
 Output
 
-…
+...
 
 Features
 
-𝑥 𝑥 𝑥 𝑥 𝑥 𝑥
+x x x x x x
 
 Input
 
@@ -3110,13 +3173,13 @@ Extract Values based On attention
 
 **Steps:**
 
-- 1. Split an image into patches
-- 2. Flatten the patches
-- 3. Produce lower-dimensional linear embeddings from the flattened patches
-- 4. Add positional embeddings
-- 5. Feed the sequence as an input to a standard transformer encoder
-- 6. Pretrain the model with image labels (fully supervised on a huge dataset)
-- 7. Finetune on the downstream dataset for image classification
+1. Split an image into patches
+1. Flatten the patches
+1. Produce lower-dimensional linear embeddings from the flattened patches
+1. Add positional embeddings
+1. Feed the sequence as an input to a standard transformer encoder
+1. Pretrain the model with image labels (fully supervised on a huge dataset)
+1. Finetune on the downstream dataset for image classification
 
 Processes the entire image using filters (kernels)
 
@@ -3151,10 +3214,10 @@ Goal: Generate new data samples (e.g. images, audio, text) that is similar to a 
 
 **Generic steps:**
 
-- 1. Start with real data
-- 2. Add noise step-by-step, until the image becomes pure noise
-- 3. Train a model to reverse this process: denoising to recover the original image!
-- 4. Once trained, the model can start from pure noise and generate new and realistic samples.
+1. Start with real data
+1. Add noise step-by-step, until the image becomes pure noise
+1. Train a model to reverse this process: denoising to recover the original image!
+1. Once trained, the model can start from pure noise and generate new and realistic samples.
 
 ### Diffusion Models
 
