@@ -126,13 +126,13 @@ Getting insight about complex problems and a large amount of data
 
 This is too complex.. Skip!
 
-Not Interested in learning Open Book Exam: 45% Closed Book Exam: 35%
+Analogy:
 
-Memorizing everything Open Book Exam: 98% Closed Book Exam: 55%
-
-Learning concept well with examples Open Book Exam: 93% Closed Book Exam: 85%
-
-**Underfitting/not learning · Overfitting · Best-Fit**
+| Strategy | Open-book exam | Closed-book exam | Fit type |
+|--------------------------------------------|----------------|------------------|--------------|
+| Not interested in learning | 45% | 35% | Underfitting |
+| Memorising everything | 98% | 55% | Overfitting |
+| Learning the concept well with examples | 93% | 85% | Best fit |
 Computer Vision
 
 How computers see and understand digital images and videos.
@@ -158,7 +158,6 @@ Assistance to differently abled humans (bionic eye)
 
 Unmanned Surveillance using Drone
 
-**Image search engines**
 Human machine interaction/ Robotics
 
 Autonomous driving
@@ -211,7 +210,6 @@ So, What Changed Overtime?
 **Availability of faster computers! Cheap and fast GPUs · Very large datasets, Easy to collect and store**
 Improved libraries, toolboxes, modern architectures!
 
-**Keras**
 AI, ML and DL relationship!
 
 Artificial Intelligence
@@ -220,17 +218,7 @@ Machine Learning
 
 Deep Learning
 
-explicitprogramming
-
-programsintelligent
-
-Makingmachine&
-
-Learnwithoutany
-
-LearnusingDeep
-
-NeuralNetworks
+**AI → ML → DL** progression (1950s → 1980s → 2010s): ML *makes machines learn without explicit programming*; DL *learns using deep neural networks*.
 
 1950s 1980s 2010s
 
@@ -251,8 +239,6 @@ Weight
 Colour
 
 Typical Machine Learning Pipeline
-
-**Launch**
 
 Evaluate Solution
 
@@ -466,55 +452,11 @@ A (24 X 16) Matrix which represents the number ’8’
 **Image dimension = 5 X 5 f(2, 3) = 170 (Pixel/intensity value)**
 Hence, an image may be defined as a 2D function f(x, y) , where, x and y are spatial co-ordinates, and the amplitude of f at (x , y) is the intensity or Gray level of the image at that point/pixel.
 
-**5 X 5 Gray scale image (8 bit)**
-Blue
+**5×5 grayscale image (8-bit)** — single intensity channel.
 
-170 170 55 170 170
+**5×5×3 colour image (24-bit)** — three 8-bit channels (R, G, B), each a 5×5 matrix of the same shape as the example above.
 
-Green
-
-**Image dimension = 5 X 5 X 3 No. of Channels = 3**
-170 170 55 170 170
-
-170 55 170 55 170
-
-Red
-
-170 170 55 170 170
-
-170 55 170 55 170
-
-170 55 170 55 170
-
-Since, RGB image contains 3 X 8-bits of intensities, they are referred to as 24-bit colour images.
-
-170 55 170 55 170
-
-170 55 170 55 170
-
-55 140 140 140 55
-
-170 55 170 55 170
-
-55 140 140 140 55
-
-55 170 170 170 55
-
-So, 24-bit colour depth
-
-55 140 140 140 55
-
-= 8 X 8 X 8 bits
-
-55 170 170 170 55
-
-= 256 X 256 X 256 colours
-
-55 170 170 170 55
-
-= ~16 million colours
-
-5 X 5 X 3 colour image (24 bit)
+RGB has `3 × 8 = 24 bits/pixel` ⇒ `2²⁴ ≈ 16,777,216` (~16M) possible colours per pixel.
 
 Image Processing - Types
 
@@ -689,12 +631,12 @@ Change is Y-directions
 
 Combining both X and Y direction to estimate if changes are in both directions
 
-**Step -1: Computing Image Gradient: · 1. Use the horizontal and vertical filters to compute gradient values**
+**Step 1: Compute the image gradient** — apply horizontal and vertical filters.
 Gradientisy-directions
 
-gx= * I
+`g_x = f_x ∗ I` (convolve image `I` with horizontal filter `f_x`)
 
-gy= * I
+`g_y = f_y ∗ I` (convolve image `I` with vertical filter `f_y`)
 
 Horizontal filter
 
@@ -725,20 +667,18 @@ Example 3×3 neighbourhood (only the cross is needed):
 
 **Pixel with blue circle has an angle of 80 degrees and magnitude of 2**
 
-**Step -3: Block Normalization:**
+**Step 3: Block normalisation**
 
-- 16 X 16 pixels blocks or 2X2 cells are used for normalization, which has 4 histograms.
-- Normalization will make it scale/multiplication invariant
-- Each block will represent 36 X 1 element vector
-
-**Step -3: Block Normalization:**
-Normalization example: (3, 9) → 3 + 9 = 9.48 (3/9.48 , 9/9.48) = (0.32, 0.95) Multiple (3, 9) by 2 to increase brightness (6, 18) → 6 + 18 = 18.97 (6/18.97, 18/18.97) = (~0.32, ~0.95)
+- 16×16-pixel blocks (2×2 cells) are used for normalisation, giving 4 histograms.
+- Normalisation makes the descriptor scale / multiplication invariant.
+- Each block produces a 36×1 element vector.
+  Normalization example: (3, 9) → 3 + 9 = 9.48 (3/9.48 , 9/9.48) = (0.32, 0.95) Multiple (3, 9) by 2 to increase brightness (6, 18) → 6 + 18 = 18.97 (6/18.97, 18/18.97) = (~0.32, ~0.95)
 
 Brightness reduced Brightness increased
 
 Original image
 
-**Step -4: Calculate the HOG feature vector:**
+**Step 4: Calculate the HoG feature vector**
 
 - Each of the 36 X 1 vectors in each blocks are concatenated into one big vector.
 - Size of the vector will be: Number of blocks X 36
@@ -764,10 +704,10 @@ An 8-digit binary number is obtained by consideringthe thresholding result, star
 |7|62|3|
 |6|5|4|
 
-- There can be 28 = 256 possible values
+- There can be 2⁸ = 256 possible values
 - Hence, the LBP histogram will have 256 bins →feature vector
 
-**00111110 = (0 × 27) + (0 × 26) + (1 × 25) + (1 × 24) + (1 × 23) + (1 × 22) + (1 × 21) + (0 × 20) = 62 · An Example of LBP Computation:**
+Worked LBP value (8-bit): `00111110₂ = 0·2⁷ + 0·2⁶ + 1·2⁵ + 1·2⁴ + 1·2³ + 1·2² + 1·2¹ + 0·2⁰ = 62`
 
 ### Neural Network Basics
 
@@ -798,8 +738,6 @@ LocationIndex
 Size #Bedroom #Bathroom Garden Location
 
 Price
-
-**Launch**
 
 Evaluate Solution
 
@@ -919,7 +857,6 @@ Dog? → 1 Cat (≈ not Dog)? → 0
 
 **Error / Loss · Gradient · Target · Model (ANN architecture + parameters) · Output (y) · Input (x)**
 
-**Activation function**
 Problem of Binary Classification → Logistic Regression (Dog ? → 1 | Not Dog? → 0)
 
 **Parameters: 1. w (weight) 2. b (bias) 3. Output a= σ(wᵀx+b) · Loss function for Logistic Regression: · `L(a, y) = −[y · log(a) + (1 − y) · log(1 − a)]`**
@@ -1310,14 +1247,14 @@ Dog
 - CNNs have neurons arranged in 3D
 - It is a sequence of layers which transforms input 3D volume to 3D outputs volume
 
-**CNNs are the foundations of modern state-of-the-art deep · learning based computer vision. Layers in a CNN:**
+**CNNs are the foundation of modern state-of-the-art deep-learning-based computer vision.** Layers in a CNN:
 Three main type of layers used to build a CNN architecture
 
 1. Convolutional Layer (CONV)
 1. Pooling Layer (POOL)
 1. Fully Connected layer (FC) These three types of layers are stacked together to form a CNN architecture!
 
-**Sample CNN architecture (LENET-5): · CONV Layer · FC Layer · POOL Layer · Sample CNN architecture:**
+**Sample CNN architecture (LeNet-5)** — alternating CONV / POOL layers, ending with FC layers.
 
 - CONVolution is the first layer to extract features from an input image
 - Core building block of a CNN
@@ -1646,26 +1583,17 @@ What is Human-level error?
 
 Loss function = Loss + Regularization term (l)
 
-- Duetol,theweightmatriceswilldecrease,assuminganeuralnetworkwith
-
-smaller weight matrices leads to simpler model
+- Due to `λ`, the weight matrices will decrease — and a neural network with smaller weight matrices tends to be simpler.
 
 - In Deep Learning, Regularization penalizes the weight matrices of the nodes
 
-- L2 regularization:
+**L2 regularization** (also called weight decay):
 
-Cost function = Loss + `(λ / 2m) · Σ w2` (λ is a hyper-parameter)
+`Cost = Loss + (λ / 2m) · Σ w²` — λ is a hyper-parameter. Pushes weights toward zero, but not exactly to zero.
 
-Also known as weight decay — it pushes weights toward zero, but not exactly zero.
-Cost func on = Loss + lis a hyper-parameter
+**L1 regularization**:
 
-Also known as weight decay, as it forces the weight to decay towards zero, but not exactly zero.
-
-- L1 regularization:
-
-Cost func on = Loss +
-
-Cost function = Loss + `(λ / 2m) · Σ |w|`
+`Cost = Loss + (λ / 2m) · Σ |w|`
 
 - Penalises the absolute value of `w`
 
@@ -1673,19 +1601,12 @@ Cost function = Loss + `(λ / 2m) · Σ |w|`
 
 - Useful for model compression
 
-- Penalize the absolute value of the ‘w’
-
-- Weight may reduce to zero
-
-- Useful in compressing a model
-
 - It produces good results and most popular regularization technique
 
 - At every iteration it randomly selects and drops some nodes and remove all the connections to and from them
 
 - Each iteration has a different set of nodes
 
-**Example Deep NN Example Deep NN with Dropout**
 Data Augmentation
 
 - Another simple way to reduce overfitting is to increase size of training dataset!
@@ -1717,7 +1638,6 @@ Mixup:
 
 Trains a neural network on convex combinations of pairs of examples and their labels. By doing so, mixup regularizes the neural network to favour simple linear behaviour in-between training examples
 
-**+ · =**
 Image A (λ=0.55)
 
 Blended Output
@@ -1728,7 +1648,6 @@ CutMix:
 
 In CutMix augmentation strategy: patches are cut and pasted among training image; ground truth labels are also mixed proportionally to the area of the patch.
 
-**+ · =**
 Image A
 
 Pasted Patch
@@ -1814,20 +1733,14 @@ Transfer Learning Benefits
 
 number of samples.
 
-**Train**
-
 #### Option-2: (VGG-16 considered as an example) Train Full-Connected layer, Use CONV layers for feature extraction
 
 →Useful when your dataset distribution is similar to ImageNet (or original dataset), but number of classes are different and your dataset is small.
 
 Train/Fine-Tune
 
-**Freeze**
-
 **Option-3: (VGG-16 considered as an example) · Partially Train CONV layers (usually last layer(s) which have specialised · features) + Full Connection (FC) layer (with modifications)**
 →Useful when your dataset distribution is not similar to ImageNet (or original dataset), number of classes are different and your dataset is small.
-
-**Train/Fine-Tune**
 
 #### Option-4: (VGG-16 considered as an example) Train all the CONV layers + Full Connection (FC) layer (with modifications)
 
@@ -1881,8 +1794,6 @@ Activations: Relu after each CONV and FC layer Optimizer: SGD with Momentum Regu
 - Number of trainable parameters: 4 Million (Alexnet ~ 60M), Significantly reduced
 - A novel inception module was introduced.
 - Optimizer: RMSProp
-
-**Inception Module**
 
 ### Understanding Inception and ResNet
 
@@ -1954,13 +1865,21 @@ Computation Cost: 1X1: 28 X 28 X 16 X 192 ≈ 2.4M multiplications! 5X5: 28 X 28
 
 **GoogleNet(2014): 9 Inception modules stacked together**
 
-**Deeper Network → Vanishing Gradient - Introduced two auxiliary classifier - Applied Softmax to the output - Compute Auxiliary loss/cost - Only used for training**
+Deeper networks suffer from the vanishing-gradient problem. GoogLeNet adds two **auxiliary classifiers**:
+
+- Apply Softmax to an intermediate feature map
+- Compute an auxiliary loss
+- Used only during training (`Total loss = real_loss + 0.3 · Aux_loss_1 + 0.3 · Aux_loss_2`)
+
+Inception V3 introduces three further ideas:
+
+- **Factorising convolutions** to reduce parameters:
+  - 1 layer of 5×5 filter → 25 parameters; 2 layers of 3×3 filters → 18 parameters (~28% reduction)
+  - 3×3 filter → 9 parameters; 3×1 + 1×3 filters → 6 parameters (~33% reduction)
 
 Aux_Loss2
 
 Aux_Loss1
-
-**Auxiliary Classifiers · Total Loss/cost = Real_Loss + 0.3 X Aux_Loss1 + 0.3 X Aux_Loss1 · Authors suggested 3 different modules -Factorizing Convolutions: Reducing the number of parameters · 1 layer of 5×5 filter, #parameters = 5×5=25 2 layers of 3×3 filters, #parameters = 3×3+3×3=18 Number of parameters is reduced by 28% · 3×3 filter, #parameters = 3×3=9 3×1 and 1×3 filters, #parameters = 3×1+1×3=6 Number of parameters is reduced by 33%**
 
 #### Inception V3 Architecture
 
@@ -1987,9 +1906,7 @@ What wrong with this curves? Overfitting?
 - Validation: 50k images
 - Test : 150k images
 
-ImageNet Dataset Results:
-
-ImageNet Dataset Results (current):
+**ImageNet dataset results** — see the original lecture slide for the model-vs-mAP scatter plot (CNN architectures vs. their ImageNet top-1/top-5 accuracy).
 
 ______________________________________________________________________
 
@@ -2037,21 +1954,19 @@ Multiple Object
 
 - Large number classes complicates the task
 
-**Dataset Comparison**
-
 - Intersection over Union (IoU): Intersection over Union is a metric used for the evaluation of an object detector, i.e. how good is the predicted bounding box for an object detected closely matches
 
 ### Microsoft COCO Dataset
 
-### Microsoft COCO Evaluation metrics
+MS COCO is a popular large-scale dataset for object detection, segmentation and captioning. Standard evaluation uses mAP at several IoU thresholds (`AP@.50`, `AP@.75`, `AP@[.50:.05:.95]`).
 
 ### Taxonomy of Object detectors
 
-**Object Detection · Network type · Data type**
+**Object detection taxonomy** is organised by network type (single-stage vs two-stage / region-proposal based) and data type (monocular image vs point cloud).
 
-**D Object Detector · 2D Object detectors · Regression/Classification Based**
+By data type: **3D Object Detector** (point-cloud / point-nets) and **2D Object detector** (regression / classification based).
 
-**Monocular Image · Point Cloud · Point Nets · RCNN family · SSD · Yolo**
+Examples by family: **monocular image** input (RCNN family, SSD, YOLO) vs **point-cloud** input (PointNets).
 
 Image Classification
 
@@ -2138,10 +2053,7 @@ Case Study: R-CNN
 
 Linear Regression for bounding box offsets
 
-**R-CNN: Region based CNN**
 Classify each region with SVMs
-
-**SVMs · Bbox Reg**
 
 1. Resized to match the input to CNN requirement.
 1. mAP: 62.4% for 2007 PASCAL VOC
@@ -2149,27 +2061,21 @@ Classify each region with SVMs
 
 Pass each region through ConvNet
 
-**SVMs · Bbox Reg · Conv -Net**
 Warped image regions
 
 Region-of-interest (ROI) from proposal method around ~2K
 
-**Linear + Softmax**
 Object category
 
-**Linear**
 Box offset
 
 Per-Region Network
 
-**Slow RCNN**
 Crop + Resize features
 
 Region of Interest (ROIs) from proposal method
 
 Run whole image through ConvNet
-
-**ConvNet**
 
 1. Reduce computation
 1. ROIs from feature maps using selective search
@@ -2189,7 +2095,6 @@ Case Study: FASTER- R-CNN
 
 - Faster R-CNN → Propose patches using a neural network (RPN)
 
-**Feature R-CNN Fast R-CNN Fater R-CNN**
 | Aspect | R-CNN | Fast R-CNN | Faster R-CNN |
 |------------------|------------------------|-------------------------|------------------------|
 | Region proposal | Selective search | Selective search | RPN (learned) |
@@ -2200,9 +2105,9 @@ Case Study: FASTER- R-CNN
 
 ### Object Detection Techniques History
 
-Image Annotation for Object Detection
+See the surveyed timeline (sliding-window → region proposals → R-CNN family → YOLO/SSD → DETR/RF-DETR). Refer to the original slide-deck image for the visual.
 
-**PASCAL VOC Format**
+### Image annotation for object detection
 
 ______________________________________________________________________
 
@@ -2223,15 +2128,13 @@ Outline
 
 ### Taxonomy of Object detectors
 
-**Object Detection · Network type · Data type**
+**Object detection taxonomy** is organised by network type (single-stage vs two-stage / region-proposal based) and data type (monocular image vs point cloud).
 
-**D Object Detector · 2D Object detectors · Regression/Classification Based**
+By data type: **3D Object Detector** (point-cloud / point-nets) and **2D Object detector** (regression / classification based).
 
-**Monocular Image · Point Cloud · Point Nets · RCNN family · SSD · Yolo**
+Examples by family: **monocular image** input (RCNN family, SSD, YOLO) vs **point-cloud** input (PointNets).
 
 ### Object Detection Techniques History
-
-**Sliding Window technique**
 
 #### Sliding Window technique
 
@@ -2295,16 +2198,10 @@ Class : {car, bike}
 
 In practice: The grid is finer, 19 X 19 instead of 3 X 3 So, Target will be of size: 19 X 19 X 7 Works well for non-overlapping objects
 
-**Issues with Object Detection:**
-
 1. Each object has one midpoint
 1. Each cells are subjected to object localization + classification
 1. Hence, neighbouring cells might assume that it has the mid-point
 1. Hence, Multiple detection bounding box
-
-**Sample prediction: For C1: Box1: 0.9 (Confidence Score) Box2: 0.79 Box3: 0.82**
-
-**For C2: Box1: 0.92 Box2: 0.85 Box3: 0.7 · C2**
 
 NMS cleans/removes the multiple detection and only keeps the one with very high confidence
 
@@ -2326,7 +2223,6 @@ YOLO: You Only Look Once Algorithm
 **So, Currently the Target Y = {1, x, y, h, w, C1, C2}, As the mid-points for both the objects are on the same grid cell, only one of the objects will be associated**
 Anchor Box 1 Anchor Box 2
 
-**Anchor Box 1 · Associate each object to:**
 Predicted BB
 
 1. A cell which contains its mid-point and
@@ -2342,8 +2238,6 @@ Similar Shape
 
 **So, with Anchor boxes: Target Y = {Po, x, y, h, w, C1, C2, Po, x, y, h, w, C1, C2},**
 Anchor Box 1 Anchor Box 2
-
-**Training Set**
 
 - Anchor Box 1
 - Anchor Box 2
@@ -2397,10 +2291,6 @@ Class : {car, bike}
 
 - With ResNet101 base SSD may be help in detecting small objects with better features from the CONV base
 
-**SSD300 architecture:**
-Object Detection State-of-the-Art
-
-**Dataset: PASCAL VOC 2007 and 2017 Test Dataset : PASCAL VOC 2007**
 |Method|Train Dataset|mAP|Time in sec/image|Time Frame /sec|
 |---|---|---|---|---|
 |RCNN (VGG16)|Pascal VOC 2007|66.0|50|-|
@@ -2411,13 +2301,14 @@ Object Detection State-of-the-Art
 |SSD300|VOC 2007+2012|74.3|0.02|45|
 |SSD512|VOC 2007+2012|76.8|0.05|19|
 
-Yolo State-of-the-Art
+**Common base networks**: VGG16, ResNet101, Inception V2/V3, MobileNet, AlexNet, ZFNet.
 
-**Dataset: MS COCO**
+**Detection frameworks**: R-CNN family (R-CNN, Fast R-CNN, Faster R-CNN), YOLO family, SSD, R-FCN.
 
-Object Detection Summary
+**Summary**:
 
-**Base Networks: • VGG16 • REsNet101 • Inception V2 • Inception V3 • ResNet • MobileNet • Alexnet • ZFNet Etc. · Object Detection FrameWorks: • RCNN Family (RCNN, Fast/Faster RCNN) • Yolo Family • SSD • F-RCN · Summary: • Faster-RCNN is more accurate but slower • Yolo/SSD are faster/real-time but may not be very accurate**
+- Faster R-CNN is more accurate but slower
+- YOLO / SSD are faster (real-time) but may be less accurate
 
 ______________________________________________________________________
 
@@ -2458,7 +2349,6 @@ Recap: YOLO: You Only Look Once Algorithm
 **So, Currently the Target Y = {1, x, y, h, w, C1, C2}, As the mid-points for both the objects are on the same grid cell, only one of the objects will be associated**
 Anchor Box 1 Anchor Box 2
 
-**Anchor Box 1 · Associate each object to:**
 Predicted BB
 
 1. A cell which contains its mid-point and
@@ -2476,8 +2366,6 @@ Similar Shape
 Anchor Box 1 Anchor Box 2
 
 Recap: YOLO: You Only Look Once Algorithm
-
-**Training Set**
 
 - Anchor Box 1
 - Anchor Box 2
@@ -2748,8 +2636,13 @@ Examples to motivate sequence modelling:
 
 Y’
 
-**X · Many to Many Q&A with LLMs, Language translations · One to Many Image Captioning · One to One Binary classification · Many to One Sentiment Analysis**
-“Will it rain today?” Yes/No?
+**Sequence-modelling task types**:
+
+- **Many to many** — Q&A with LLMs, language translation
+- **One to many** — image captioning
+- **One to one** — binary classification (e.g. "will it rain today?")
+- **Many to one** — sentiment analysis (e.g. "42028 is the best subject so far!")
+  “Will it rain today?” Yes/No?
 
 “42028 is the best subject so far!”
 
@@ -2761,7 +2654,6 @@ Size #Bedroom #Bathroom Garden Location
 
 Price
 
-**Y · House Price prediction**
 Recurrent Neural Network (RNN) Basics
 
 Output
@@ -2786,9 +2678,7 @@ X2
 
 Input
 
-y = f(x , h )
-
-Output Input Past Memory/ state
+Output `y_t = f(x_t, h_t)` — from input `x_t` and past hidden state `h_t`.
 
 Output Function+
 
@@ -2796,22 +2686,17 @@ y’t
 
 Weights w
 
-h = f (x , h )
+Hidden state update `h_t = f(x_t, h_{t-1})` — recurrent cell consumes current input and the previous state.
 
-RNN
-
-Output Input Past state
-
-**Recurrence Relation**
 Xt
 
-y = W h OutputVector
+Output vector `ŷ_t = W_y · h_t`
 
 y’t
 
 Output
 
-h = tanh (W h + W x )
+`h_t = tanh(W_hh · h_{t-1} + W_xh · x_t)`
 
 RNN
 
@@ -2935,7 +2820,7 @@ Key (K1)
 **Key (K2)**
 Compute similarity between Q and K
 
-**Key (K3) · Training Query (Q) · Value (V) · Key (K2)**
+For each attention step: compute similarity between the **Query Q** and each **Key K_i**, then extract **Values V_i** weighted by that similarity.
 
 Extract Values based On attention
 
@@ -2953,8 +2838,6 @@ Extract Values based On attention
 - ViT is a type of Deep Learning Model that’s looks at Images, like how language model looks at words
 
 - Images are represented as sequences of patches!
-
-**Steps:**
 
 1. Split an image into patches
 1. Flatten the patches
