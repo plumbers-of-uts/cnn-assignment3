@@ -19,12 +19,14 @@ Idempotent — re-running rebuilds the same files from the same checkpoint.
 
 from __future__ import annotations
 
+import base64
 import json
 import time
 from pathlib import Path
 from typing import Any
 
 import cv2
+import numpy as np
 from ultralytics import YOLO
 
 # ──────────────────────────────────────────────────────────────────────────────
@@ -61,6 +63,56 @@ JPEG_QUALITY = 82
 # ──────────────────────────────────────────────────────────────────────────────
 # Helpers
 # ──────────────────────────────────────────────────────────────────────────────
+
+
+def encode_mask_to_data_url(
+    mask: np.ndarray,
+    *,
+    target_size: tuple[int, int],
+    bbox_xyxy: tuple[int, int, int, int],
+) -> str | None:
+    """Resize a model-space binary mask to the original image, crop to the
+    detection bbox, and return a PNG data URL whose alpha channel marks the
+    mask interior (255 = defect, 0 = background).
+
+    Matches the encoding shape produced at runtime by `encodeMaskToPng` in
+    `pipevision-ai/src/features/inference/mask-serializer.ts` so the same
+    web-side compositor draws seed masks identically to live-inference ones.
+
+    Returns None when the bbox crop is empty (e.g., bbox out of image bounds).
+    """
+    img_w, img_h = target_size
+    x1, y1, x2, y2 = bbox_xyxy
+
+    # Clamp the bbox into the image so cv2 slicing never goes negative.
+    x1 = max(0, min(x1, img_w))
+    y1 = max(0, min(y1, img_h))
+    x2 = max(0, min(x2, img_w))
+    y2 = max(0, min(y2, img_h))
+    if x2 <= x1 or y2 <= y1:
+        return None
+
+    # Upsample the network-space mask to original image resolution.
+    resized = cv2.resize(mask.astype(np.float32), (img_w, img_h), interpolation=cv2.INTER_LINEAR)
+    binary = resized > 0.5
+
+    # RGBA: white pixels inside the mask, fully transparent outside. This lets
+    # the canvas compositor tint the visible alpha with each class colour.
+    rgba = np.zeros((img_h, img_w, 4), dtype=np.uint8)
+    rgba[binary] = (255, 255, 255, 255)
+
+    cropped = rgba[y1:y2, x1:x2]
+    if cropped.size == 0:
+        return None
+
+    # cv2.imencode expects BGRA byte order on disk.
+    bgra = cv2.cvtColor(cropped, cv2.COLOR_RGBA2BGRA)
+    ok, buf = cv2.imencode(".png", bgra)
+    if not ok:
+        return None
+
+    b64 = base64.b64encode(buf.tobytes()).decode("ascii")
+    return f"data:image/png;base64,{b64}"
 
 
 def slugify(filename: str) -> str:
@@ -141,26 +193,42 @@ def main() -> None:
         cv2.imwrite(str(out_jpg), bgr, [cv2.IMWRITE_JPEG_QUALITY, JPEG_QUALITY])
 
         # Boxes come back in xyxy pixel space, classes as int, conf as float.
+        # Masks (seg model) are aligned to boxes by index; absent for detect-only
+        # models, in which case seeds ship without segmentation overlay.
         det_boxes: list[dict[str, Any]] = []
         if result.boxes is not None and len(result.boxes) > 0:
             xyxy = result.boxes.xyxy.cpu().numpy()
             conf = result.boxes.conf.cpu().numpy()
             cls = result.boxes.cls.cpu().numpy().astype(int)
+            masks_tensor = (
+                result.masks.data.cpu().numpy() if result.masks is not None else None
+            )
             for k in range(len(xyxy)):
-                x1, y1, x2, y2 = xyxy[k]
-                det_boxes.append(
-                    {
-                        "classId": int(cls[k]),
-                        "confidence": round(float(conf[k]), 4),
-                        # web app stores bbox as top-left xywh in original-image px
-                        "bbox": {
-                            "x": int(round(float(x1))),
-                            "y": int(round(float(y1))),
-                            "w": int(round(float(x2 - x1))),
-                            "h": int(round(float(y2 - y1))),
-                        },
-                    }
-                )
+                x1f, y1f, x2f, y2f = xyxy[k]
+                x1 = int(round(float(x1f)))
+                y1 = int(round(float(y1f)))
+                x2 = int(round(float(x2f)))
+                y2 = int(round(float(y2f)))
+                detection: dict[str, Any] = {
+                    "classId": int(cls[k]),
+                    "confidence": round(float(conf[k]), 4),
+                    # web app stores bbox as top-left xywh in original-image px
+                    "bbox": {
+                        "x": x1,
+                        "y": y1,
+                        "w": x2 - x1,
+                        "h": y2 - y1,
+                    },
+                }
+                if masks_tensor is not None and k < masks_tensor.shape[0]:
+                    mask_url = encode_mask_to_data_url(
+                        masks_tensor[k],
+                        target_size=(int(w), int(h)),
+                        bbox_xyxy=(x1, y1, x2, y2),
+                    )
+                    if mask_url is not None:
+                        detection["maskPng"] = mask_url
+                det_boxes.append(detection)
 
         records.append(
             to_record(
@@ -178,7 +246,7 @@ def main() -> None:
 
     manifest_path = WEB_PUBLIC / "inferences.json"
     manifest = {
-        "modelVersion": "yolo26m-pipevision-fp16",
+        "modelVersion": "yolo26m-seg-pipevision-fp16",
         "generatedAt": int(time.time() * 1000),
         "conf": CONF_THRESHOLD,
         "iou": IOU_THRESHOLD,
