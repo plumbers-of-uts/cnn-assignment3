@@ -252,16 +252,9 @@ Colour
 
 Typical Machine Learning Pipeline
 
-|Data/ Features | |
-
 **Launch**
-|Train ML Algorithm| |
-
-|Study the Problem| |
 
 Evaluate Solution
-
-| |Analyse errors|
 
 Traditional ML Vs DL Pipeline
 
@@ -589,14 +582,13 @@ Edge detection
 
 Canny Edge detection Sobel Edge detection
 
-|100|100|100|0|0|0|
+`[ 100, 100, 100, 0, 0, 0 ]`
 
-|0|300|300|0|
+`[ 0, 300, 300, 0 ]`
 
-|1|0|-1|
+`[ 1, 0, -1 ]`
 
 *(convolution)*
-|Convolution operator| |
 
 3 X 3 filter/Kernel
 
@@ -609,9 +601,9 @@ Canny Edge detection Sobel Edge detection
 |---|---|---|---|---|---|
 |100|100|100|0|0|0|
 
-|0|300|300|0|
+`[ 0, 300, 300, 0 ]`
 
-|1|0|-1|
+`[ 1, 0, -1 ]`
 
 -
 
@@ -634,23 +626,23 @@ Canny Edge detection Sobel Edge detection
 
 ### Edge detection filters
 
-||1|0|-1|
-|---|---|---|---|
-|1|0|-1|
-|1|1|1|
-|0|0|0|
-|-1|-1|-1|
-3 X 3 filter/Kernel For Horizontal edges 3 X 3 filter/Kernel For Vertical edges Prewitt Filters|
+**Prewitt filters** (3×3):
 
-||1|2|1|
-|---|---|---|---|
-|0|0|0|
-|-1|-2|-1|
-3 X 3 filter/Kernel For Horizontal edges |1|0|-1|
-|2|0|-2|
-|---|---|---|
-|1|0|-1|
-3 X 3 filter/Kernel For Vertical edges Sobel Filters|
+```text
+Horizontal edges      Vertical edges
+[  1   1   1 ]        [  1   0  -1 ]
+[  0   0   0 ]        [  1   0  -1 ]
+[ -1  -1  -1 ]        [  1   0  -1 ]
+```
+
+**Sobel filters** (3×3):
+
+```text
+Horizontal edges      Vertical edges
+[  1   2   1 ]        [  1   0  -1 ]
+[  0   0   0 ]        [  2   0  -2 ]
+[ -1  -2  -1 ]        [  1   0  -1 ]
+```
 
 ### Sobel edge detection - Example
 
@@ -711,20 +703,18 @@ Vertical filter
 Gradient is X-directions
 
 **2. Compute the strength/magnitude and direction of gradient.**
-|X|100|X|
-|---|---|---|
-|70|60|120|
-|X|50|X|
 
-Strength/Magnitude(g) =
+Example 3×3 neighbourhood (only the cross is needed):
 
-Example
+```text
+[ -   100   - ]
+[ 70   60  120 ]
+[ -    50   - ]
+```
 
-Direction
-
-|gx= |-70 + 120| = 50 gy = |-100 + 50| = 50 |
-
-**Gradient Magnitude ≈ 70.7, Direction/Angle = 45°**
+- `gx = |−70 + 120| = 50`
+- `gy = |−100 + 50| = 50`
+- Gradient magnitude `g ≈ √(50² + 50²) ≈ 70.7`, direction/angle = `45°`
 
 **Step-2: Create orientation histogram**
 
@@ -790,11 +780,7 @@ CNNs
 
 Standard ANNs
 
-|House Price prediction| |
-|---|---|
-|y = 1.8537x - 15.783 0 500 1000 1500 2000 2500 0 200 400 600 800 1000 1200 1400 PriceinAUD$(in100Ks) Size in Sq. ft| |
-
-|y = 1.8537x - 15.783| | |
+House price prediction example fit line: `y = 1.8537·x − 15.783` (price in AUD$100K vs. size in sq. ft).
 
 **Price Y**
 Size X
@@ -813,16 +799,9 @@ Size #Bedroom #Bathroom Garden Location
 
 Price
 
-|Data/ Features | |
-
 **Launch**
-|Train ML Algorithm| |
-
-|Study the Problem| |
 
 Evaluate Solution
-
-| |Analyse errors|
 
 Function to calculate the loss/error
 
@@ -955,28 +934,28 @@ Logistic Regression pipeline with the math looks like:
 **Where, W → Weights X → Inputs b → Bias term σ → Activation function · X · ŷ**
 `wᵀx + b`
 
-|a = σ(wᵀx + b)| |
+`a = σ(wᵀx + b)`
 
 - W b
 
-| |L (a, y)|
+Loss `L(a, y)`
 
 **Parameters: 1. w (weight) 2. b (bias) 3. Output a=σ(wᵀx +b)**
 Activation function
 
-**a=σ = 1+e1−x · Loss function for Logistic Regression: · `L(a, y) = −[y · log(a) + (1 − y) · log(1 − a)]`**
+Activation: `a = σ(wᵀx + b) = 1 / (1 + e^(-(wᵀx + b)))`. Loss: `L(a, y) = −[y · log(a) + (1 − y) · log(1 − a)]`.
 Logistic Regression pipeline with the math looks like:
 
 Activation function
 
-**a=σ = 1+e1−x · ŷ**
+Activation `a = σ(wᵀx + b) = 1 / (1 + e^(-(wᵀx + b)))` → prediction `ŷ`
 `wᵀx + b`
 
-|a = σ(wᵀx + b)| |
+`a = σ(wᵀx + b)`
 
 - W b
 
-| |L (a, y)|
+Loss `L(a, y)`
 
 If y = 1:L (a, y) =-log a
 
@@ -989,9 +968,9 @@ Logistic Regression pipeline with the math looks like:
 **Where, W → Weights X → Inputs b → Bias term σ → Activation function · X**
 `wᵀx + b`
 
-|a = σ(wᵀx + b)||L |(a, y)|
+`a = σ(wᵀx + b)`, loss `L(a, y)`
 
-|L |(a, y)|
+Loss `L(a, y)`
 
 W b
 
@@ -1000,19 +979,14 @@ Forward Pass
 **Back Propagation · Parameters: 1. w (weight) 2. b (bias) 3. Output a=σ(wᵀx +b) · repeatedly adjust the weights to minimize the difference between actual output and desired output**
 Activation function
 
-**a=σ = 1+e1−x · Loss function for Logistic Regression: · `L(a, y) = −[y · log(a) + (1 − y) · log(1 − a)]`**
+Activation: `a = σ(wᵀx + b) = 1 / (1 + e^(-(wᵀx + b)))`. Loss: `L(a, y) = −[y · log(a) + (1 − y) · log(1 − a)]`.
 
 #### Optimization techniques
 
 **Generic Algorithm: Step 1: Initialize w and b Step 2: Perform Forward pass operation/calculations Step 3: Compute Loss/Cost function L (a, y) Step 4: Compute change in w and b (Take the partial derivative of the cost function with respect to Weights and bias (dw and db). Step 5: Update w and b w := w – αdw b := b – αdb Step 6: Repeat from Step 2 with new values of w and b for ‘n’ number of iterations. · Gradient Descent for learning parameters: It is an iterative approach for error correction in a machine learning model. · Question: Find w and b that will minimize GD(w, b)**
 Required: Loss/cost function
 
-**(L)LossFn**
-|Example the loss function is: L (a, y)=- yloga + 1 − y log(1 − a) | | |
-|---|---|---|
-| |α → Learning rate| |
-
-GDmin(w)
+Example loss function: `L(a, y) = −[y · log(a) + (1 − y) · log(1 − a)]`. `α` → learning rate. Goal: `min_w GD(w)`.
 
 **Gradient Descent for learning parameters: Learning rate(α) issues:**
 
@@ -1281,7 +1255,7 @@ Average cost over all training ‘m’ samples
 X W
 
 **a = σ(wᵀx + b)**
-| |L (a, y) |
+Loss `L(a, y)`
 
 `wᵀx + b`
 
@@ -1352,14 +1326,13 @@ Three main type of layers used to build a CNN architecture
 
 Convolution Operation
 
-|100|100|100|0|0|0|
+`[ 100, 100, 100, 0, 0, 0 ]`
 
-|0|300|300|0|
+`[ 0, 300, 300, 0 ]`
 
-|1|0|-1|
+`[ 1, 0, -1 ]`
 
 *(convolution)*
-|Convolution operator| |
 
 3 X 3 filter/Kernel
 
@@ -1372,12 +1345,11 @@ Convolution Operation
 |---|---|---|---|---|---|
 |100|100|100|0|0|0|
 
-|0|300|300|0|
+`[ 0, 300, 300, 0 ]`
 
-|1|0|-1|
+`[ 1, 0, -1 ]`
 
 *(convolution)*
-|Convolution operator| |
 
 3 X 3 filter/Kernel
 
@@ -1394,7 +1366,7 @@ Convolution Operation
 |0|100|100|100|0|0|0|0|
 |0|0|0|0|0|0|0|0|
 
-|100|100|100|0|0|0|
+`[ 100, 100, 100, 0, 0, 0 ]`
 
 **Padding (p) = 1**
 6 X 6 dimension image without padding
@@ -1411,35 +1383,15 @@ Convolution Operation
 |-300|0|300|300|0|0|
 |-200|0|200|200|0|0|
 
-|1|0|-1|
-|---|---|---|
-|| |3 X 3 1|
-|Convolution operator| |
-|0|-1|
+Filter / kernel: `[1, 0, -1]`. Input `6 × 6` padded to `8 × 8` (padding `p = 1`).
 
-*(convolution)*
-| |3 X 3 1|
-|---|---|
-|Convolution operator| |
+`(n × n) ∗ (f × f)` with padding `p = 1` produces output of size `(n + 2p − f + 1) × (n + 2p − f + 1)`. Example: `6 × 6 ∗ 3 × 3 → 6 × 6`.
 
-filter/Kernel
+**Same-padding question**: what padding `p` keeps the output size equal to the input?
 
-**6 X 6 dimension matrix 8 X 8 dimension matrix == Input Matrix dimension**
-
-|---|---|
-|(n X n) ∗ (f X f)|
-Input Matrix Dimension : n x n Filter size: f x f Padding (p) : 1 So, ( will produce ( e.g.: 6 X 6 ∗ 3 X 3 → 6 X 6 Output matrix Input Matrix Output Matrix |
-
-Given: Input Matrix Dimension : n x n
-
-**Filter size: f x f**
-Required output size with stride `s = 1`: `(n + 2p − f) + 1` along each side.
-
-sizes?
-
-So, n + 2p − f + 1 = n
-
-p = (f2−1)
+```
+n + 2p − f + 1 = n   →   p = (f − 1) / 2
+```
 
 #### Padding (Same and Valid)
 
@@ -1863,7 +1815,6 @@ Transfer Learning Benefits
 number of samples.
 
 **Train**
-|Freeze||
 
 #### Option-2: (VGG-16 considered as an example) Train Full-Connected layer, Use CONV layers for feature extraction
 
@@ -2097,12 +2048,8 @@ Multiple Object
 ## Taxonomy of Object detectors
 
 **Object Detection · Network type · Data type**
-|Single stage| |
-
-|Two Stage| |
 
 **D Object Detector · 2D Object detectors · Regression/Classification Based**
-|Region Proposal Based| |
 
 **Monocular Image · Point Cloud · Point Nets · RCNN family · SSD · Yolo**
 
@@ -2243,12 +2190,13 @@ Case Study: FASTER- R-CNN
 - Faster R-CNN → Propose patches using a neural network (RPN)
 
 **Feature R-CNN Fast R-CNN Fater R-CNN**
-|Region proposal Selective search Selective search RPN (learned)|
-|---|
-|CNN Usage Per region Once per image Once per image|
-|Speed Very slow Faster Can work in realtime|
-|Training Multi-stage, discreate Partially en-to-end Fully end-to-end|
-|Accuracy Good Better Best of all three|
+| Aspect | R-CNN | Fast R-CNN | Faster R-CNN |
+|------------------|------------------------|-------------------------|------------------------|
+| Region proposal | Selective search | Selective search | RPN (learned) |
+| CNN usage | Per region | Once per image | Once per image |
+| Speed | Very slow | Faster | Can work in real-time |
+| Training | Multi-stage, discrete | Partially end-to-end | Fully end-to-end |
+| Accuracy | Good | Better | Best of all three |
 
 ## Object Detection Techniques History
 
@@ -2276,12 +2224,8 @@ Outline
 ## Taxonomy of Object detectors
 
 **Object Detection · Network type · Data type**
-|Single stage| |
-
-|Two Stage| |
 
 **D Object Detector · 2D Object detectors · Regression/Classification Based**
-|Region Proposal Based| |
 
 **Monocular Image · Point Cloud · Point Nets · RCNN family · SSD · Yolo**
 
@@ -2432,7 +2376,6 @@ Class : {car, bike}
 19 X 19 X 2 X 7
 
 **Class : {car, bike}**
-| |Apply NMS|
 
 - Real-time performance with 45 frames per sec, 0.02 sec per image
 
