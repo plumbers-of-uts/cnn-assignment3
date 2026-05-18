@@ -295,10 +295,14 @@ recover the Buckling / Hole regressions we observed.
 
 ### 6.3 Fix class-weighting kwarg
 
-Ultralytics 8.4.37 silently rejects `cls_weights`. Either upgrade to
-≥ 8.4.51 or implement a `WeightedBCEWithLogitsLoss` subclass for the
-`v8DetectionLoss`. CIW is the most plausible lever for Hole, which has
-only 11 test boxes.
+**Status: Resolved — see §11.**
+
+The original stub: Ultralytics rejects `cls_weights` as an unknown
+argument (`SyntaxError` from `check_dict_alignment`). The fix landed
+as a custom `WeightedSegmentationLoss` / `WeightedSegmentationModel` /
+`WeightedSegmentationTrainer` subclass chain that injects `pos_weight`
+into `nn.BCEWithLogitsLoss`. Full rationale and verified source
+citations are in §11.
 
 ### 6.4 Pseudo-labelling on SewerML
 
@@ -564,3 +568,157 @@ the file name (`-v2`) or republish under a new SHA.
    deployment because the bbox channels in output0 are identical
    semantics; the web client can ignore mask coeffs if a future use case
    needs bbox-only.
+
+---
+
+## 11. Class-Weighting Implementation — Decision and Rationale
+
+This section documents the design choice behind the per-class loss
+weighting now applied in `src/sagemaker_seg_train.ipynb` (cell-10). It
+exists because the original notebook called `model.train(cls_weights=…)`
+on the assumption that Ultralytics accepts a per-class weight vector —
+it does not — and the resulting `SyntaxError` was masked by a
+`try/except TypeError` block that hid the real failure (`SyntaxError`,
+not `TypeError`) and silently disabled the weighting we believed we
+were applying.
+
+### 11.1 Problem statement
+
+Two facts established the design space:
+
+1. **The previous CUDA run never used class weights.** The fallback
+   path stripped `cls_weights` and trained with uniform per-class loss
+   gain. Recall on minority classes (Buckling 31.8%, Hole 27.3%, Joint
+   offset 27.8%, Crack 41.1%) lost > 50% of ground-truth boxes to
+   background — the exact failure mode that class re-weighting is
+   intended to mitigate.
+2. **Ultralytics has no public API to pass a custom per-class weight
+   vector.** Verified from primary sources (see §11.5).
+
+### 11.2 Approaches considered
+
+| Approach | Mechanism | Why rejected / accepted |
+|---|---|---|
+| `cls_pw=<float>` train arg | Built-in. Computes `(1 / class_count) ^ cls_pw` from label frequencies, normalises to mean 1.0 | Rejected. Drives weights from raw frequency only; cannot encode our confusion-matrix-tuned values (e.g., Buckling 3.0 because of recall = 31.8%, not because of low frequency). |
+| `on_pretrain_routine_end` callback that sets `trainer.model.class_weights = tensor` | Piggybacks on the internal getattr path used by `v8DetectionLoss.__init__`. Loss applies as `bce_loss *= class_weights` (symmetric multiplicative scaling) | Rejected. Uses internal API not documented for end users — could break across Ultralytics versions. Symmetric scaling also amplifies background gradient on the same axis, partially cancelling the intended push on positives. |
+| Subclass `v8SegmentationLoss` + `SegmentationModel` + `SegmentationTrainer`, inject `pos_weight` into `nn.BCEWithLogitsLoss` | Officially documented Custom Trainer extension path. Asymmetric: amplifies the positive-sample gradient only, leaves negatives untouched | **Accepted.** Directly targets the failure mode (minority classes lost to background) and uses a stable, published extension point. |
+| Focal loss for classification | Down-weights easy samples; addresses hard-sample imbalance | Rejected as the *primary* lever. Ultralytics has no `fl_gamma` train arg (`dfl` is for box regression's Distribution Focal Loss, not the cls head), so it would require its own subclass anyway. Focal also addresses a different axis (hard vs easy) than what the confusion matrix shows we need (positives vs background). Could be added as a complementary lever later. |
+| Data-level oversampling / Cycle-GAN augmentation | Duplicate minority-class images in the dataset | Deferred. Effective in the sewer-defect literature but expands disk and changes the dataset's identity; loss-side fix is reversible and cheaper to A/B. |
+
+### 11.3 Why `pos_weight` and not mean-normalised multiplicative weights
+
+`pos_weight` in `nn.BCEWithLogitsLoss` applies as
+`loss = -[pos_weight * y * log(σ(x)) + (1 - y) * log(1 - σ(x))]`.
+
+Concretely, `1.0` is the no-boost baseline; values > 1.0 amplify the
+gradient on positive samples for that class; values < 1.0 *suppress*
+positive-sample gradient. This matches the design intent — Obstacle
+already has 75% recall, leave it alone (1.0); Buckling at 31.8% should
+have its positives pushed harder (3.0).
+
+A previous draft of this fix normalised `cls_weights` to mean 1.0 to
+preserve total loss scale (the convention Ultralytics uses internally
+for `cls_pw`). With multiplicative scaling that convention is correct.
+With `pos_weight` it is actively wrong: normalising pushes Obstacle to
+~0.48, which *down-weights* its positives. The committed code uses
+raw values without mean normalisation. Total cls loss is consequently
+~2× larger than an unweighted baseline (mean = 2.09 across our seven
+classes); if `box_loss` / `dfl_loss` look proportionally squeezed in
+the training curve, lowering the `cls=` gain from 0.5 → 0.3 restores
+the original ratio.
+
+### 11.4 Implementation outline
+
+Three subclasses, in `src/sagemaker_seg_train.ipynb` cell-10:
+
+```text
+WeightedSegmentationLoss(v8SegmentationLoss)
+  └─ super().__init__()
+  └─ self.bce = nn.BCEWithLogitsLoss(pos_weight=tensor, reduction='none')
+
+WeightedSegmentationModel(SegmentationModel)
+  └─ init_criterion():
+       return E2ELoss(self, WeightedSegmentationLoss) if end2end
+              else WeightedSegmentationLoss(self)
+
+WeightedSegmentationTrainer(SegmentationTrainer)
+  └─ get_model(cfg, weights, verbose):
+       construct WeightedSegmentationModel, optionally model.load(weights)
+
+model.train(trainer=WeightedSegmentationTrainer, **train_kwargs)
+```
+
+YOLO26-seg is end-to-end (NMS-free), so `getattr(self, 'end2end', False)`
+is `True`, and `E2ELoss(self, WeightedSegmentationLoss)` instantiates
+two copies of our weighted loss (one-to-many topk = 10 and one-to-one
+topk = 1) under a decaying weight schedule. Both copies inherit the
+`pos_weight` injection.
+
+### 11.5 Verification — primary sources read
+
+All claims above were verified by reading the actual Ultralytics
+sources, not from memory. Key file:line references:
+
+- `ultralytics/cfg/default.yaml` — no `cls_weights` key exists; `cls_pw`
+  is defined as `(float) class weights power for handling class
+  imbalance` and operates on frequency, not on a user-supplied vector.
+- `ultralytics/utils/loss.py` — `v8DetectionLoss.__init__` sets
+  `self.bce = nn.BCEWithLogitsLoss(reduction='none')`; the optional
+  multiplicative weights path is `bce_loss *= self.class_weights` where
+  `self.class_weights = getattr(model, 'class_weights', None)`.
+- `ultralytics/utils/loss.py` — `v8SegmentationLoss(v8DetectionLoss)`
+  calls `super().__init__()` and adds `self.bcedice_loss` (mask path);
+  classification BCE inherits from the parent unchanged.
+- `ultralytics/utils/loss.py` — `E2ELoss(model, loss_class=v8DetectionLoss)`
+  composes two instances of `loss_class` with different topk; passing
+  our subclass propagates `pos_weight` to both.
+- `ultralytics/nn/tasks.py:665` — `SegmentationModel.init_criterion()`
+  returns `E2ELoss(self, v8SegmentationLoss) if getattr(self, 'end2end',
+  False) else v8SegmentationLoss(self)`.
+- `ultralytics/models/yolo/detect/train.py` — `set_class_weights()`
+  reads `self.args.cls_pw`, early-returns when `cls_pw == 0.0`, and
+  otherwise writes `self.model.class_weights = (1 / class_counts) **
+  cls_pw / mean`. Keeping `cls_pw` at its default `0.0` prevents this
+  routine from overwriting our injected weights.
+- `ultralytics/models/yolo/segment/train.py:20-34` —
+  `SegmentationTrainer.get_model(cfg, weights, verbose)` constructs a
+  `SegmentationModel` and optionally calls `model.load(weights)`. Our
+  override mirrors this signature.
+
+### 11.6 Academic context
+
+The `pos_weight` approach matches the standard pattern in the sewer-
+defect classification literature:
+
+- *Sewer-ML: A Multi-Label Sewer Defect Classification Dataset and
+  Benchmark* (arXiv 2103.10895) — weighted binary cross-entropy (WBCE)
+  with `pos_weight = negative-to-positive class ratio` as the baseline
+  classifier.
+- *Vision Transformer based classification of sewer defects weighted
+  loss model* (Tunnelling & Underground Space Technology, 2024) —
+  SViT/WCE and SViT/FL variants using weighted CE and focal loss.
+- *Imbalance-Aware Culvert-Sewer Defect Segmentation Using an Enhanced
+  Feature Pyramid Network* (arXiv 2408.10181) — Class Importance
+  Weights (CIW) assigned by a domain expert ("economic and safety
+  impacts") and normalised for use in both loss and FWIoU metric. This
+  is the closest analogue to the values used here, which were derived
+  from confusion-matrix recall rather than expert intuition but follow
+  the same shape (per-class scalar, applied in loss).
+
+YOLO-based sewer-defect papers more commonly use modified IoU losses
+(EIoU, SIoU, WIoU) or focal loss on the cls head; class-weighted BCE
+is the textbook fix for the specific failure mode observed here
+(minority-class positives lost to background), so we chose it over
+focal as the first lever.
+
+### 11.7 Process rule that came out of this
+
+The original failure (`try/except TypeError` masking a `SyntaxError`,
+combined with the false belief that `cls_weights` was a valid 8.4.x
+argument) traced to making confident claims about library APIs from
+memory rather than verifying. The repository now carries a rule
+(`CLAUDE.md` → "Project-Specific Rules → No Memory-Based Claims About
+Libraries") requiring `WebSearch`, direct `site-packages` reads, or
+`WebFetch` before any factual claim about third-party library APIs.
+This section was itself written under that rule — every file:line
+citation in §11.5 was read directly before being included.
