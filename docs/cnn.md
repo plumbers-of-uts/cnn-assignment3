@@ -167,150 +167,62 @@ Outline
 
 ### Machine Learning Basics
 
-Type of Machine Learning Systems
+**Types of ML system** can be classified along three axes:
 
-**Supervised Learning Unsupervised Learning Semi-supervised Learning Reinforcement Learning**
-Depending on whether the system is trained with human supervision
+- **By supervision**: supervised / unsupervised / semi-supervised / reinforcement learning.
+- **By learning mode**: batch (offline) vs online (learns on the fly).
+- **By generalisation strategy**: instance-based (compares to known examples) vs model-based (builds a predictive model).
 
-**Batch and Online Learning**
-Whether System can learn on the fly
+### Supervised learning
 
-Comparing data points or detect patterns in training data to build a predictive model
+Labelled data for training (object + desired output label). Two sub-tasks:
 
-**Instance-based and Model-based Learning**
-?
+- **Classification** — predict a discrete class (e.g. *Apple* vs *Pear* vs *Mango*).
+- **Regression** — predict a continuous value (e.g. house price from size in sq. ft).
 
-Apple
+Important algorithms: k-Nearest Neighbours, Logistic Regression, Support Vector Machines (SVMs), Neural Networks (some variants are unsupervised).
 
-Pear
+**Examples**: image classification, object recognition, predictions / forecasting, fraud detection, medical diagnostics, process optimisation.
 
-**Predictive Model**
-Supervised Learning
+### Unsupervised learning
 
-Pear
+Unlabelled data for training; model finds structure or groups in the data.
 
-Mango
+- Typical task: **clustering** (e.g. group similar fruits).
+- Outputs new insights — useful where labels are unavailable or expensive.
 
-**Classification Task**
-Labelled data for training (Object + Desired Output Label)
+Important algorithms: k-means, Expectation–Maximization.
 
-**0 500 1000 1500 2000 2500 0 200 400 600 800 1000 1200 1400 PriceinAUD$(in100Ks) Size in Sq. ft · House Price prediction Feature: - Size of the house To Predict: - Price of the house**
-PriceinAUD$(in10
+### Support Vector Machine (SVM)
 
-**Regression Task**
-Important Algorithms:
+- A powerful, versatile ML model for linear or non-linear classification, regression, and outlier detection.
+- Defined by a separating hyperplane that fairly separates the classes.
+- Suitable for small or medium-sized datasets.
 
-- K-Nearest Neighbours
-- Logistic regression
-- Support Vector Machines (SVMs)
-- Neural Networks (\*some of themcan be unsupervised)
+Hyper-parameters: `kernel`, `gamma`, regularization `C`. A low `C` allows a softer margin (more mis-classifications, simpler model); a high `C` forces a hard margin (fewer mis-classifications, more complex model). Example use: `sklearn.svm.SVC` on the Iris flower dataset.
 
-Supervised Learning Examples
+### Evaluation Metrics — Precision, Recall, IoU
 
-Image Classification Object Recognition
+Confusion matrix:
 
-Predictions
+| | No Cancer | Cancer |
+|----------|-----------|--------|
+| **Pred. No Cancer** | TN | FN |
+| **Pred. Cancer** | FP | TP |
 
-Forecasting
+- **TN** — patients without cancer, correctly diagnosed as no cancer.
 
-Supervised Learning
+- **TP** — patients with cancer, correctly diagnosed as cancer.
 
-CLASSIFICATION CLASSIFICATIONREGRESSION
+- **FN** — patients with cancer, missed by the model.
 
-Fraud Detection
+- **FP** — patients without cancer, incorrectly flagged as cancer.
 
-New Insights
+- `Precision = TP / (TP + FP)` — of the cases predicted positive, how many are truly positive.
 
-Medical Diagnostics
+- `Recall = TP / (TP + FN)` — of the truly positive cases, how many the model caught.
 
-Process Optimization
-
-Unsupervised Learning
-
-Unsupervised Learning
-
-**Clustering Task · Groups of similar fruits**
-Unlabelled data for training
-
-Unsupervised Learning
-
-Important Algorithms:
-
-- k-means
-
-- Expectation Maximization
-
-- A Support Vector Machine is a very powerful and versatile Machine Learning model, capable of performing linear or non-linear classification, regression, and also outlier detection.
-
-- Defined by a separating hyperplane
-
-- Suitable for small or medium sized datasets
-
-**Feature dimension: 2**
-Orange Apple
-
-Weight
-
-**? · SVM finds the best line or hyper-plane which will fairly separates the classes**
-Colour
-
-**Example: Using sklearn for SVM classification (Partialcodesnippet)**
-
-**SVM Parameters: Kernel, Gamma, Regularization (C)**
-
-Low Regularization value
-
-High Regularization value
-
-**Example: Using sklearn for SVM classification · Iris flower data set**
-
-- Precision & Recall
-
-**Precision: TP/Cancer Diagnoses Diagnoses**
-What are the “correct” cells?
-
-| |No Cancer|Cancer|
-|---|---|---|
-|No Cancer|TN|FP|
-|Cancer|FN|TP|
-
-- TN: (Number of True Negatives), i.e., patients who did not have cancer whom we
-
-Truestate
-
-correctly diagnosed as not having cancer.
-
-- TP: (Number of True Positives), i.e., patients who did have cancer whom we
-
-correctly diagnosed as having cancer
-
-Recall: TP/Cancer True States
-
-- Precision & Recall
-
-**Precision: TP/Cancer Diagnoses Diagnoses**
-what are the “error” cells are:
-
-| |No Cancer|Cancer|
-|---|---|---|
-|No Cancer|TN|FP|
-|Cancer|FN|TP|
-
-- FN: (Number of False Negatives), i.e., patients who did have cancer whom we
-
-incorrectly diagnosed as not having cancer
-
-- FP: (Number of False Positives), i.e., patients who did not have cancer whom we incorrectly diagnosed as having cancer
-
-Truestate
-
-Recall: TP/Cancer True States
-
-**Precision= (TP)/(TP+FP) · Recall = (TP)/(TP+FN)**
-
-- Intersection over Union (IoU):
-
-**Intersection over Union is a metric used for the evaluation of an object detector, i.e. how good is the predicted bounding box for an object detected closely matches**
+**Intersection over Union (IoU)** is the metric for object detectors — it measures how well the predicted bounding box overlaps with the ground-truth box (`IoU = area_intersection / area_union`).
 
 ### Image Processing Basics
 
@@ -325,26 +237,21 @@ Image Processing Basics
 - For a standard 8-bit image, a pixel can have 2^8 = 256 (0 – 255) values.
 - Black & White images have a single 8-bits intensity range.
 
-How computer sees Image?
-
-A (24 X 16) Matrix which represents the number ’8’
+How does a computer see an image? As a matrix — e.g. the digit '8' on a `24 × 16` grid is just a `24 × 16` matrix of pixel intensities.
 
 #### Colour Images
 
-|170|170|55|170|170|
+Example 5×5 grayscale image (8-bit):
+
+|170|170| 55|170|170|
 |---|---|---|---|---|
-|170|55|170|55|170|
-|55|140|140|140|55|
-|55|170|170|170|55|
+|170| 55|170| 55|170|
+| 55|140|140|140| 55|
+| 55|170|170|170| 55|
 
-**Image dimension = 5 X 5 f(2, 3) = 170 (Pixel/intensity value)**
-Hence, an image may be defined as a 2D function f(x, y) , where, x and y are spatial co-ordinates, and the amplitude of f at (x , y) is the intensity or Gray level of the image at that point/pixel.
+So an image is a 2D function `f(x, y)`, where `x` and `y` are spatial coordinates and `f(x, y)` is the intensity / grey level at that pixel (e.g. `f(2, 3) = 170` in the matrix above).
 
-**5×5 grayscale image (8-bit)** — single intensity channel.
-
-**5×5×3 colour image (24-bit)** — three 8-bit channels (R, G, B), each a 5×5 matrix of the same shape as the example above.
-
-RGB has `3 × 8 = 24 bits/pixel` ⇒ `2²⁴ ≈ 16,777,216` (~16M) possible colours per pixel.
+A colour image adds channels: a `5 × 5 × 3` (24-bit) colour image stores **three** 8-bit channels (R, G, B), each a `5 × 5` matrix of the same shape. RGB has `3 × 8 = 24 bits/pixel` ⇒ `2²⁴ ≈ 16,777,216` (~16M) possible colours per pixel.
 
 Image Processing - Types
 
@@ -359,100 +266,61 @@ Image Processing - Types
 1. Colour Image Processing
 1. 3D Image Processing
 
-### Image Enhancement, Restoration
+### Image Enhancement and Restoration
 
-**Enhancement Restoration**
+- **Image enhancement** improves the appearance of an image (sharpening, denoising, contrast adjustment).
+- **Image restoration** recovers an image from degradation (blur, noise) using a model of how it was degraded.
 
-- Easiest method for image segmentation!
-- Converts gray-scale image into a binary image If f(x,y) > Threshold, then f(x,y) = 0 else f(x,y) = 255
+### Image Segmentation — Thresholding
 
-**Binary Image (8-bit) has only two possible values of pixel intensity ( 0 and 1, or B & W)**
-|170|170|55|170|170|
+The simplest segmentation method is thresholding: convert a grayscale image to binary,
+
+```text
+f(x, y) > T   →   255 (white)
+otherwise     →     0 (black)
+```
+
+**Example** with `T = 100`:
+
+Original 5×5 grayscale image:
+
+|170|170| 55|170|170|
 |---|---|---|---|---|
-|170|55|170|55|170|
-|55|140|140|140|55|
-|55|170|170|170|55|
+|170| 55|170| 55|170|
+| 55|140|140|140| 55|
+| 55|170|170|170| 55|
 
-|255|255|0|255|255|
+After thresholding (`T = 100`):
+
+|255|255| 0|255|255|
 |---|---|---|---|---|
-|255|0|255|0|255|
-|0|255|255|255|0|
+|255| 0|255| 0|255|
+| 0|255|255|255| 0|
+| 0|255|255|255| 0|
 
-Threshold = 100
+**Thresholding methods**:
 
-Thresholding
+- **Histogram-shape based** — analyse peaks, valleys, and curvature of the histogram.
+- **Clustering based** — e.g. the **Otsu method**, very good for bimodal distributions.
+- **Adaptive thresholding** — different thresholds for different regions in the image (instead of one global value).
 
-Original Image Binary Image
+### Edge Detection (Image Filtering)
 
-Image Thresholding methods
+**What is an edge?** A pixel where brightness/intensity changes sharply. Edge detection is a fundamental tool in image processing and computer vision, useful for feature detection / extraction. Common operators: Canny, Sobel, Prewitt.
 
-**- Histogram shape:**
-Peaks, valleys and curvature of the histogram are analysed.
+**Convolution example** — a `3 × 3` vertical-edge filter `[1, 0, -1]` (replicated in three rows) applied to a `6 × 6` image of a left half block of 100s and right half of 0s. The convolution produces a `4 × 4` response highlighting the vertical boundary:
 
-No.ofPixels
+```text
+Input (6×6)            Filter (3×3)          Output (4×4)
+[100 100 100  0  0  0]   [ 1  0 -1]          [   0  300  300    0]
+[100 100 100  0  0  0]   [ 1  0 -1]   *      [   0  300  300    0]
+[100 100 100  0  0  0]   [ 1  0 -1]   →      [   0  300  300    0]
+[100 100 100  0  0  0]                       [   0  300  300    0]
+[100 100 100  0  0  0]
+[100 100 100  0  0  0]
+```
 
-**- Clustering based:**
-The Otsu method, very good for bimodal distribution
-
-**Threshold · - Adaptive thresholding:**
-Gray-scale
-
-Instead of a single threshold, have thresholds for different regions in the image
-
-Edge Detection (Image Filtering)
-
-**What is an edge?**
-
-- The points/pixels in an image where brightness/intensities changes sharply
-- A simple and fundamental tools in image processing and computer vision, useful in feature detection/extraction
-
-Colour to Gray
-
-Edge detection
-
-Canny Edge detection Sobel Edge detection
-
-`[ 100, 100, 100, 0, 0, 0 ]`
-
-`[ 0, 300, 300, 0 ]`
-
-`[ 1, 0, -1 ]`
-
-*(convolution)*
-
-3 X 3 filter/Kernel
-
-4 X 4 dimension matrix
-
-6 X 6 dimension image
-
-**(100 X 1 + 100 X 1 + 100 X 1) + (100 X 0 + 100 X 0 + 100 X 0) + (100 X -1 + 100 X -1 + 100 X -1)**
-|1100|0100|-1100|0|0|0|
-|---|---|---|---|---|---|
-|100|100|100|0|0|0|
-
-`[ 0, 300, 300, 0 ]`
-
-`[ 1, 0, -1 ]`
-
--
-
-*(convolution)*
-|100|100|100|100|100|100|
-|---|---|---|---|---|---|
-|0|0|0|0|0|0|
-
-|0|0|0|0|
-|---|---|---|---|
-|300|300|300|300|
-|0|0|0|0|
-
-|1|1|1|
-|---|---|---|
-|0|0|0|
-|-1|-1|-1|
-
-*(convolution)*
+For a horizontal edge (top half 100, bottom half 0) with a horizontal-edge filter `[1; 0; -1]` (transposed of above), the response peaks across the horizontal seam.
 
 ### Edge detection filters
 
@@ -502,39 +370,22 @@ Outline
 - Logistic Regression using ANN
 - Gradient Descent
 
-### Features Extraction
+### Image Gradient
 
-**What is an Image Gradient?**
+**What is an image gradient?** A directional change in the intensity (or colour) of an image. The gradient captures *where* and *how strongly* the image is changing, in the **x-direction**, the **y-direction**, and combined. It is widely used for edge detection.
 
-- It is a directional change in the intensity or color in an Image.
-- Can be used to extract valuable information from images.
-- Commonly used in edge detection.
+### Histogram of Oriented Gradient (HoG)
 
-**What is an Image Gradient?**
-X
+#### Step 1: Compute the image gradient
 
-Change is X-directions
+Apply horizontal and vertical filters to the image `I`:
 
-Change is Y-directions
+- `g_x = f_x ∗ I` — horizontal filter
+- `g_y = f_y ∗ I` — vertical filter
 
-Combining both X and Y direction to estimate if changes are in both directions
+#### Step 2: Compute gradient magnitude and direction
 
-**Step 1: Compute the image gradient** — apply horizontal and vertical filters.
-Gradientisy-directions
-
-`g_x = f_x ∗ I` (convolve image `I` with horizontal filter `f_x`)
-
-`g_y = f_y ∗ I` (convolve image `I` with vertical filter `f_y`)
-
-Horizontal filter
-
-Vertical filter
-
-Gradient is X-directions
-
-**2. Compute the strength/magnitude and direction of gradient.**
-
-Example 3×3 neighbourhood (only the cross is needed):
+For a 3×3 neighbourhood (only the cross is needed):
 
 ```text
 [ -   100   - ]
@@ -542,181 +393,121 @@ Example 3×3 neighbourhood (only the cross is needed):
 [ -    50   - ]
 ```
 
-- `gx = |−70 + 120| = 50`
-- `gy = |−100 + 50| = 50`
-- Gradient magnitude `g ≈ √(50² + 50²) ≈ 70.7`, direction/angle = `45°`
+- `g_x = |−70 + 120| = 50`
+- `g_y = |−100 + 50| = 50`
+- Magnitude `g ≈ √(50² + 50²) ≈ 70.7`
+- Direction / angle `≈ 45°`
 
-**Step-2: Create orientation histogram**
+#### Step 3: Build an orientation histogram per cell
 
-- Divide the image into small connected regions called Cells which is a 8 X 8 patch
-- Create cell histogram based on gradient direction and magnitude
-- 64 (8 X 8) gradient vectors are put into a 9-bin histogram
-- The bins are the gradient directions (θ) quantized into 9-bins
+- Divide the image into small connected regions called **cells** (an 8×8 pixel patch).
+- For each cell, build a histogram from its gradient directions and magnitudes.
+- The 64 (= 8×8) gradient vectors in a cell are accumulated into a **9-bin** histogram, where bins are the gradient directions θ (e.g. a pixel with angle 80° and magnitude 2 contributes 2 to the bin around 80°).
 
-**Pixel with blue circle has an angle of 80 degrees and magnitude of 2**
+#### Step 4: Block normalisation
 
-**Step 3: Block normalisation**
+- Group cells into **16×16-pixel blocks** (i.e. 2×2 cells = 4 histograms per block).
+- Normalisation makes the descriptor **scale / multiplication invariant**.
+  Worked example: vector `(3, 9)` has L2-norm `√(3² + 9²) ≈ 9.48`, so normalised it becomes `(3/9.48, 9/9.48) ≈ (0.32, 0.95)`. Scaling brightness ×2 gives `(6, 18) → (0.32, 0.95)` — same direction.
+- Each block produces a `36 × 1` vector (4 histograms × 9 bins).
 
-- 16×16-pixel blocks (2×2 cells) are used for normalisation, giving 4 histograms.
-- Normalisation makes the descriptor scale / multiplication invariant.
-- Each block produces a 36×1 element vector.
-  Normalization example: (3, 9) → 3 + 9 = 9.48 (3/9.48 , 9/9.48) = (0.32, 0.95) Multiple (3, 9) by 2 to increase brightness (6, 18) → 6 + 18 = 18.97 (6/18.97, 18/18.97) = (~0.32, ~0.95)
+#### Step 5: Calculate the final HoG feature vector
 
-Brightness reduced Brightness increased
+Concatenate the `36 × 1` block vectors into one long descriptor.
 
-Original image
+Example: image `64 × 128` → `8 × 16` cells → `7 × 15` blocks (with 50% overlap) → HoG feature vector of size `7 × 15 × 36 = 3,780`.
 
-**Step 4: Calculate the HoG feature vector**
+### Local Binary Pattern (LBP)
 
-- Each of the 36 X 1 vectors in each blocks are concatenated into one big vector.
-- Size of the vector will be: Number of blocks X 36
+- An efficient **texture operator** that labels each pixel by thresholding its neighbours.
+- Powerful feature for texture classification.
+- Describes textures using two measures: local spatial patterns and grayscale contrast.
 
-Example: For an Image size: 64 X 128, will have 8 X 16 cells, and 7 X 15 block (with 50% overlap), hence size of HOG feature vector: 7 X 15 X 36 = 3,780
+The basic `LBP_{P,R}` operator considers `P` sampling points on a circle of radius `R` around the centre pixel `(x_c, y_c)`:
 
-**Example:**
-Visualisation of the histogram (Magnitude and direction)
+- `s(x)` — thresholding function (`1` if neighbour ≥ centre, else `0`).
+- `g_c` — grey value of the centre pixel.
+- `g_p` — grey value of a neighbour at angle `2π p / P` from the centre.
 
-- An efficient texture operator which labels each pixels of an image by thresholding their neighbours.
+**LBP computation example.** Take a 3×3 neighbourhood with centre value `62`:
 
-- A powerful feature for texture classification
-
-- The idea behind the LBP operator is to describe the image textures using two measures namely, local spatial patterns and the gray scale contrast of its strength.
-
-- The basic LBPP,R operator is defined as follows:
-
-**Where, S(x) → a thresholding function (xc , yc) → the centre pixel in the 8 pixel neighbourhood, gc→gray level of the centre pixel gp→gray value of a sampling point in an equally spaced circular neighbourhood of P sampling points and radius R around the point (xc , yc) · An Example of LBP Computation:**
-An 8-digit binary number is obtained by consideringthe thresholding result, starting from pixel 1 to 8, as marked in red.
-
-|8|1|2|
+| 8 | 1 | 2 |
 |---|---|---|
-|7|62|3|
-|6|5|4|
+| 7 | 62| 3 |
+| 6 | 5 | 4 |
 
-- There can be 2⁸ = 256 possible values
-- Hence, the LBP histogram will have 256 bins →feature vector
+Threshold each neighbour against `62`, read clockwise from pixel 1, and form an 8-bit binary number. Each pixel gives one of `2⁸ = 256` possible values, so the LBP histogram has 256 bins, which becomes the feature vector.
 
-Worked LBP value (8-bit): `00111110₂ = 0·2⁷ + 0·2⁶ + 1·2⁵ + 1·2⁴ + 1·2³ + 1·2² + 1·2¹ + 0·2⁰ = 62`
+Worked value: `00111110₂ = 0·2⁷ + 0·2⁶ + 1·2⁵ + 1·2⁴ + 1·2³ + 1·2² + 1·2¹ + 0·2⁰ = 62`.
 
 ### Neural Network Basics
 
-What is Artificial Neural Network (ANN)?
+**What is an Artificial Neural Network (ANN)?**
 
-- Artificial Neural Networks (ANN) are multi-layered fully-connected neural networks.
-- It has an input layer, multiple hidden layers and an output layer
+- Multi-layered, fully-connected networks of artificial neurons.
+- Has an **input layer**, one or more **hidden layers**, and an **output layer**.
+- CNNs (covered later) are a specialised form of ANN tailored for images.
 
-CNNs
+**Motivating example — house price prediction.** Predict the price `Y` of a house from its size `X` (sq. ft). A simple linear fit gives `y = 1.8537·x − 15.783` (price in AUD$100K). In a richer model the input features become `[size, #bedrooms, #bathrooms, garden, location, …]` and the model learns a single "neuron" that outputs the predicted price.
 
-Standard ANNs
+### ANN learning process — analogy
 
-House price prediction example fit line: `y = 1.8537·x − 15.783` (price in AUD$100K vs. size in sq. ft).
+Think of training as walking towards a target:
 
-**Price Y**
-Size X
+- Source position `S = (x, y)`, target `T = (x_T, y_T)`, total distance `D`.
+- After one step you've covered `d`; remaining distance is `D − d` — this is the **loss** to minimise.
+- Update the position (parameters): `x ← x + dx`, `y ← y + dy`.
 
-**“Neuron” · House Price prediction**
+Training an ANN follows the same loop:
 
-**House Price prediction · Size #Bedroom #Bathroom Garden Location**
-FamilySize Facility Index
+1. Compute the model's output for the current input.
+1. Compute the loss vs. the target.
+1. Compute gradients (`dw`, `db`).
+1. Update the parameters and repeat.
 
-Price
+### Logistic Regression as a one-neuron ANN
 
-LocationIndex
+Binary classification (e.g. *Shark?* → 1 vs *Not Shark?* → 0). Flatten an input image of dimensions `64 × 128` into a vector `x = [x_1, x_2, …, x_n]` of `n = 8192` pixels (Python: `image.reshape(-1, 1)`):
 
-**X · House Price prediction**
-Size #Bedroom #Bathroom Garden Location
+```text
+x_1  x_2  x_3  ...  x_{n-1}  x_n
+128   56   89  ...      250  255
+```
 
-Price
+Linear function of the input followed by a sigmoid:
 
-Evaluate Solution
+- `z = wᵀx + b = w_1·x_1 + w_2·x_2 + … + w_n·x_n + b` (weighted sum of inputs)
+- `a = σ(z) = 1 / (1 + e^(−z))` — the sigmoid activation maps to (0, 1), so `a` is a probability.
+- Decision rule: `a > 0.5` ⇒ class 1 (e.g. *Shark*); otherwise class 0.
 
-Function to calculate the loss/error
+> Rule of thumb: for binary classification the sigmoid is the obvious choice for the output-layer activation.
 
-**Problem of Binary Classification:**
-Shark ? → 1 Not Shark? → 0
+**Parameters**: `w` (weights), `b` (bias). **Output**: `a = σ(wᵀx + b)`.
 
-Error/ Loss
+**Loss function** (logistic / binary cross-entropy):
 
-Mechanism to reduce the loss in the model
-
-Gradient
-
-Target
-
-**Model ANN Architecture + Parameters**
-
-Output (y)
-
-Input (x)
-
-ANN Introduction – Learning Process: Example
-
-**T Target Position: (x, y) · S · Position: (x+dx, y+dx) · UTS Building-1**
-d
-
-Distance need to cover to reach target
-
-Distance remaining = (D – d) (Error/Loss to minimize)
-
-Update Position (parameter):
-
-- x = x + dx
-- y = y + dy
-
-**Problem of Binary Classification → Logistic Regression (Shark ? → 1 | Not Shark? → 0)**
-Image dimension: 64X128 = 8192 Pixels
-
-image.reshape(image.shape[0]\*image.shape[1]\*image.shape[2],1)
-
-x1 x2 x3 ... xn-1 xn
-
-128 56 89 ... 250 255
-
-`wᵀx + b → σ(·) = 0.82`
-
-0.82 > 0.5
-
-... ... Shark
-
-### Problem of Binary Classification — Logistic Regression (Shark = 1 / Not Shark = 0)
-
-→ Linear function of input x
-
-s =
-
-**w1x1 + w2x2 + ...+ wnxn + b**
-(Sigmoid function)
-
-Where, Weighted sum of inputs
-
-- W → Weights
-- X → Inputs b → Bias term s → Activation function
-
-**Rule of thumb: In case of binary classification, Sigmoid function is the obvious choice for output layer**
-Problem of Binary Classification → Logistic Regression (Shark ? → 1 | Not Shark? → 0)
-
-Parameters: `w` (weight), `b` (bias). Output `a = σ(wᵀx + b)`. Loss function for Logistic Regression:
 `L(a, y) = −[y · log(a) + (1 − y) · log(1 − a)]`
 
-Logistic Regression pipeline with the math looks like:
+- If `y = 1`: `L = −log(a)` — large penalty when `a` is small.
+- If `y = 0`: `L = −log(1 − a)` — large penalty when `a` is close to 1.
 
-**X W B · L**
-`wᵀx + b`
+For `m` training samples the **cost** averages the per-sample loss:
 
-`a = σ(wᵀx + b)`, loss `L(a, y)`.
-Gradient Descent for learning parameters: It is an iterative approach for error correction in a machine learning model.
+`J(w, b) = (1/m) · Σᵢ₌₁ᵐ L(aᵢ, yᵢ)`
 
-GD(w)
+### Gradient descent — first look
 
-For 1 Sample the loss function is: L (a, y)=- y loga + 1 − y log(1 − a)
+Gradient Descent is an iterative approach to error correction. Find `w` and `b` that minimise `J(w, b)`:
 
-GDmin(w)
+- Compute partial derivatives `dw = ∂J/∂w` and `db = ∂J/∂b`.
+- Update iteratively with learning rate `α`:
 
-For m Sample the loss function is: GD(w, b) =x = ∑ L (a, y)
+```text
+w := w − α · dw
+b := b − α · db
+```
 
-Question: Find w and b that will minimize GD(w, b)
-
-**Problem of Binary Classification → Logistic Regression (Shark ? → 1 | Not Shark? → 0) · Gradient Descent for learning parameters: It is an iterative approach for error correction in a machine learning model. · Where, dw = ( , ) db = ( , ) · Updating the w and b iteratively, : w = w - adw Updating the b: b = b - adb · a → Learning rate · Gradient Descent for learning parameters: Learning rate(a) issues:**
-GD(w) GD(w)
+- `α` is the **learning rate** — a hyper-parameter that controls step size. Too small ⇒ slow; too large ⇒ overshoot / divergence.
 
 ______________________________________________________________________
 
@@ -734,208 +525,88 @@ Outline
 - Logistic Regression with Back Propagation
 - Multi-Layered Neural Network
 
-Logistic Regression – Recap
+### Logistic Regression — Recap
 
-Function to calculate Loss/error
+Binary classification (e.g. *Dog?* → 1, *Not-Dog?* → 0) trained by gradient descent on the logistic loss:
 
-Mechanism to reduce the loss/error
+- Inputs `X`, weights `W`, bias `b`, sigmoid activation `σ`.
+- Forward pass: `z = wᵀx + b` → `a = σ(z) = 1 / (1 + e^(−z))` → prediction `ŷ`.
+- Loss: `L(a, y) = −[y · log(a) + (1 − y) · log(1 − a)]`
+  - If `y = 1`: `L = −log(a)`
+  - If `y = 0`: `L = −log(1 − a)`
 
-**Problem of Binary Classification:**
-Dog? → 1 Cat (≈ not Dog)? → 0
+### Back Propagation
 
-**Error / Loss · Gradient · Target · Model (ANN architecture + parameters) · Output (y) · Input (x)**
-
-Problem of Binary Classification → Logistic Regression (Dog ? → 1 | Not Dog? → 0)
-
-**Parameters: 1. w (weight) 2. b (bias) 3. Output a= σ(wᵀx+b) · Loss function for Logistic Regression: · `L(a, y) = −[y · log(a) + (1 − y) · log(1 − a)]`**
-Logistic Regression pipeline with the math looks like:
-
-**X W B**
-`wᵀx + b`
-
-**a = σ(wᵀx + b) · L (a, y) · L**
-Logistic Regression pipeline with the math looks like:
-
-**Where, W → Weights X → Inputs b → Bias term σ → Activation function · X · ŷ**
-`wᵀx + b`
-
-`a = σ(wᵀx + b)`
-
-- W b
-
-Loss `L(a, y)`
-
-**Parameters: 1. w (weight) 2. b (bias) 3. Output a=σ(wᵀx +b)**
-Activation function
-
-Activation: `a = σ(wᵀx + b) = 1 / (1 + e^(-(wᵀx + b)))`. Loss: `L(a, y) = −[y · log(a) + (1 − y) · log(1 − a)]`.
-Logistic Regression pipeline with the math looks like:
-
-Activation function
-
-Activation `a = σ(wᵀx + b) = 1 / (1 + e^(-(wᵀx + b)))` → prediction `ŷ`
-`wᵀx + b`
-
-`a = σ(wᵀx + b)`
-
-- W b
-
-Loss `L(a, y)`
-
-If y = 1:L (a, y) =-log a
-
-**Loss function for Logistic Regression:**
-If y = 0:L (a, y) =-log (1– a)
-
-**`L(a, y) = −[y · log(a) + (1 − y) · log(1 − a)]`**
-Logistic Regression pipeline with the math looks like:
-
-**Where, W → Weights X → Inputs b → Bias term σ → Activation function · X**
-`wᵀx + b`
-
-`a = σ(wᵀx + b)`, loss `L(a, y)`
-
-Loss `L(a, y)`
-
-W b
-
-Forward Pass
-
-**Back Propagation · Parameters: 1. w (weight) 2. b (bias) 3. Output a=σ(wᵀx +b) · repeatedly adjust the weights to minimize the difference between actual output and desired output**
-Activation function
-
-Activation: `a = σ(wᵀx + b) = 1 / (1 + e^(-(wᵀx + b)))`. Loss: `L(a, y) = −[y · log(a) + (1 − y) · log(1 − a)]`.
+After the forward pass computes the loss, back-propagation walks **backwards** through the computational graph to compute gradients with respect to every parameter, so the optimiser can repeatedly nudge the weights to minimise the difference between actual and desired output.
 
 ### Optimization techniques
 
-**Generic Algorithm: Step 1: Initialize w and b Step 2: Perform Forward pass operation/calculations Step 3: Compute Loss/Cost function L (a, y) Step 4: Compute change in w and b (Take the partial derivative of the cost function with respect to Weights and bias (dw and db). Step 5: Update w and b w := w – αdw b := b – αdb Step 6: Repeat from Step 2 with new values of w and b for ‘n’ number of iterations. · Gradient Descent for learning parameters: It is an iterative approach for error correction in a machine learning model. · Question: Find w and b that will minimize GD(w, b)**
-Required: Loss/cost function
+**Generic gradient-descent algorithm**:
 
-Example loss function: `L(a, y) = −[y · log(a) + (1 − y) · log(1 − a)]`. `α` → learning rate. Goal: `min_w GD(w)`.
+1. Initialise `w` and `b`.
+1. Forward pass — compute the model's output for each input.
+1. Compute loss / cost `L(a, y)`.
+1. Compute the partial derivatives `dw = ∂J/∂w` and `db = ∂J/∂b`.
+1. Update parameters: `w := w − α·dw`, `b := b − α·db`.
+1. Repeat steps 2–5 for `n` iterations.
 
-**Gradient Descent for learning parameters: Learning rate(α) issues:**
+The learning rate `α` is a key hyper-parameter — too small means slow convergence, too large means oscillation or divergence.
 
-**- It is a hyper-parameter**
+#### Three flavours of Gradient Descent
 
-**Learning rate(α): more intuitions**
+| Variant | Per-update sample size | Speed | Memory | Notes |
+|----------------------------------|------------------------|---------------|------------|----------------------------------------------------------------|
+| Batch Gradient Descent (BGD) | Whole training set | Slow on big data | High | Stable but hard to tune `α` and pick number of epochs. |
+| Stochastic Gradient Descent (SGD)| One random sample | Much faster | Very low | Noisy path helps escape local minima; may not hit exact minimum. |
+| Mini-Batch Gradient Descent (MBGD)| A mini-batch (e.g. 32–512) | Fast on GPUs | Tunable | Best of both worlds — most practical choice today. |
 
-Gradient Descent Types
+**SGD detail.** Because each update uses a single random sample, the trajectory is irregular and may oscillate around the optimum without converging exactly. A common remedy is a **learning-rate schedule** — start large and reduce `α` over time (simulated annealing).
 
-There are three main types of Gradient Descent Algorithms:
+> *Epoch*: one full pass through the training set. *Iteration*: one parameter update — there are `m` iterations per epoch when using `m` mini-batches.
 
-1. Batch Gradient Descent (BGD)
-1. Stochastic Gradient Descent (SGD)
-1. Mini-Batch Gradient Descent (MBGD)
+**MBGD trade-offs**:
 
-Batch Gradient Descent (BGD)
+- Computes gradient on small sets of inputs.
+- Much faster than BGD; benefits from GPU matrix operations.
+- May not reach the exact minimum, but usually closer than SGD.
+- Slightly harder than SGD to escape local minima because of less noise.
 
-**Issues: · Generic steps: -Process each input sample and find the cost -Find the average cost over all input samples -Update w and b, and -repeat the steps for ‘n’ epochs(iterations)**
+#### Exponentially weighted average (EWMA) — the building block for Momentum
 
-1. It uses the complete dataset to calculate the gradients at every steps
-1. Slow when training set is large
-1. Difficult to find the learning rate
-1. Difficult to ascertain the number of epochs(iterations)
+EWMA is a classic algorithm for smoothing sequential data (a.k.a. *moving average*). It weights recent observations more heavily than older ones.
 
-**Advantage: · Stochastic → Random**
+Example with daily temperature `θ_t` and smoothing factor `β = 0.9`:
 
-1. Computes gradient based on single input sample: memory efficient
-1. Much faster compared to BGD
-1. Possible to train on large dataset
-1. Randomness is a good escape from local minima problem
+```text
+V_0 = 0
+V_1 = 0.9·V_0 + 0.1·θ_1
+V_2 = 0.9·V_1 + 0.1·θ_2
+V_3 = 0.9·V_2 + 0.1·θ_3
+...
+V_t = 0.9·V_{t-1} + 0.1·θ_t
+```
 
-Due to the random nature, the
+In general, with smoothing factor `β`:
 
-Algorithm is much less regular than
+`V_t = β · V_{t-1} + (1 − β) · θ_t`
 
-BGD
+`V_t` is approximately the average over the last `1 / (1 − β)` days:
 
-**Generic steps: -Process a random input sample and find the cost -Update w and b, and -repeat the steps for ‘n’ iterations on the training samples · Issues:**
-
-1. Might not reach the optimal value,
-
-but very close to it.
-
-Issues: Might not reach the optimal value, but very close to it.
-
-Possible solution: Reduce the learning rate gradually → Stimulated annealing
-
-Create a Learning Schedule to determine the learning at each iteration.
-
-Epoch: One round through the complete training set. Iterations: Process in multiple subsets of the training set, say, ‘m’ iterations
-
-my form 1 epoch
-
-Mini-Batch Gradient Descent (MBGD)
-
-**Advantage: · Generic steps: -Divide the training set into mini-batches (set of random samples on fixed number) -Process all the samples in a Mini-batch and find the average cost -Update w and b, and -repeat the steps for ‘n’ iterations/epochs on the training samples**
-
-1. Computes gradient based on small sets of input sample
-1. Much faster compared to BGD
-1. Possible to train on large dataset
-1. Performance boost on matrix operations using GPUs!
-1. Might not reach the optimal value, but very close to it, and possibly better than SGD
-
-**Issues:**
-
-1. It may be harder to escape the local
-
-minima.
-
-#### Gradient Descent (SGD) - intuition
-
-#### Gradient Descent (SGD) – loss function nature
-
-- One of the popular algorithm for smoothing sequential data
-- Also called Moving Average
-- Weight the number of observations and using their average
-- Example: Temperature θ over ‘n’ days Days
-
-Temperature
-
-Vt : Moving average on day ‘t’
-
-So, let V0 = 0 V1 = 0.9 V0 + 0.1 θ1 V2 = 0.9 V1 + 0.1 θ2 V3 = 0.9 V2 + 0.1 θ3
-
-Temperature
-
-: : Vt = 0.9 Vt-1 + 0.1 θt
-
-Days
-
-Vt = 0.9 Vt-1 + 0.1 θt If β = 0.9,
-
-Temperature
-
-**Vt = β Vt-1 + (1- β) θt**
-This equation gives the moving average
-
-shown by the red line.
-
-Days
-
-**Vt = β Vt-1 + (1- β) θt**
-Temperature
-
-Vt is approximate average over ≈1−1
-
-β days
-
-So, β = 0.9 is closer to 10 days temperature β = 0.98 is closer to 50 days temperature β = 0.5 is closer to 2 days temperature
-
-Days
-
-What is Exponentially Weighted Averages doing?
-
-Vt = β Vt-1 + (1- β) θt
+- `β = 0.5` → ~2-day average
+- `β = 0.9` → ~10-day average
+- `β = 0.98` → ~50-day average
 
 For, V100= 0.9 V99 + 0.1 θ100 V99= 0.9 V98 + 0.1 θ99
 
 Substituting, V99 V100= 0.1 θ100+ 0.9 (0.9 V98 + 0.1 θ99) V100= 0.1 θ100+ 0.9 ( 0.1 θ99+ 0.9 (0.9 V97+ 0.1 V98)) ..
 
 - “Compute the Exponentially weighted average of the gradients and use that gradient to update weights” - Andrew NG
-- One of the most popular algorithms
-- Helps to accelerate the gradient vectors in right direction and reduces oscillation
-- Always faster than the SGD
+
+#### Momentum
+
+- Compute the **exponentially weighted average of the gradients** and use that to update the weights (Andrew Ng).
+- One of the most popular optimisers; accelerates the gradient vectors in the right direction and reduces oscillation.
+- Generally faster than plain SGD.
 
 Algorithm (Momentum) — at iteration t, on the current mini-batch compute `dw, db`:
 
@@ -950,14 +621,13 @@ Update parameters:
 Hyper-parameters: learning rate α, momentum β (≈ 0.9)
 ```
 
-SGD Without Momentum SGD With Momentum
+With momentum, the optimiser converges faster and oscillates less than plain SGD.
 
-Faster convergence and reduced oscillation
+#### RMSProp — Root Mean Square Propagation
 
-- Root Mean Square Propagation
-- Unpublished adaptive learning method by Geoffrey Hinton
-- RMSProp also reduces oscillation but in a different way than Momentum
-- RMSprop as well divides the learning rate by an exponentially decaying average of squared gradients.
+- Unpublished adaptive method by Geoffrey Hinton.
+- Also reduces oscillation, but in a different way than Momentum.
+- Divides the learning rate by an exponentially decaying average of **squared** gradients.
 
 Algorithm (RMSProp) — at iteration t, on the current mini-batch compute `dw, db`:
 
@@ -972,11 +642,10 @@ Update parameters (ε ≈ 10⁻⁸ for numerical stability):
 
 Intuition: when an oscillating dimension produces a large `S`, the effective step size shrinks; a small `S` keeps the step size large — faster convergence with reduced oscillation.
 
-So,
+#### Adam — Adaptive Moment Estimation
 
-- Adam → Adaptive Moment Estimation
-- Combination of RMSProp and Momentum
-- Work well for a wide range of deep learning architecture
+- A combination of Momentum and RMSProp.
+- Works well across a wide range of deep-learning architectures and is the most common default optimiser.
 
 Algorithm (Adam) — initialize `V_dw = V_db = S_dw = S_db = 0`. At iteration t, on the current mini-batch compute `dw, db`:
 
@@ -1007,98 +676,77 @@ Hyper-parameter guide:
 
 ### Learning Rate Decay
 
-**Speed-up the learning algorithm by slowing decreasing the α (Learning rate)**
+Speed up training by gradually **decreasing** `α` (the learning rate) as training progresses — large steps early to make rapid progress, small steps later to fine-tune.
 
 ### Activation Functions
 
-Activation Functions: Sigmoid
+#### Sigmoid
 
 `σ(x) = 1 / (1 + e^(-x))`
 
-Characteristics:
+- Non-linear, range `(0, 1)` — useful as a final-layer activation for binary classification.
+- Suffers from the **vanishing gradient** problem: toward the ends of the curve `Y` changes very little with `X`, so the gradient is tiny and the network learns slowly.
 
-- Non-linear in nature
-- Range (0, 1)
-- Tends to bring activations to either side of the curve: good for a classifier
-- Suffers from the vanishing gradient problem
+#### tanh
 
-Vanishing Gradient: Toward the ends of the curve, Y changes very little with changes in X; the gradient becomes very small and the network learns extremely slowly.
+`tanh(x) = 2 / (1 + e^(−2x)) − 1`
 
-Activation Functions: tanh
+- Non-linear, range `(−1, 1)`.
+- Stronger gradient than sigmoid, but still suffers from vanishing gradients at saturation.
 
-`tanh(x) = 2 / (1 + e^(-2x)) − 1`
+#### ReLU (Rectified Linear Unit)
 
-Characteristics:
+`A(x) = max(0, x)` — `0` for negative inputs, identity for non-negative inputs.
 
-- Non-linear in nature
-- Range (-1, 1)
-- Stronger gradient than sigmoid
-- Also suffers from the vanishing gradient problem
-  Activation Functions: ReLu
+- Non-linear, range `[0, ∞)`.
+- Cheaper to compute than sigmoid / tanh; strong gradient.
+- Best used in hidden layers; largely fixes the vanishing-gradient problem.
+- Can suffer from the **dying ReLU** problem — neurons stuck at 0 stop learning.
 
-`A(x) = max(0, x)` — if x < 0, A(x) = 0; if x ≥ 0, A(x) = x
+#### Leaky ReLU
 
-Characteristics:
+`A(x) = max(0.01x, x)` — small negative slope instead of a flat zero.
 
-- Non-linear in nature
-- Range \[0, ∞)
-- Stronger gradient than sigmoid
-- Computationally less expensive than sigmoid and tanh
-- Best used in hidden layers
-- Dying ReLU problem
-- Avoids/rectifies vanishing gradient problem
-  Activation Functions: Leaky ReLu
+- Range `(−∞, ∞)`.
+- A simple fix for the dying-ReLU problem.
 
-`A(x) = max(0.01x, x)` — if x < 0, A(x) = 0.01x; if x ≥ 0, A(x) = x
+#### Softmax
 
-Characteristics:
+`Softmax(y)_i = e^(y_i) / Σ_j e^(y_j)`, for `j = 1, …, K`.
 
-- Non-linear in nature
-- Range (-∞, ∞)
-- Leaky ReLU is one attempt to fix the "dying ReLU" problem
+- Turns a vector of raw scores into a probability distribution that sums to 1.
+- Standard final-layer activation for multi-class classification.
 
-Activation Functions: Softmax
+Illustration: `Y = [2.0, 1.0, 0.1] → Softmax(Y) ≈ [0.7, 0.2, 0.1]`.
 
-`Softmax: S(y_i) = e^(y_i) / Σ_j e^(y_j)` for j = 1, ..., K
+### Logistic Regression with Backpropagation
 
-Characteristics:
+For a single sample the forward pass and loss are:
 
-- Non-linear in nature
-- Turns numbers into probabilities that sum to one
-- Useful when there is more than one output
-- Used for classification in the output layer
-- Less computationally expensive than sigmoid and tanh
-  |---|---|---|
+```text
+z = wᵀx + b     (linear)
+a = σ(z)        (sigmoid)
+L = −[y·log(a) + (1−y)·log(1−a)]
+```
 
-Illustration: `Y = [2.0, 1.0, 0.1] → Softmax(Y) ≈ [0.7, 0.2, 0.1]`
+For `m` training samples the **average cost** is `J = (1/m) Σᵢ₌₁ᵐ L(aᵢ, yᵢ)`.
 
-Logistic Regression with Backpropagation
+Batch gradient descent on this cost:
 
-**Logistic Regression pipeline with the math looks like:**
-Average cost over all training ‘m’ samples
+1. Initialise `w` and `b`.
+1. Forward pass over all samples.
+1. Compute average cost `J`.
+1. Compute `dw = ∂J/∂w` and `db = ∂J/∂b` via back-propagation.
+1. Update: `w := w − α·dw`, `b := b − α·db`.
+1. Repeat for `n` iterations.
 
-X W
+### Multi-layered Neural Network
 
-**a = σ(wᵀx + b)**
-Loss `L(a, y)`
+Adding a **hidden layer** between input and output gives a multi-layer perceptron (MLP). For example, a 3-layered NN has 2 hidden layers between input and output.
 
-`wᵀx + b`
+**Intuition**: in a multi-layer NN, the first hidden layer learns very simple patterns (e.g. edges); each subsequent hidden layer composes those into progressively more complex patterns (textures, parts, objects).
 
-Average loss over `m` samples: `J = (1/m) Σ_{i=1..m} L(a_i, y_i)`
-b
-
-**Batch GD Step 1: Initialize w and b Step 2: Perform Forward pass operation/calculations Step 2: Compute Loss/Cost function L (a, y) Step 3: Find the average cost over all input samples (Take the partial derivative of the cost function with respect to Weights and bias (dw and db). Step 4: Update w and b w := w – αdw b := b – αdb Step 5: Repeat from Step 2 with new values of w and b for ‘n’ number of iterations. · dw = ∂w∂J , db = ∂b∂J · w ≔ w − αdw b := b – αdb · Size #Bedroom #Bathroom Garden Location · Price**
-Y
-
-Hidden Layer→ Adding more neurons in between input and output layer
-
-Single layer perceptron 3-layered neural network with 2 hidden layers
-
-Example: 2-layered architecture for multi-class classification (e.g: Fashion MNIST dataset)
-
-Intuition: In a multi-layer neural network, the first hidden layer will be able to learn some very simple patterns. Each additional hidden layer will somehow be able to learn progressively more complicated patterns.
-
-**Example: 2-layered architecture for multi-class classification (e.g. MNIST digit dataset).**
+**Example**: a 2-layered MLP for multi-class classification on the Fashion-MNIST or MNIST digit datasets.
 
 ______________________________________________________________________
 
