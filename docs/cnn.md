@@ -23,11 +23,7 @@ ______________________________________________________________________
 
 ## Week 1 — Introduction to ML and DL
 
-42028: Deep Learning and Convolutional Neural Network
-
-#### Week 1
-
-Introduction to Machine Learning and Deep Learning
+*42028: Deep Learning and Convolutional Neural Network — Introduction to Machine Learning and Deep Learning*
 
 Outline
 
@@ -280,29 +276,20 @@ Deep Learning Pipeline example
 
 ______________________________________________________________________
 
-## Student Projects from previous iterations of 42028!
+### Student Projects from previous iterations of 42028
 
-### KrossConnection
+- KrossConnection
+- SignSync
+- GestureFly
 
-### SignSync
+### Deep Learning Projects @ UTS
 
-### GestureFly
-
-# Deep Learning Projects @UTS!
-
-Signature and Logo detection
-
-Logo and Signature detection result
-
-## Drone detection for Security and Surveillance — The Award winning
+- Signature and Logo detection
+- Drone detection for Security and Surveillance (award winning)
 
 ## Week 2 — Lecture
 
-42028: Deep Learning and Convolutional Neural Network
-
-## Week-2 Lecture
-
-Machine Learning and Image Processing Basics
+*42028: Deep Learning and Convolutional Neural Network — Machine Learning and Image Processing Basics*
 
 Outline
 
@@ -691,11 +678,7 @@ ______________________________________________________________________
 
 ## Week 3 — Lecture
 
-42028: Deep Learning and Convolutional Neural Network
-
-# Week-3 Lecture
-
-Feature Extraction and Neural Network Basics
+*42028: Deep Learning and Convolutional Neural Network — Feature Extraction and Neural Network Basics*
 
 Outline
 
@@ -946,11 +929,7 @@ ______________________________________________________________________
 
 ## Week 4 — Lecture
 
-42028: Deep Learning and Convolutional Neural Network
-
-# Week-4 Lecture
-
-Neural Network in details
+*42028: Deep Learning and Convolutional Neural Network — Neural Network in details*
 
 Outline
 
@@ -971,18 +950,7 @@ Mechanism to reduce the loss/error
 **Problem of Binary Classification:**
 Dog? → 1 Cat (≈ not Dog)? → 0
 
-**Error/ Loss**
-Gradient
-
-### 1
-
-Target
-
-**Model ANN Architecture + Parameters**
-
-Output (y)
-
-Input (x)
+**Error / Loss · Gradient · Target · Model (ANN architecture + parameters) · Output (y) · Input (x)**
 
 **Activation function**
 Problem of Binary Classification → Logistic Regression (Dog ? → 1 | Not Dog? → 0)
@@ -1343,15 +1311,11 @@ Example: 2-layered architecture for multi-class classification (e.g: Fashion MNI
 
 Intuition: In a multi-layer neural network, the first hidden layer will be able to learn some very simple patterns. Each additional hidden layer will somehow be able to learn progressively more complicated patterns.
 
-## **Example: 2-layered architecture for multi-class classification (e.g: MNIST digit dataset) intuition**
+**Example: 2-layered architecture for multi-class classification (e.g. MNIST digit dataset) — intuition.**
 
 ## Week 5 — Lecture
 
-42028: Deep Learning and Convolutional Neural Network
-
-## Week-5 Lecture
-
-Convolutional Neural Network (CNN) - 1
+*42028: Deep Learning and Convolutional Neural Network — Convolutional Neural Network (CNN) - 1*
 
 Outline
 
@@ -1437,15 +1401,9 @@ Convolution Operation
 
 6 X 6 dimension image
 
-## Vertical Edge detector — Convolution Operation
+**Vertical Edge detector — Convolution Operation**
 
-# →
-
-3 X 3 Filter
-
-Image Convolved Feature
-
-5 X 5 Image
+5 × 5 image · 3 × 3 filter → convolved feature
 
 |0|0|0|0|0|0|0|0|
 |---|---|---|---|---|---|---|---|
@@ -1600,11 +1558,7 @@ ______________________________________________________________________
 
 ## Week 6 — Lecture
 
-42028: Deep Learning and Convolutional Neural Network
-
-# Week-6 Lecture
-
-Convolutional Neural Network (CNN) - 2
+*42028: Deep Learning and Convolutional Neural Network — Convolutional Neural Network (CNN) - 2*
 
 Outline
 
@@ -1872,11 +1826,7 @@ ______________________________________________________________________
 
 ## Week 7 — Lecture
 
-42028: Deep Learning and Convolutional Neural Network
-
-# Week-7 Lecture
-
-Convolutional Neural Network (CNN) - 3
+*42028: Deep Learning and Convolutional Neural Network — Convolutional Neural Network (CNN) - 3*
 
 Outline
 
@@ -2003,44 +1953,15 @@ Activations: Relu after each CONV and FC layer Optimizer: SGD with Momentum Regu
 
 ## Understanding Inception and ResNet
 
-|100|100|100|0|0|0|
+**1×1 Convolution — is this useful?**
 
-|300|300|300|0|0|0|
+Apply a 1×1 filter/kernel over a `6 × 6 × 1` volume → still `6 × 6 × 1`. Pointless on a 1-channel input — but useful when the input has many channels.
 
-## Is this useful? — 3
+Example with `+ ReLU` and 32 filters of size `1 × 1 × 64`:
 
-|Convolution operator| |
+`(6 × 6 × 64) → (6 × 6 × 32)` — channels reduced!
 
-1 X 1 filter/Kernel
-
-6 X 6 X 1 dimension volume
-
-6 X 6 X 1 dimension image
-
-3 X 3
-
-1 X 1
-
-## **+ Relu**
-
-:
-
-(6 X 6 )
-
-X 32 (# of filters)
-
-6 X 6 X 64
-
-1 X 1 X 64
-
-X 32 (# of filters)
-
-#### So, (6 X 6 X 64) → (6 X 6 X 32) ... reduced!
-
-**Relu**
-1 X 1 Conv 128 filters
-
-64 X 64 X 256 64 X 64 X 128
+`64 × 64 × 256` with a `1×1` Conv (128 filters) → `64 × 64 × 128`.
 
 - Large filter preferred for large objects
 - Small filters for small objects
@@ -2153,11 +2074,7 @@ ______________________________________________________________________
 
 ## Week 8 — Lecture
 
-42028: Deep Learning and Convolutional Neural Network
-
-# Week-8 Lecture
-
-Object Detection -1
+*42028: Deep Learning and Convolutional Neural Network — Object Detection -1*
 
 Outline
 
@@ -2255,11 +2172,7 @@ ______________________________________________________________________
 Input Image
 
 **Input Image · We need to modify this CNN pipeline to output Class Label and Bounding Box (4 numbers) · Pre-trained model or ImageNet, AlexNet, VGG16, ResNet, etc. Classification Head**
-Softmax Loss
-
-#### + MultitaskLoss
-
-Regression Head L2 Loss
+Classification head → Softmax loss, regression head → L2 loss (combined as multi-task loss).
 
 Input Image
 
@@ -2389,11 +2302,7 @@ ______________________________________________________________________
 
 ## Week 9 — Lecture
 
-42028: Deep Learning and Convolutional Neural Network
-
-# Week-9 Lecture
-
-Object Detection -2
+*42028: Deep Learning and Convolutional Neural Network — Object Detection -2*
 
 Outline
 
@@ -2617,11 +2526,7 @@ ______________________________________________________________________
 
 ## Week 10 — Lecture
 
-42028: Deep Learning and Convolutional Neural Network
-
-# Week-10 Lecture
-
-Anchor Free Object Detection, Instance/Semantic Segmentation
+*42028: Deep Learning and Convolutional Neural Network — Anchor Free Object Detection, Instance/Semantic Segmentation*
 
 Outline
 
@@ -2928,11 +2833,7 @@ ______________________________________________________________________
 
 ## Week 11 — Lecture
 
-42028: Deep Learning and Convolutional Neural Network
-
-# Week-11 Lecture
-
-Introduction to Sequence Modelling
+*42028: Deep Learning and Convolutional Neural Network — Introduction to Sequence Modelling*
 
 Outline
 
@@ -2945,13 +2846,12 @@ Outline
 - Object Detection using Transformer (RF-DETR)
 - Diffusion models
 
-# ??
+Examples to motivate sequence modelling:
 
-Predict where the ball will go next?
+- Predict where the ball will go next?
+- Complete the sentence: "This Sunday I went for a walk…"
 
-#### “This Sunday I went for a walk”
-
-Sequence modelling types and applications
+### Sequence modelling types and applications
 
 Y’
 
@@ -3090,19 +2990,9 @@ y’t
 
 y’t-2
 
-y’t-1
+y'\_{t-1}, …
 
-...
-
-#### Features
-
-Input
-
-X0
-
-X1
-
-X2
+Inputs (features) `X_0, X_1, X_2, …`
 
 Xt-2
 
@@ -3226,7 +3116,7 @@ Example: Given a lot of sprite sample images
 **Training Data**
 Task: Generate New Sprite images (New Image generation from image input)
 
-#### Example prompt: Butterfly image (Text to Image Generation) Task: Generate image of Butterfly!
+**Example prompt** (text-to-image): "Butterfly image" → Task: generate an image of a butterfly.
 
 - Forward Diffusion:
 
