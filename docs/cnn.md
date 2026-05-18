@@ -171,8 +171,6 @@ Image Classification Object Detection
 
 - Localization Instance Segmentation
 
-______________________________________________________________________
-
 **DOG · CAT**
 DOG
 
@@ -274,8 +272,6 @@ Deep Learning Pipeline example
 
 **More layers that loosely mimic human brain · No explicit feature engineering · Deep Learning System Pipeline**
 
-______________________________________________________________________
-
 ### Student Projects from previous iterations of 42028
 
 - KrossConnection
@@ -286,6 +282,8 @@ ______________________________________________________________________
 
 - Signature and Logo detection
 - Drone detection for Security and Surveillance (award winning)
+
+______________________________________________________________________
 
 ## Week 2 — Lecture
 
@@ -364,8 +362,6 @@ Unsupervised Learning
 
 Unsupervised Learning
 
-______________________________________________________________________
-
 **Clustering Task · Groups of similar fruits**
 Unlabelled data for training
 
@@ -395,11 +391,7 @@ Colour
 
 **SVM Parameters: Kernel, Gamma, Regularization (C)**
 
-______________________________________________________________________
-
 Low Regularization value
-
-______________________________________________________________________
 
 High Regularization value
 
@@ -595,8 +587,6 @@ Colour to Gray
 
 Edge detection
 
-______________________________________________________________________
-
 Canny Edge detection Sobel Edge detection
 
 |100|100|100|0|0|0|
@@ -744,8 +734,6 @@ Direction
 - The bins are the gradient directions (θ) quantized into 9-bins
 
 **Pixel with blue circle has an angle of 80 degrees and magnitude of 2**
-
-______________________________________________________________________
 
 **Step -3: Block Normalization:**
 
@@ -1313,6 +1301,8 @@ Intuition: In a multi-layer neural network, the first hidden layer will be able 
 
 **Example: 2-layered architecture for multi-class classification (e.g. MNIST digit dataset) — intuition.**
 
+______________________________________________________________________
+
 ## Week 5 — Lecture
 
 *42028: Deep Learning and Convolutional Neural Network — Convolutional Neural Network (CNN) - 1*
@@ -1354,12 +1344,6 @@ Three main type of layers used to build a CNN architecture
 1. Fully Connected layer (FC) These three types of layers are stacked together to form a CNN architecture!
 
 **Sample CNN architecture (LENET-5): · CONV Layer · FC Layer · POOL Layer · Sample CNN architecture:**
-
-______________________________________________________________________
-
-______________________________________________________________________
-
-______________________________________________________________________
 
 - CONVolution is the first layer to extract features from an input image
 - Core building block of a CNN
@@ -1889,8 +1873,6 @@ Train/Fine-Tune
 
 **Freeze**
 
-______________________________________________________________________
-
 **Option-3: (VGG-16 considered as an example) · Partially Train CONV layers (usually last layer(s) which have specialised · features) + Full Connection (FC) layer (with modifications)**
 →Useful when your dataset distribution is not similar to ImageNet (or original dataset), number of classes are different and your dataset is small.
 
@@ -1971,8 +1953,6 @@ Example with `+ ReLU` and 32 filters of size `1 × 1 × 64`:
 **Designing CNN requires: - Deciding filter size and number - Number and type of layers etc. · Inception suggests: - Use filters with different size together! - Use different types of layers (CONV, POOL etc.) together Result → Complicated Architecture! & better performance · 28 X 28 X 64 · 1X1 · 3X3**
 64
 
-______________________________________________________________________
-
 128
 
 28
@@ -2021,19 +2001,9 @@ Computation Cost: 1X1: 28 X 28 X 16 X 192 ≈ 2.4M multiplications! 5X5: 28 X 28
 
 ## Inception Module V1
 
-______________________________________________________________________
-
-______________________________________________________________________
-
-______________________________________________________________________
-
 **GoogleNet(2014): 9 Inception modules stacked together**
 
-______________________________________________________________________
-
 **Deeper Network → Vanishing Gradient - Introduced two auxiliary classifier - Applied Softmax to the output - Compute Auxiliary loss/cost - Only used for training**
-
-______________________________________________________________________
 
 Aux_Loss2
 
@@ -2095,8 +2065,6 @@ Image Classification Object Detection
 
 - Localization Instance Segmentation
 
-______________________________________________________________________
-
 **DOG · CAT**
 DOG
 
@@ -2144,8 +2112,6 @@ Image Classification Object Detection
 
 - Localization Instance Segmentation
 
-______________________________________________________________________
-
 **DOG · CAT**
 DOG
 
@@ -2158,15 +2124,11 @@ Input : Image Output: Label Performance Evaluation: Accuracy
 
 **Output : Dog · Localization Task:**
 
-______________________________________________________________________
-
 Input : Image Output: Bounding Box in the image
 
 (x, y, Ht, Wd) or (x, y, x’, y’) Performance Evaluation: IoU
 
 **Output : (x, y, Ht, Wd) · Output : 4 numbers (x’, y’, Ht’, Wd’)**
-
-______________________________________________________________________
 
 **Calculate Loss L2 Loss · CNN · Ground Truth: 4 numbers (x, y, Ht, Wd)**
 Input Image
@@ -2188,8 +2150,6 @@ Image Classification
 Image Classification Object Detection
 
 - Localization Instance Segmentation
-
-______________________________________________________________________
 
 **DOG · CAT**
 DOG
@@ -2298,8 +2258,6 @@ Image Annotation for Object Detection
 
 ______________________________________________________________________
 
-______________________________________________________________________
-
 ## Week 9 — Lecture
 
 *42028: Deep Learning and Convolutional Neural Network — Object Detection -2*
@@ -2329,11 +2287,7 @@ Outline
 
 ## Object Detection Techniques History
 
-______________________________________________________________________
-
 **Sliding Window technique**
-
-______________________________________________________________________
 
 #### Sliding Window technique
 
@@ -2703,8 +2657,6 @@ Yolo v9
 
 ## Case Study: YoloX, Decoupled head
 
-______________________________________________________________________
-
 ### Mixup Augmentation
 
 ### Mosaic Augmentation
@@ -2758,8 +2710,6 @@ Image Classification
 Image Classification Object Detection
 
 - Localization Instance Segmentation
-
-______________________________________________________________________
 
 **DOG · CAT**
 DOG
@@ -3143,5 +3093,3 @@ Week 12 Guest Lecture
 Industry Guest Lecture will be presented by Amazon Web Services (AWS) on Week 12
 
 Topic: Build, Evaluate and Scale Production ready Agents
-
-______________________________________________________________________
