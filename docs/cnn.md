@@ -783,185 +783,99 @@ Dog
 - CNNs have neurons arranged in 3D
 - It is a sequence of layers which transforms input 3D volume to 3D outputs volume
 
-**CNNs are the foundation of modern state-of-the-art deep-learning-based computer vision.** Layers in a CNN:
-Three main type of layers used to build a CNN architecture
+**CNNs are the foundation of modern state-of-the-art deep-learning-based computer vision.** A CNN is built from three main layer types, stacked together:
 
-1. Convolutional Layer (CONV)
-1. Pooling Layer (POOL)
-1. Fully Connected layer (FC) These three types of layers are stacked together to form a CNN architecture!
+1. **Convolutional layer (CONV)** — applies learnable filters (e.g. edge detectors) to extract features from the input image.
+1. **Pooling layer (POOL)** — down-samples to reduce spatial size.
+1. **Fully-connected layer (FC)** — classifies the high-level features into output classes.
 
-**Sample CNN architecture (LeNet-5)** — alternating CONV / POOL layers, ending with FC layers.
+Classic example: **LeNet-5** — alternating CONV / POOL layers, ending with FC layers.
 
-- CONVolution is the first layer to extract features from an input image
-- Core building block of a CNN
-- Convolutions are basic operation in this layer
-- A number of filters (e.g. edge detectors) are applied to the input image
+### Convolution operation
 
-Convolution Operation
+CONVolution is the first layer to extract features from an input image and is the core building block of a CNN. A 2D convolution slides a small filter (kernel) over the input image and produces a feature map.
 
-`[ 100, 100, 100, 0, 0, 0 ]`
+**Example** — input `6 × 6` image of two halves (left = 100s, right = 0s), filter `[1, 0, -1]` repeated in three rows (a simple vertical-edge detector):
 
-`[ 0, 300, 300, 0 ]`
-
-`[ 1, 0, -1 ]`
-
-*(convolution)*
-
-3 X 3 filter/Kernel
-
-4 X 4 dimension matrix
-
-6 X 6 dimension image
-
-**Convolution Operation · (100 X 1 + 100 X 1 + 100 X 1) + (100 X 0 + 100 X 0 + 100 X 0) + (100 X -1 + 100 X -1 + 100 X -1)**
-|1100|0100|-1100|0|0|0|
-|---|---|---|---|---|---|
-|100|100|100|0|0|0|
-
-`[ 0, 300, 300, 0 ]`
-
-`[ 1, 0, -1 ]`
-
-*(convolution)*
-
-3 X 3 filter/Kernel
-
-4 X 4 dimension matrix
-
-6 X 6 dimension image
-
-**Vertical Edge detector — Convolution Operation**
-
-5 × 5 image · 3 × 3 filter → convolved feature
-
-|0|0|0|0|0|0|0|0|
-|---|---|---|---|---|---|---|---|
-|0|100|100|100|0|0|0|0|
-|0|0|0|0|0|0|0|0|
-
-`[ 100, 100, 100, 0, 0, 0 ]`
-
-**Padding (p) = 1**
-6 X 6 dimension image without padding
-
-8 X 8 dimension matrix with padding
-
-|0|0|0|0|0|0|0|0|
-|---|---|---|---|---|---|---|---|
-|0|100|100|100|0|0|0|0|
-|0|0|0|0|0|0|0|0|
-
-|-200|0|200|200|0|0|
-|---|---|---|---|---|---|
-|-300|0|300|300|0|0|
-|-200|0|200|200|0|0|
-
-Filter / kernel: `[1, 0, -1]`. Input `6 × 6` padded to `8 × 8` (padding `p = 1`).
-
-`(n × n) ∗ (f × f)` with padding `p = 1` produces output of size `(n + 2p − f + 1) × (n + 2p − f + 1)`. Example: `6 × 6 ∗ 3 × 3 → 6 × 6`.
-
-**Same-padding question**: what padding `p` keeps the output size equal to the input?
-
-```
-n + 2p − f + 1 = n   →   p = (f − 1) / 2
+```text
+Input (6×6)           Filter (3×3)         Output (4×4)
+[100 100 100  0  0  0]   [ 1  0 -1]        [   0  300  300    0]
+[100 100 100  0  0  0]   [ 1  0 -1]   *    [   0  300  300    0]
+[100 100 100  0  0  0]   [ 1  0 -1]   →    [   0  300  300    0]
+[100 100 100  0  0  0]                     [   0  300  300    0]
+[100 100 100  0  0  0]
+[100 100 100  0  0  0]
 ```
 
-#### Padding (Same and Valid)
+The high values (300) in the output map the vertical edge between the two halves.
 
-**Valid Padding: ≈ No Padding (Padding p = 0) So, Output size will be → n − f + 1 X n − f + 1 Same Padding: ≈ Output size and input size is same, this requires appropriate padding. Hence use p = (f2−1), for calculate the required padding.**
-Stride
+### Padding (Same vs. Valid)
 
-It is the number of pixels by which we slide the filter over the input
+- **Valid padding** — no padding (`p = 0`); output is `(n − f + 1) × (n − f + 1)`.
+- **Same padding** — pad so the output has the same size as the input; use `p = (f − 1) / 2`.
 
-matrix Example:
+Without padding the output shrinks each layer; with padding the borders are preserved.
 
-1. Stride(s) = 1: Move the filter by one pixel horizontally and vertically
-1. Stride(s) = 2: Move the filter by two pixels horizontally and vertically
+### Stride
 
-#### Stride and Padding illustration
+**Stride `s`** = number of pixels the filter shifts per step.
 
-Convolution with stride (s)=2,
+- `s = 1`: shift by one pixel horizontally and vertically (default).
+- `s = 2`: shift by two pixels — output is roughly half the size.
 
-Convolution with stride (s) =2 padding (p) = 0
+### Output size with padding and stride
 
-Convolution with stride (s) =1 padding (p) = 1
+For an `n × n` input convolved with an `f × f` filter, padding `p`, stride `s`:
 
-padding (p) = 1
+```text
+output side = ⌊(n + 2p − f) / s⌋ + 1
+```
 
-Output size with Stride and padding
+**Example**: `n = 7`, `f = 3`, `p = 0`, `s = 2` → `⌊(7 − 3)/2⌋ + 1 = 3` → output is `3 × 3`.
 
-Given: Input Matrix Dimension : n x n
+### Pooling layer
 
-- Filter size: `f × f`
-- Padding: `p`
-- Stride: `s`
-- Output size: `⌊(n + 2p − f) / s⌋ + 1` along each spatial dimension
-  so the output is `(⌊(n + 2p − f)/s⌋ + 1) × (⌊(n + 2p − f)/s⌋ + 1)`
-  Example:
+A down-sampling operation that reduces a feature map's spatial size while keeping the most important information.
 
-Input Matrix Dimension : 7 x 7, Filter size: 3 x 3
+Three common variants:
 
-Padding:0, Stride :2
+- **Max pooling** — take the maximum in each window.
+- **Average pooling** — take the average.
+- **Sum pooling** — take the sum (rarely used).
 
-**Output Size= 3 X 3**
+**Max pooling** with a 2×2 filter and stride 2:
 
-- Pooling layer is a down sampling operation which reduces the dimensionality of a matrix.
+Input `4 × 4`:
 
-- In other words, it reduces the number of parameters for large image, but retain the valuable information.
-
-- 3 types:
-
-- Max pooling
-
-- Average pooling
-
-- Sum pooling
-
-- Max pooling:
-
-**Max(7, 8, 1, 5) = 8**
-|7|8|9|0|
+| 7 | 8 | 9 | 0 |
 |---|---|---|---|
-|1|5|8|3|
-|5|9|3|2|
-|5|6|6|2|
+| 1 | 5 | 8 | 3 |
+| 5 | 9 | 3 | 2 |
+| 5 | 6 | 6 | 2 |
 
-|8|9|
+Output `2 × 2` (take the max of each 2×2 window, e.g. `max(7, 8, 1, 5) = 8`):
+
+| 8 | 9 |
 |---|---|
-|9|6|
+| 9 | 6 |
 
-Max pooling with 2X2 filter and Stride 2
+**Average pooling** on the same input (e.g. `(7+8+1+5)/4 = 5.25`):
 
-- Average pooling:
+| 5.25 | 5 |
+|------|------|
+| 6.25 | 3.25 |
 
-**(7+8+1+5)/4 = 5.25**
-|7|8|9|0|
-|---|---|---|---|
-|1|5|8|3|
-|5|9|3|2|
-|5|6|6|2|
+### Fully-Connected (FC) layer
 
-|5.25|5|
-|---|---|
-|6.25|3.25|
+After CONV / POOL layers extract high-level features, the FC layer flattens the feature map and feeds it through a traditional multi-layer perceptron. For multi-class classification, the final layer typically uses a **Softmax** activation so the outputs become a probability distribution over classes.
 
-Max pooling with 2X2 filter and Stride 2
+### CNN layer visualisation — intuition
 
-- In FC layer, the output matrix after convolution layer is flattened and feed into a fully connected layer similar to ANN
+A trained CNN's filters learn increasingly abstract features layer by layer:
 
-- It is a traditional Multi-layer Perception/Neural Network
-
-- For multi-class classification, usually Softmax activation is used.
-
-- Softmax ensures the output
-
-- Output of the CONV and POOL layers represent a high level features of the Input image
-
-- FC layer uses this feature to classify the input image into the desired class.
-
-CNN layers visualization and intuition
-
-**Example: Face recognition using CNNs · Uses simple shapes to form higher level features like facial shapes! · Uses edges to detect simple shapes · Low level feature like edges from raw pixels**
+- Early layers detect **low-level features** (edges from raw pixels).
+- Middle layers compose edges into **simple shapes**.
+- Late layers compose shapes into **high-level concepts** (e.g. facial parts) — useful for tasks like face recognition.
 
 ______________________________________________________________________
 
@@ -987,231 +901,128 @@ Outline
 
 - Data Augmentation – Simple and advanced
 
-- In case of small dataset (Range : 100 - \<100k)
+### Dataset preparation
 
-  - Train set: 60%
+How you split the data depends on the dataset size:
 
-  - Validation set: 20%
+| Dataset size | Train | Validation | Test |
+|-------------------------|-------|------------|----------|
+| Small (≤ ~100k) | 60% | 20% | 20% |
+| Small (alt. split) | 70% | — | 30% |
+| Large (500K – 1M+) | 98% | 10,000 | 10,000 |
 
-  - Test set: 20%
+The 60/20/20 split is typical for the pre-DL / small-data era. With very large datasets (deep-learning era), a fixed-size validation and test set (~10k each) is enough and the rest goes into training.
 
-**Popular dataset spit choice in non-DL era! Or Small Data era!**
-Or,
-
-- Train set: 70%
-
-- Test set: 30%
-
-- In case of Large dataset (Range : 500K - 1M+)
-
-**Example: Total data sample : 1M+ Train: 98% ! Validation: 10,000 samples Test: 10,000 samples · Popular dataset spit choice in DL era! Or BIG Data era! · Train, validation and test set distribution:**
-Rule of Thumb: Validation and Test set should come from the same distribution
+> Rule of thumb: validation and test sets must come from the same distribution.
 
 ### Bias and Variance
 
-- It is a value that allows to shift the activation function to left or right, to better fit the data
+**Bias** is the value that shifts the activation function left/right to better fit the data — without bias the line always passes through the origin, which often leads to a poor fit.
 
-Compare: without bias `a = σ(wᵀx)` vs with bias `a = σ(wᵀx + b)`.
+- Compare: without bias `a = σ(wᵀx)` vs. with bias `a = σ(wᵀx + b)`.
+- Changes in `w` alter the **steepness** of the curve (keeping the origin fixed).
+- Changes in `b` shift the curve **left or right**, giving a better fit to the data.
 
-- Changes in ‘w’ alters the steepness of the curve, keeping the origin at (0,0) or same/unchanged
-- Without bias we may get a poor fit to training data
+**Variance** is the change in prediction accuracy between training and test data:
 
-Without bias: `a = σ(wᵀx)`
+- High variance means the model overfits — it pays too much attention to training data and fails to generalise to unseen data.
+- High-variance models perform very well on training data but have high error on test data.
 
-- Changes in ‘b’ shifts the curve to left or right
-- With bias the curve/line will not always pass through origin
-- We get a better fit to training data
+#### Bayesian optimal vs. human-level performance
 
-With bias: `a = σ(wᵀx + b)`
-Variance
+- **Bayesian Optimal Error (BOE)** — the best possible error any model could achieve on the task.
+- **Human-level performance** — humans are very good at many tasks; using human-labelled data and analysing human errors helps improve ML models. As training time grows, model accuracy approaches human-level performance and then plateaus toward BOE.
 
-- It is the change in prediction accuracy of Machine Learning model between training data and test data.
-- Model with high variance pays a lot of attention to training data and does not generalize on the data which it hasn’t seen before.
-- With high variance, models perform very well on training data but has high error rates on test data.
+Example — medical diagnosis of arm fractures from X-rays:
 
-#### Bias and Variance effect
+| Group | Annotator | Error rate |
+|-------|---------------------------------|-----------:|
+| A | Untrained human | 16% |
+| B | General practitioner (GP) | 5% |
+| C | Orthopaedic specialist | 2% |
+| D | Team of experienced doctors | 0.4% |
 
-- Bayesian Optimal Error (BOE):
+The error of the strongest human group (D) is the practical human-level error to compare against.
 
-• Best optimal error that can be achieved
+#### Identifying bias / variance issues
 
-- Human Level performance:
+- **High bias** — high training error; validation/test error roughly equal to training error.
+- **High variance** — low training error; validation/test error much higher than training error.
 
-- Humans are very good at a lot of tasks
+The four regimes:
 
-- Can get labelled data from Humans – helps to improve the ML model performance
+| Bias | Variance | Behaviour |
+|------|----------|------------------------------------------------------|
+| Low | Low | Consistent and accurate (the goal) |
+| Low | High | Accurate on average but inconsistent — overfitting |
+| High | Low | Consistent but inaccurate — underfitting |
+| High | High | Inconsistent and inaccurate |
 
-- Gain insights from manual error analysis - Why did a human got it right?
+**Fixing high bias** (model too simple, high training error):
 
-Bayesian Optimal Error / Best Possible error
+- Add more features or use a more complex model.
+- Decrease the regularization parameter.
 
-Accuracy
+**Fixing high variance** (model overfits):
 
-Human-level performance
+- Increase dataset size.
+- Reduce input features.
+- Increase the regularization parameter.
 
-Time
+### Regularization
 
-Medical diagnosis of fractures on arms Consider the performance by these groups:
+Regularization slightly modifies the learning algorithm so the model generalises better to unseen data. The basic idea is to update the loss to include a **regularization term**:
 
-|A|Untrained human|16 % error|
-|---|---|---|
-|B|General practitioner (GP)|5 % error|
-|C|Orthopedic doctor (Specialist)|2 % error|
-|D|Team of experienced doctors|0.4 % error|
+`Cost = Loss + λ · R(w)`
 
-X-ray: Stress fracture on arms
+Due to `λ`, the weight matrices shrink — and a neural network with smaller weight matrices tends to be simpler.
 
-What is Human-level error?
+**L2 regularization** (a.k.a. weight decay):
 
-- Identify High Bias:
+`Cost = Loss + (λ / 2m) · Σ w²`
 
-- High training error
-
-- Validation/test error nearly same as train error
-
-- Identify High Variance:
-
-- Low training error
-
-- High validation/test error
-
-- High Bias Low Variance: Models are consistent but inaccurate
-
-- High Bias High Variance: Models are inconsistent and inaccurate
-
-**• Low Bias and Low Variance: Models are consistent and accurate**
-
-- Low Bias and High Variance: Models are somewhat accurate but inconsistent on average
-
-- High Bias: Due to simple ML model and high training error.
-
-- Potential things to try :
-
-- Increase features: this will help in generalizing dataset
-
-- Make ML model more complicated
-
-- Decrease Regularization parameter
-
-- High Variance: Due to a ML model which is fitting most of the training dataset - overfitting.
-
-- Potential things to try :
-
-- Increase dataset size
-
-- Reduce input features
-
-- Increasing Regularization parameter
-
-- Regularization is a technique which makes slight modifications to the learning algorithm such that the model generalizes better.
-
-- Improves the model’s performance on the unseen data as well.
-
-- Popular techniques:
-
-- L2 and L1 regularization
-
-- Dropout
-
-- L2 and L1 regularization are common types and help in reducing the overfitting issue
-
-- Idea: Update the loss/cost function by adding a regularization term
-
-Loss function = Loss + Regularization term (l)
-
-- Due to `λ`, the weight matrices will decrease — and a neural network with smaller weight matrices tends to be simpler.
-
-- In Deep Learning, Regularization penalizes the weight matrices of the nodes
-
-**L2 regularization** (also called weight decay):
-
-`Cost = Loss + (λ / 2m) · Σ w²` — λ is a hyper-parameter. Pushes weights toward zero, but not exactly to zero.
+- λ is a hyper-parameter.
+- Pushes weights toward zero, but not exactly to zero.
 
 **L1 regularization**:
 
 `Cost = Loss + (λ / 2m) · Σ |w|`
 
-- Penalises the absolute value of `w`
+- Penalises the absolute value of `w`.
+- Weights may reduce exactly to zero.
+- Useful for model compression (sparsity).
 
-- Weights may reduce exactly to zero
+#### Dropout
 
-- Useful for model compression
+- The most popular regularization technique in practice — produces excellent results.
+- At every training iteration, randomly select and drop some nodes (and all their connections).
+- Each iteration uses a different random subset of nodes.
 
-- It produces good results and most popular regularization technique
+### Data Augmentation
 
-- At every iteration it randomly selects and drops some nodes and remove all the connections to and from them
+Increasing the effective training set size by creating new samples from existing ones is a simple and very effective regulariser.
 
-- Each iteration has a different set of nodes
+**Simple operations**: flip, rotate, scale, crop, translate, Gaussian noise.
 
-Data Augmentation
+**Cutout** — randomly mask out square regions of the input during training.
 
-- Another simple way to reduce overfitting is to increase size of training dataset!
-- Increase the size of training data by creating more sample using the existing training set and applying the following simple operations:
-- Flip
-- Rotate
-- Scale
-- Crop
-- Translate
-- Gaussian Noise
+- Key parameters: patch size (16×16 to 64×64), fill value (0/black or mean), patches per image (1–3).
+- Common test setting: applied to CIFAR-10.
 
-Cutout:
+**Mixup** — train on convex combinations of pairs of examples and their labels. The network is encouraged to behave linearly between training examples. For two images `A` and `B` with mixing coefficient `λ`:
 
-Simple regularization technique of randomly masking out square regions of input during training
+`Image_mixed = λ · A + (1 − λ) · B` (e.g. λ = 0.55), and likewise for labels.
 
-Key Parameters:
+**CutMix** — cut a patch from one image and paste it onto another; ground-truth labels are also mixed proportionally to the patch area.
 
-- Patch size: 16X16 to 64X64
-- Fill Value: 0(black) or mean
-- Patches: 1-3 per image
+**Overview** — Mixup, Cutout and CutMix are complementary regularisers; many image-classification training pipelines use them in combination.
 
-Original Image After CutOut
+**RandAugment** — automatically chooses a random sequence of standard augmentations (rotate, shear, colour-jitter, etc.) per image with a single magnitude parameter, removing the need to hand-tune each operation.
 
-Cutout:
+### Advanced data augmentation
 
-Example - Cutout applied to CIFAR-10 dataset
-
-Mixup:
-
-Trains a neural network on convex combinations of pairs of examples and their labels. By doing so, mixup regularizes the neural network to favour simple linear behaviour in-between training examples
-
-Image A (λ=0.55)
-
-Blended Output
-
-Image B (1-λ=0.45)
-
-CutMix:
-
-In CutMix augmentation strategy: patches are cut and pasted among training image; ground truth labels are also mixed proportionally to the area of the patch.
-
-Image A
-
-Pasted Patch
-
-Image B (Patch Donor)
-
-### Overview of Mixup, Cutout and CutMix
-
-### RandAugment:
-
-Example images augment by RandAugment
-
-- Generative Adversarial Networks (GANs):
-
-  - Among the hottest topic is DL
-  - Able to generate images which look similar to the original ones
-  - Proven to be very effective
-
-Original image from MNIST GAN generated
-
-Data Augmentation
-
-- Advanced data augmentation techniques:
-
-• Neural Style transfer:
-
-- Using CNN to separate style
-- transfer style to different image
+- **Generative Adversarial Networks (GANs)** — one of the hottest DL topics; can generate new images that look similar to real ones. Sample use: training a GAN on MNIST to produce synthetic digits that augment the original training set.
+- **Neural Style Transfer** — use a CNN to separate the *style* and *content* of two images, then re-render the content image in the style of the other.
 
 ______________________________________________________________________
 
@@ -1243,169 +1054,111 @@ Outline
 
 - Residual Block
 
-Transfer Learning
+### Transfer Learning
 
-- Knowledge acquired while solving one task, can be used to solve related tasks.
+Knowledge acquired while solving one task can be re-used to solve related tasks — just like humans transferring skills:
 
-- Example:
+- Knowing how to ride a bicycle helps you learn to ride a motorbike.
+- Knowing how to use a tablet helps you learn a laptop/desktop.
+- Reading skills learnt in Year-1 literacy make it easier to understand a Year-9 physics textbook.
 
-- You know how to ride a Bi-cycle → You can learn how to ride a Motorbike
+**Benefits**:
 
-- You know how to use a Tablet → You can easily learn how to use a Laptop/desktop
+- Less training data required — start from a model pre-trained on a large (similar) dataset.
+- Faster training — converges sooner because existing weights are a good starting point.
+- Better generalisation — pre-trained features carry over to new contexts.
 
-- Similar to the way humans apply knowledge acquired from one task to solve a new but similar/related task.
+#### Four strategies (using VGG-16 on ImageNet as the source model)
 
-- We learned how to read in Year-1 in literacy class. Reading skills acquired in the literacy classes made it easy to understand Physics in Year-9.
-
-Transfer Learning Benefits
-
-1. Less training data required: Don’t have enough data to train a Deep Learning model from scratch. Model trained using a large (similar) dataset can be used.
-1. Faster training : Training can converge faster, due the use to existing knowledge (weights) to start with rather than from scratch.
-1. Better model generalization: Model is trained to identify features which can be applied to new contexts.
-
-#### Option-1: (VGG-16 considered as an example) Use pre-trained (ImageNet) model for prediction, without any training.
-
-→Useful when your dataset distribution is similar to ImageNet, with small
-
-number of samples.
-
-#### Option-2: (VGG-16 considered as an example) Train Full-Connected layer, Use CONV layers for feature extraction
-
-→Useful when your dataset distribution is similar to ImageNet (or original dataset), but number of classes are different and your dataset is small.
-
-Train/Fine-Tune
-
-**Option-3: (VGG-16 considered as an example) · Partially Train CONV layers (usually last layer(s) which have specialised · features) + Full Connection (FC) layer (with modifications)**
-→Useful when your dataset distribution is not similar to ImageNet (or original dataset), number of classes are different and your dataset is small.
-
-#### Option-4: (VGG-16 considered as an example) Train all the CONV layers + Full Connection (FC) layer (with modifications)
-
-→Useful when your dataset distribution is not similar to ImageNet, number of classes are different, your is dataset large and the task is complex.
+| Option | What to train | Use when … |
+|--------|------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------|
+| 1 | Nothing — use the pre-trained model directly for inference | Your dataset distribution is **similar** to ImageNet and you have very few samples. |
+| 2 | Only the FC layer; freeze all CONV layers | Distribution is similar to ImageNet but number of classes differs and dataset is small. |
+| 3 | Partially train the last CONV layer(s) + a modified FC head | Distribution is **not similar** to ImageNet, number of classes differs, dataset is still small. |
+| 4 | All CONV layers + a modified FC head | Distribution is not similar to ImageNet, classes differ, dataset is **large**, and the task is complex. |
 
 ### Classic CNN Architectures
 
-- Similar architecture as LeNet by Yann LeCunn et al. but deeper with more layers
+#### AlexNet (ILSVRC 2012 winner)
 
-- Simple architecture:
+- Similar architecture to LeNet by Yann LeCun et al., but deeper.
+- First CNN to be successful on a very large dataset.
+- Top-5 test error: **15.3%**.
 
-- CONV : 5 layers
+```text
+Input 224×224×3 → CONV1 → CONV2 → CONV3 → CONV4 → CONV5 → FC1 → FC2 → FC3 (1000 classes)
+```
 
-- FC: 3 layer
+| Layer | Filters | Dim | Stride | Pad |
+|-------|--------:|-------|-------:|----:|
+| CONV1 | 96 | 11×11 | 4 | 0 |
+| CONV2 | 256 | 5×5 | 1 | 2 |
+| CONV3 | 384 | 3×3 | 1 | 1 |
+| CONV4 | 384 | 3×3 | 1 | 1 |
+| CONV5 | 256 | 3×3 | 1 | 1 |
+| FC1 | 4096 neurons | — | — | — |
+| FC2 | 4096 neurons | — | — | — |
+| FC3 | 1000 neurons | — | — | — |
 
-- Max pooling
+- Activations: ReLU after each CONV and FC layer.
+- Optimiser: SGD with Momentum.
+- Regularisation: Dropout in FC1 and FC2.
+- Total trainable parameters: ~60M.
+- Training: 2× Nvidia GTX 580 3GB GPUs for 5–6 days.
 
-- Dropout
+#### Inception / GoogLeNet (ILSVRC 2014 winner)
 
-- Accuracy: top-5 test error rate of 15.3%
-
-- Winner of ILSVRC 2012!
-
-- First CNN to be successful on a very big dataset!
-
-Input: 224x224x3 image
-
-**CONV1 → CONV2 → CONV3 → CONV4 → CONV5 → FC1 → FC2 → FC3**
-4096 Neuron
-
-4096 Neuron
-
-Filters: 96 Dim: 11x11 Stride: 4 Pad: 0
-
-Filters: 256 Dim: 5x5 Stride: 1 Pad: 2
-
-Filters: 384 Dim: 3x3 Stride: 1 Pad: 1
-
-Filters: 384 Dim: 3x3 Stride: 1 Pad: 1
-
-Filters: 256 Dim: 3x3 Stride: 1 Pad: 1
-
-1000 Neuron
-
-Activations: Relu after each CONV and FC layer Optimizer: SGD with Momentum Regularization: Dropout in FC1 and FC2 Total Trainable parameter: ~60Million Training settings: 2 X Nvidia GTX 580 3GB GPUs for 5-6days!
-
-- Accuracy: top-5 test error rate of 6.7%
-- Close to human level performance
-- Winner of ILSVRC 2014!
-- 22 layer Deep CNN
-- Number of trainable parameters: 4 Million (Alexnet ~ 60M), Significantly reduced
-- A novel inception module was introduced.
-- Optimizer: RMSProp
+- Top-5 test error: **6.7%** — close to human-level performance.
+- 22-layer deep CNN.
+- Trainable parameters: ~4M (vs ~60M for AlexNet) — significantly reduced.
+- Introduces a novel **inception module** (filters of multiple sizes in parallel).
+- Optimiser: RMSProp.
 
 ### Understanding Inception and ResNet
 
-**1×1 Convolution — is this useful?**
+#### 1×1 Convolution — what's the point?
 
-Apply a 1×1 filter/kernel over a `6 × 6 × 1` volume → still `6 × 6 × 1`. Pointless on a 1-channel input — but useful when the input has many channels.
+A `1×1` filter over a `6 × 6 × 1` volume is pointless — the result is still `6 × 6 × 1`. The trick is that `1×1` is useful when the input has **many channels**, because it can mix or reduce channels at low cost.
 
-Example with `+ ReLU` and 32 filters of size `1 × 1 × 64`:
+Example: `+ ReLU` with 32 filters of size `1 × 1 × 64`:
 
-`(6 × 6 × 64) → (6 × 6 × 32)` — channels reduced!
+- `(6 × 6 × 64) → (6 × 6 × 32)` — channels reduced from 64 to 32.
+- `64 × 64 × 256 → 64 × 64 × 128` with 128 such `1×1` filters.
 
-`64 × 64 × 256` with a `1×1` Conv (128 filters) → `64 × 64 × 128`.
+#### Motivation behind the Inception module
 
-- Large filter preferred for large objects
-- Small filters for small objects
-- Large variation in object size
-- How to choose the right filter size?
+Choosing the "right" filter size is hard:
 
-**Designing CNN requires: - Deciding filter size and number - Number and type of layers etc. · Inception suggests: - Use filters with different size together! - Use different types of layers (CONV, POOL etc.) together Result → Complicated Architecture! & better performance · 28 X 28 X 64 · 1X1 · 3X3**
-64
+- Large filters detect large objects, small filters detect small objects.
+- Real images have a large variation in object size.
 
-128
+**Inception's answer**: don't choose — use multiple filter sizes (1×1, 3×3, 5×5) **and** pooling **in parallel** within the same module, and concatenate their outputs. The result is a more complicated architecture but better performance, e.g. taking a `28 × 28 × 192` feature map to `28 × 28 × 256` (= 64 + 128 + 32 + 32 channels from the four parallel branches).
 
-28
+#### Reducing computation with 1×1 convolutions
 
-32 28 32
+A naive `5 × 5` CONV with 32 filters on a `28 × 28 × 192` input costs:
 
-28 X 28 X 192 28 X 28 X 256 Max-Pooling
+`28 × 28 × 32 × 5 × 5 × 192 ≈ 120M multiplications`
 
-Computation cost
+That is prohibitively expensive. With a **1×1 bottleneck** that first reduces 192 channels to 16:
 
-28 X 28 X 32
-
-28
-
-32 28
-
-5x5 CONV #Filter: 32
-
-28 X 28 X 32
-
-28 X 28 X 192
-
-**Computation Cost: 28 X 28 X 32 X 5 X 5 X 192 ≈ 120M multiplications! Quite expensive !**
-Reduce Computation cost using 1X1 CONV
-
-28 X 28 X 32
-
-28
-
-32 28
-
-1 X 1 X 192 #Filters: 16
-
-5 X 5 X 16 CONV #Filter: 32
-
-28 X 28 X 32
-
-**28 X 28 X 16**
-28 X 28 X 192
-
-Computation Cost: 1X1: 28 X 28 X 16 X 192 ≈ 2.4M multiplications! 5X5: 28 X 28 X 32 X 5 X 5 X 16 ≈ 10M multiplications! Total : 12.4M multiplications! → Reduced by 10 times!
+- `1×1` step: `28 × 28 × 16 × 192 ≈ 2.4M`
+- `5×5` step: `28 × 28 × 32 × 5 × 5 × 16 ≈ 10M`
+- **Total ≈ 12.4M** — roughly **10× cheaper** than the naive version.
 
 #### Bottleneck Layer
 
-**192 · 32 · 16 · Bottleneck**
+A **bottleneck** uses a 1×1 conv to squeeze the channel dimension (e.g. `192 → 16`) before the expensive operation, then a follow-up CONV restores it to the target depth (`16 → 32`).
 
-#### Inception Module V1
+#### Inception module V1 — GoogLeNet
 
-**GoogleNet(2014): 9 Inception modules stacked together**
+GoogLeNet (2014) stacks **9 Inception modules**. Each module runs 1×1, 3×3, 5×5 convolutions and a max-pooling branch in parallel, concatenating the outputs along the channel axis (with 1×1 bottlenecks for cheaper computation).
 
-Deeper networks suffer from the vanishing-gradient problem. GoogLeNet adds two **auxiliary classifiers**:
+Deeper networks suffer from the vanishing-gradient problem, so GoogLeNet adds two **auxiliary classifiers**:
 
-- Apply Softmax to an intermediate feature map
-- Compute an auxiliary loss
-- Used only during training (`Total loss = real_loss + 0.3 · Aux_loss_1 + 0.3 · Aux_loss_2`)
+- Apply Softmax to an intermediate feature map.
+- Compute an auxiliary loss.
+- Used only during training (`Total loss = real_loss + 0.3 · Aux_loss_1 + 0.3 · Aux_loss_2`).
 
 Inception V3 introduces three further ideas:
 
@@ -1504,132 +1257,72 @@ By data type: **3D Object Detector** (point-cloud / point-nets) and **2D Object 
 
 Examples by family: **monocular image** input (RCNN family, SSD, YOLO) vs **point-cloud** input (PointNets).
 
-Image Classification
+### Image classification vs. detection vs. segmentation
 
-Image Classification Object Detection
+| Task | Output | Performance metric |
+|-----------------------|-----------------------------------------|-------------------|
+| Classification | Label | Accuracy |
+| Localization | Bounding box `(x, y, Ht, Wd)` or `(x, y, x', y')` | IoU |
+| Object detection | Class + bounding box for **every** object | mAP, IoU |
+| Instance segmentation | Pixel mask per object | mAP at mask IoU |
 
-- Localization Instance Segmentation
+A single-object image (`DOG` only) is image classification; a multi-object image (`DOG`, `CAT`, `DOG`, …) is detection or segmentation.
 
-**DOG · CAT**
-DOG
+### Classification + Localization as a multi-task CNN
 
-Single Object
+Modify a standard classification CNN (pre-trained on ImageNet, e.g. AlexNet / VGG-16 / ResNet) by adding **two heads**:
 
-Multiple Object
+- **Classification head** — Softmax loss for the class label.
+- **Regression head** — L2 loss against the ground-truth 4 numbers `(x, y, Ht, Wd)`.
 
-**Classification Task:**
-Input : Image Output: Label Performance Evaluation: Accuracy
+Total loss combines both as a **multi-task loss**. The regression head can sit either right after the last CONV layer (before the FC head) or after the last FC layer.
 
-**Output : Dog · Localization Task:**
+### Detection as a regression problem
 
-Input : Image Output: Bounding Box in the image
+Idea: predict, for each object, a class **and** `(x, y, Ht, Wd)`.
 
-(x, y, Ht, Wd) or (x, y, x’, y’) Performance Evaluation: IoU
+A naive way is a **sliding window**: crop fixed-size windows at multiple positions / scales and run a CNN on each:
 
-**Output : (x, y, Ht, Wd) · Output : 4 numbers (x’, y’, Ht’, Wd’)**
+- Window at the corner → "Dog? No, Cat? No, Background? Yes".
+- Window over the cat → "Cat? Yes".
+- Window over the dog → "Dog? Yes".
 
-**Calculate Loss L2 Loss · CNN · Ground Truth: 4 numbers (x, y, Ht, Wd)**
-Input Image
+**Issues with sliding windows**:
 
-**Input Image · We need to modify this CNN pipeline to output Class Label and Bounding Box (4 numbers) · Pre-trained model or ImageNet, AlexNet, VGG16, ResNet, etc. Classification Head**
-Classification head → Softmax loss, regression head → L2 loss (combined as multi-task loss).
+1. CNN must be applied to a very large number of windows.
+1. Need multiple scales and aspect ratios.
+1. Inaccurate bounding boxes.
+1. Computationally expensive.
 
-Input Image
+**Better: region proposals.** Find blobs in the image that are most likely to contain objects (e.g. **Selective Search** produces ~1000–2000 region proposals using CPU).
 
-Potential locations for Regression head in CNN
+### Case Study: R-CNN family
 
-**After CONV Layer, Before the FC layer After Last FC layer**
-Input Image
+#### R-CNN (Slow)
 
-Task: Object Detection Problem
+- Generate ~2K region proposals via selective search.
+- Warp each to the CNN's input size and pass each through the ConvNet.
+- Classify each region with **SVMs**; linear regression refines the bounding-box offsets.
+- mAP: **62.4%** on PASCAL VOC 2007.
+- Problem: very slow — runs the CNN ~2K times per image.
 
-Image Classification
+#### Fast R-CNN
 
-Image Classification Object Detection
+- Run the whole image through the ConvNet **once**.
+- Take ROIs (from selective search) from the resulting feature map, **crop + resize** features (RoI pooling).
+- Per-region head outputs object category (linear + Softmax) and box offset (linear).
+- mAP: **70%** on PASCAL VOC 2007.
 
-- Localization Instance Segmentation
+#### Faster R-CNN
 
-**DOG · CAT**
-DOG
+- Replace the external proposal step with a learned **Region Proposal Network (RPN)** that shares features with the detection CNN.
+- mAP: **78.8%** on PASCAL VOC 2007.
 
-Single Object
+**Family intuition**:
 
-Multiple Object
-
-Detection as a regression problem
-
-**Output : Dog, (x, y, Ht, Wd) · Cat, (x, y, Ht, Wd) Cat, (x, y, Ht, Wd)**
-
-1. Apply Sliding Window technique
-1. Apply CNN to different Windows and get a prediction
-
-**Output : Dog? No Cat? No · CNN · Background? Yes**
-
-1. Apply Sliding Window technique
-1. Apply CNN to different Windows and get a prediction
-
-**Output : Dog? No Cat? Yes Background? No · CNN**
-
-1. Apply Sliding Window technique
-1. Apply CNN to different Windows and get a prediction
-
-**Output : Dog? No Cat? Yes Background? No · CNN · Issue with Sliding Window technique**
-
-1. Apply CNN on large number of windows
-1. Multiple scale and locations of windows
-1. Inaccurate bounding boxes
-1. Computationally expensive
-
-**Region Proposal Technique:**
-
-- Find blobs in the image that are most likely to contain objects
-- E.g: Selective search → ~1000-2000 region proposals using CPU!
-
-Case Study: R-CNN
-
-Linear Regression for bounding box offsets
-
-Classify each region with SVMs
-
-1. Resized to match the input to CNN requirement.
-1. mAP: 62.4% for 2007 PASCAL VOC
-1. Problem: Very Slow!
-
-Pass each region through ConvNet
-
-Warped image regions
-
-Region-of-interest (ROI) from proposal method around ~2K
-
-Object category
-
-Box offset
-
-Per-Region Network
-
-Crop + Resize features
-
-Region of Interest (ROIs) from proposal method
-
-Run whole image through ConvNet
-
-1. Reduce computation
-1. ROIs from feature maps using selective search
-1. mAP: 70% for 2007 PASCAL VOC
-
-Case Study: FASTER- R-CNN
-
-1. Use CNNs to make proposals
-
-1. Introduced RPN (Region Proposal Network)
-
-1. mAP: 78.8% for 2007 PASCAL VOC
-
-- RCNN → Look at every patch one by one
-
-- Fast R-CNN → Look once, and then inspect patches on feature map
-
-- Faster R-CNN → Propose patches using a neural network (RPN)
+- R-CNN — look at every patch one by one.
+- Fast R-CNN — look once, then inspect patches on the feature map.
+- Faster R-CNN — propose patches using a neural network (RPN).
 
 | Aspect | R-CNN | Fast R-CNN | Faster R-CNN |
 |------------------|------------------------|-------------------------|------------------------|
@@ -1672,160 +1365,67 @@ Examples by family: **monocular image** input (RCNN family, SSD, YOLO) vs **poin
 
 ### Object Detection Techniques History
 
-#### Sliding Window technique
+### Strategies for predicting bounding boxes
 
-- Crop images and classify using CNN
-- Try different sizes of the sliding window Issues:
-- Slow
-- Computationally very expensive
-- Less accurate
+#### Sliding Window
 
-#### Region Proposals
+- Crop images at many positions / scales and classify each crop with a CNN.
+- **Issues**: slow, very expensive computationally, and produces inaccurate bounding boxes.
 
-Currently:
+#### Region proposals
 
-Task:
+Use selective search (or similar) to suggest ~1–2K candidate regions, then run the CNN only on those — basis of R-CNN family.
 
-- Sliding Window
+#### Grid + per-cell prediction (the YOLO idea)
 
-- Selective Search
+Place a grid over the image and predict, for **each grid cell**, whether an object's mid-point lies in that cell along with its bounding box and class. With classes `{car, bike}`, each cell predicts a vector
 
-- Region Proposals
+`Y_cell = {p_o, x, y, h, w, c_1, c_2}`
 
-- Predict Bounding boxes from CNN
+- `p_o` = 1 if the cell contains an object's mid-point, 0 otherwise.
+- `(x, y, h, w)` = bounding-box centre and size relative to the cell.
+- `(c_1, c_2)` = one-hot class probabilities.
 
-- Place a grid over the image
+For a `3 × 3` grid with two classes the target tensor is shaped `3 × 3 × 7` (= 5 + #classes). In practice grids are finer, e.g. `19 × 19 × 7`, which works well for non-overlapping objects.
 
-- Apply image classification and localization to each of the grid cells
+**Idea**: take the mid-point of each object and assign it to the grid cell that contains it.
 
-- Input:
+### Non-Maxima Suppression (NMS)
 
-  - Image: (ht x wd x 3) Target:
-  - Bounding box information for each object
-  - Class for each object
+Each object has only one mid-point, but neighbouring cells may also predict overlapping boxes. NMS removes duplicates and keeps only the highest-confidence detection:
 
-**Class : {car, bike} · Target:**
-Y = {po, x, y, h, w, c1, c2} for each cell e.g:
+1. Discard boxes with confidence below a threshold (e.g. 0.7).
+1. From the remaining boxes, pick the one with the highest score as a final detection.
+1. Discard any remaining box with `IoU > 0.5` against that detection (i.e. heavy overlap).
+1. Repeat until no boxes remain.
 
-- Cell(1,1) = {0, ?, ?, ?, ?, ?, ?} :
+### Anchor boxes — handling overlapping objects
 
-- Cell(2,1) = {1, x, y, h, t, 1, 0}
+YOLO's basic form assigns each grid cell to **one** object. For multiple overlapping objects (mid-points in the same cell) only one would be detected.
 
-- Cell(2,2) = {0, ?, ?, ?, ?, ?, ?}
+**Solution**: predefine `k` **anchor boxes** of different shapes per cell. Each anchor is responsible for objects whose shape (aspect ratio / size) best matches it. Targets become:
 
-- Cell(2,3) = {1, x, y, h, t, 1, 0} :
+`Y_cell = {p_o, x, y, h, w, c_1, c_2}_anchor1 + {p_o, x, y, h, w, c_1, c_2}_anchor2 + …`
 
-- Cell(3,3) = {0, ?, ?, ?, ?, ?, ?}
+With 2 anchors per cell on a `19 × 19` grid and 2 classes:
 
-**Class : {car, bike} · Idea: Take the mid-point of the object and Assign it to a grid cell based on its location**
+`Y shape = 19 × 19 × 2 × 7`
 
-**Target output vector: 3 X 3 X 7 3 X 3: Grid size 7: (5 + Number-of-Classes) · Class : {car, bike}**
-3 X 3 X 7
+Assigning an object means selecting **both** the cell containing its mid-point and the anchor box with the highest IoU to its bounding box.
 
-#### Training Strategy:
+### Case Study: YOLO and SSD
 
-Target: Y
+#### YOLO — You Only Look Once
 
-Input: X
+- Real-time: ~45 FPS (0.02 s per image).
+- Weakness: not great for small objects; struggles with new or unusual aspect ratios.
 
-3 X 3 X 7
+#### SSD — Single Shot Detector
 
-Class : {car, bike}
-
-In practice: The grid is finer, 19 X 19 instead of 3 X 3 So, Target will be of size: 19 X 19 X 7 Works well for non-overlapping objects
-
-1. Each object has one midpoint
-1. Each cells are subjected to object localization + classification
-1. Hence, neighbouring cells might assume that it has the mid-point
-1. Hence, Multiple detection bounding box
-
-NMS cleans/removes the multiple detection and only keeps the one with very high confidence
-
-1. Check the probabilities of each detection and keep ones with score > Threshold (0.7)
-
-1. For remaining boxes:
-
-- Box with highest score is the detection results.
-
-- Discard any remaining boxes with IoU > 0.5 with final detected box, i.e: overlap with the box with highest score.
-
-YOLO: You Only Look Once Algorithm
-
-**Challenges with overlapping objects**
-
-- Each grid cell detect only one object
-- For multiple overlapping objects, Mid point are on the same grid cell
-
-**So, Currently the Target Y = {1, x, y, h, w, C1, C2}, As the mid-points for both the objects are on the same grid cell, only one of the objects will be associated**
-Anchor Box 1 Anchor Box 2
-
-Predicted BB
-
-1. A cell which contains its mid-point and
-1. Anchor box for the cell with highest IoU
-
-Anchor Box 1
-
-Calculate the IoU of Anchor boxes and predicted BB
-
-Anchor Box 1 Anchor Box 2
-
-Similar Shape
-
-**So, with Anchor boxes: Target Y = {Po, x, y, h, w, C1, C2, Po, x, y, h, w, C1, C2},**
-Anchor Box 1 Anchor Box 2
-
-- Anchor Box 1
-- Anchor Box 2
-
-**Y = {Po, x, y, h, w, C1, C2, Po, x, y, h, w, C1, C2} Cell(1,1) = {0, ?, ?, ?, ?, ?, ?, 0, ?, ?, ?, ?, ?, ?} : Cell(12,6)= {0, ?, ?, ?, ?, ?, ?, 1, x, y, h, w, 1, 0} : Cell(12,15)= {0, ?, ?, ?, ?, ?, ?, 1, x, y, h, w, 1, 0} : Cell(19,19)= {0, ?, ?, ?, ?, ?, ?, 0, ?, ?, ?, ?, ?, ?}**
-InputX
-
-Class : {1:car, 2:bike} Y size : (
-
-X 2 X 7 )
-
-**19 X 19 · Grid Size · #Anchor Box · 5(Po, x,y,h,w) + #Classes(2)**
-
-#### Training:
-
-Target: Y
-
-Input: X
-
-19 X 19 X 2 X 7
-
-Class : {car, bike}
-
-**Input: X · Y = {Po, x, y, h, w, C1, C2, Po, x, y, h, w, C1, C2} {0, ?, ?, ?, ?, ?, ?, 0, ?, ?, ?, ?, ?, ?} : {0, ?, ?, ?, ?, ?, ?, 1, x, y, h, w, 1, 0} : {0, ?, ?, ?, ?, ?, ?, 1, x, y, h, w, 1, 0} : {0, ?, ?, ?, ?, ?, ?, 0, ?, ?, ?, ?, ?, ?}**
-
-19 X 19 X 2 X 7
-
-**Class : {car, bike} · Input: X · Y = {Po, x, y, h, w, C1, C2, Po, x, y, h, w, C1, C2} {0, ?, ?, ?, ?, ?, ?, 0, ?, ?, ?, ?, ?, ?} : {0, ?, ?, ?, ?, ?, ?, 1, x, y, h, w, 1, 0} : {0, ?, ?, ?, ?, ?, ?, 1, x, y, h, w, 1, 0} : {0, ?, ?, ?, ?, ?, ?, 0, ?, ?, ?, ?, ?, ?}**
-
-19 X 19 X 2 X 7
-
-**Class : {car, bike}**
-
-- Real-time performance with 45 frames per sec, 0.02 sec per image
-
-- Not suitable for small objects
-
-- Issues with new or multiple aspect ratios and unable to generalize
-
-- Similar to YOLO
-
-- VGG16 base CONV layers
-
-- Take advantage of Anchor boxes with different aspect ratios
-
-- Large number of anchors boxes are chosen
-
-- Not suitable for small objects
-
-- 3 times faster than Faster-RCNN
-
-- With ResNet101 base SSD may be help in detecting small objects with better features from the CONV base
+- Similar architecture to YOLO; uses VGG-16 base CONV layers.
+- Many anchor boxes with different aspect ratios.
+- ~3× faster than Faster R-CNN.
+- Still not great on small objects; using a ResNet-101 base can help with small-object features.
 
 |Method|Train Dataset|mAP|Time in sec/image|Time Frame /sec|
 |---|---|---|---|---|
@@ -1863,288 +1463,140 @@ Outline
 - Semantic Segmentation Introduction
 - Case Study: U-Net
 
-Recap: Predicting Bounding Boxes
+### Recap — anchor-based object detection
 
-### Training Strategy:
+YOLO places a grid over the image and predicts, per cell + per anchor, a vector `{p_o, x, y, h, w, c_1, …, c_k}`. With a `19 × 19` grid, 2 anchors and 2 classes the target tensor is `19 × 19 × 2 × 7`.
 
-- Place a grid over the image
-- Apply image classification and localization to each of the grid cells Input:
-- Image: (ht x wd x 3) Target:
-- Bounding box information for each object
-- Class for each object
+**Drawbacks of anchor-based detectors**:
 
-Class : {car, bike}
+- Sensitive to anchor box **size** and **aspect ratio**.
+- Number of anchor boxes is fixed.
+- Too much variation in object shape; small objects suffer.
+- May not generalise — anchors are predefined offline.
+- Computationally expensive.
 
-Recap: YOLO: You Only Look Once Algorithm
+### Anchor-free detectors
 
-**Challenges with overlapping objects**
+Localise objects without using boxes as proposals. Two broad categories:
 
-- Each grid cell detect only one object
-- For multiple overlapping objects, Mid point are on the same grid cell
+- **Key-point based** — detect spatial points unique to an object. Examples: facial key points (nose, eyebrows…), human-body joints (elbows, knees…). Each object is represented by its key points.
+- **Center-based** — find object centres and predict four distances from the centre to the object's bounding-box edges.
 
-**So, Currently the Target Y = {1, x, y, h, w, C1, C2}, As the mid-points for both the objects are on the same grid cell, only one of the objects will be associated**
-Anchor Box 1 Anchor Box 2
+### YOLO timeline
 
-Predicted BB
+```text
+2015 — YOLO v1                       2021 — YOLO v5, YOLO R, YOLO X (anchor-free)
+2016 — YOLO v2                       2022 — YOLO v6, YOLO v7
+2018 — YOLO v3                       2023 — YOLO v8, YOLO-NAS
+2020 — YOLO v4, Scaled YOLO v4       2024 — YOLO v9, v10, v11
+                                     2025 — YOLO v12
+                                     2026 — YOLO 26
+```
 
-1. A cell which contains its mid-point and
-1. Anchor box for the cell with highest IoU
+### Case Study: YOLOX (anchor-free)
 
-Anchor Box 1
+- "YOLOX: Exceeding the YOLO Series", 2021.
+- Anchor-free detector in the YOLO family.
+- Uses a **decoupled head** (separate branches for classification and regression).
+- Label assignment via **SimOTA**.
+- Backbone: YOLO v3 SPP with **DarkNet-53**.
+- Uses advanced augmentation: **Mixup** and **Mosaic**.
 
-Calculate the IoU of Anchor boxes and predicted BB
+Every YOLO architecture has three parts:
 
-Anchor Box 1 Anchor Box 2
+- **Backbone** — feature extraction.
+- **Neck** — aggregation of multi-scale features (typically FPN / PANet).
+- **Head** — localisation and classification scores.
 
-Similar Shape
+#### YOLOX augmentations
 
-**So, with Anchor boxes: Target Y = {Po, x, y, h, w, C1, C2, Po, x, y, h, w, C1, C2},**
-Anchor Box 1 Anchor Box 2
+- **Mixup** — blend two training images and their labels (`λ` and `1 − λ`).
+- **Mosaic** — combine four training images into one mosaic per training step; exposes the model to many objects and scales in a single sample.
 
-Recap: YOLO: You Only Look Once Algorithm
+### YOLO 26 — The Next Evolution
 
-- Anchor Box 1
-- Anchor Box 2
+Real-time computer-vision model by Ultralytics:
 
-**Y = {Po, x, y, h, w, C1, C2, Po, x, y, h, w, C1, C2} Cell(1,1) = {0, ?, ?, ?, ?, ?, ?, 0, ?, ?, ?, ?, ?, ?} : Cell(12,6)= {0, ?, ?, ?, ?, ?, ?, 1, x, y, h, w, 1, 0} : Cell(12,15)= {0, ?, ?, ?, ?, ?, ?, 1, x, y, h, w, 1, 0} : Cell(19,19)= {0, ?, ?, ?, ?, ?, ?, 0, ?, ?, ?, ?, ?, ?}**
-InputX
+- Supports detection, segmentation, classification, pose, tracking, OBB (oriented bounding boxes).
+- Available in **Nano / Small / Medium / Large / XLarge** sizes.
+- End-to-end detection pipeline (**NMS-free** inference).
+- Designed for edge AI and fast deployment.
 
-Class : {1:car, 2:bike} Y size : (
+**Why is it faster?**
 
-X 2 X 7 )
+- NMS-free inference removes post-processing overhead.
+- Direct bounding-box regression (no DFL).
+- Lower latency and simpler deployment graph.
+- CPU-optimised architecture — up to **43% faster on CPUs than YOLO 11** (Ultralytics benchmark).
 
-**19 X 19 · Grid Size · #Anchor Box · 5(Po, x,y,h,w) + #Classes(2)**
-Drawbacks of Anchor-based detectors
+**Key changes**:
 
-• Sensitive to:
+- **ProgLoss** (Progressive Loss Balancing) — improves training stability and convergence.
+- **STAL** (Small-Target-Aware Label Assignment) — improves small-object detection.
+- **MuSGD** optimiser — faster convergence.
+- Better speed–accuracy trade-off than previous YOLO models.
+- Ideal for robotics, drones, surveillance, and edge devices.
 
-**4 · 2 · 1**
-2
-
-- Size
-- Aspect ratio
-- No. of Anchor boxes (fixed)
-- To much variation with shape
-- Small object
-- May not generalize due to pre-defined anchor boxes
-- Computation expensive
-
-Anchor-free detector
-
-Localize objects without using boxes as proposals Two board categories:
-
-1. Key-point based
-
-1. Center-based
-
-- Locates key object parts in an image
-
-- Detects spatial locations or points unique to an object
-
-- With human body as an example
-
-- Key Part of Face: nose, eyebrows etc.
-
-- Key point of human body: joints, elbows, etc.
-
-- Object is represented using Key-points
-
-Anchor-free detector : Center-based
-
-- Finds positives in the centre
-- Predicts four distances from the positive to the potential object boundary
-
-YOLO Timeline
-
-**Yolo X · Yolo - NAS**
-Yolo v12
-
-Yolo R
-
-**Yolo v8 · Yolo v3**
-Yolo v1
-
-2016
-
-2020
-
-2026
-
-2022
-
-2025
-
-2023
-
-2015
-
-2018
-
-2021
-
-Yolo v2
-
-Yolo v4 Scaled Yolo v4 Yolo v5
-
-Yolo26
-
-Yolo v6 Yolo v7
-
-Yolo v9
-
-- Yolo v10
-
-2024
-
-- Yolo v11
-
-**Anchor Free**
-
-- YoloX: Exceeding the YOLO Series, 2021
-
-- Anchor-free detector in the Yolo Family
-
-- Decoupled head used
-
-- Label assignment using SimOTA
-
-- Uses YoloV3 SPP with DarkNet53 backbone
-
-- Uses advanced augmentation such as Mix-up & Mosaic
-
-- Backbone Neck Head
-
-- Every Yolo Architecture consists of three parts: Backbone, neck, head
-
-- Backbone → Feature extraction
-
-- Neck → Aggregation of multi-scale feature
-
-- Head→ Localization and Classification scores
-
-### Case Study: YoloX, Decoupled head
-
-#### Mixup Augmentation
-
-#### Mosaic Augmentation
-
-#### Case Study: YoloX, Performance
-
-#### Case Study: Yolo State-of-the-art, Performance
-
-### Yolo26 — The Next Evolution
-
-- Real-time computer vision model by Ultralytics
-
-- Supports: Detection, Segmentation, Classification, Pose, Tracking, OBB
-
-- Available in Nano, Small, Medium, Large, XLarge
-
-- End-to-end detection pipeline (NMS-free)
-
-- Designed for edge AI and fast deployment
-
-- Yolo26 – Why is it Faster?
-
-- NMS-free inference removes post-processing overhead
-
-- Direct bounding box regression (no DFL)
-
-- Lower latency and simpler deployment graph
-
-- CPU-optimized architecture
-
-- Up to 43% faster on CPUs than YOLO11 (Ultralytics benchmark)
-
-Yolo26 – Key Changes
-
-- ProgLoss (Progressive Loss Balancing) improves training stability and convergence
-- STAL (Small-Target-Aware Label Assignment) improves small-object detection
-- MuSGD optimizer improves convergence speed
-- Better speed–accuracy trade-off than many previous YOLO models
-- Ideal for robotics, drones, surveillance, and edge devices
-
-#### Yolo26 – High Level Architecture (Inference)
-
-#### Yolo26 – Training Pipeline
-
-#### Yolo26 – Performance
+The Yolo26 release ships three variants — the high-level **inference architecture**, a **training pipeline**, and a published **performance** comparison (Ultralytics' benchmark dashboard).
 
 ### Instance Segmentation
 
-Image Classification
+**Semantic vs. instance segmentation**:
 
-Image Classification Object Detection
+- **Semantic segmentation** classifies each pixel into a class/category — but does not distinguish individual instances of the same class.
+- **Instance segmentation** identifies each pixel **and** the specific object instance it belongs to (e.g. two separate dogs get two separate masks).
 
-- Localization Instance Segmentation
+| Task | Popular techniques |
+|-----------------------|------------------------------------------------------------------------------------------------------|
+| Semantic segmentation | Conditional Random Field (CRF), Fully Convolutional Network (FCN), U-Net, Pyramid Scene Parsing Network (PSPNet), … |
+| Instance segmentation | SegNet, DeepMask, SharpMask, **Mask R-CNN**, … |
 
-**DOG · CAT**
-DOG
+**Applications**: autonomous driving (lane / vehicle / pedestrian masks), scene understanding, aerial image processing.
 
-Single Object Multiple Object
+### Case Study: Mask R-CNN
 
-Semantic Segmentation Vs Instance Segmentation:
+- **Mask-RCNN** = Mask-Region Convolutional Neural Network.
+- Adds an instance-segmentation head to the R-CNN family on top of **Faster R-CNN**.
+- Uses a Fully Convolutional Network (FCN) to predict a mask per class / object.
 
-- Semantic segmentation classifies object pixels to specific classes/category
-- Instance Segmentation identifies each pixels object instance
+Two stages:
 
-Input Image Semantic Segmentation Instance Segmentation
+1. **RPN** proposes candidate object bounding boxes.
+1. Classify the candidates, refine bounding boxes, and predict the per-instance mask.
 
-**Popular Techniques:**
-|Semantic Segmentation|Instance Segmentation|
-|---|---|
-|Conditional Random Field (CRF) Fully Convolutional Network (FCN) U-Net Pyramid Scene Parsing Network (PSPNet) etc.|SegNet, DeepMask, SharpMask, MaskRCNN, etc.|
+#### Mask R-CNN limitations
 
-**Applications: Autonomous Driving**
-
-**Applications: Scene Understanding**
-
-**Applications: Aerial Image processing**
-
-- Mask-RCNN → Mask-Region Convolutional Neural Network
-- An addition to the RCNN family, performing instance segmentation
-- Improved over FasterRCNN
-- A Full Convolutional Network (FCN) for predicting Mask for each class/object.
-- 2 Stages:
-- Stage 1: RPN proposes candidate object bounding boxes.
-- Stage 2: Classify the Candidates, refine bounding boxes, and predict mask.
-
-**Faster-RCNN · Source and Reference: http://cs231n.stanford.edu/slides/2016/winter1516_lecture8.pdf**
-
-- Sample Results
-
-- Sample Results on video:
-
-#### Mask R-CNN Limitations
-
-- Computational Complexity: Training and inference can be computationally intensive, requiring substantial resources, especially for high-resolution images or large datasets.
-- Small-Object Segmentation: may struggle to accurately segment very small objects due to limited pixel information.
-- Data Requirements: Training requires a large amount of annotated data, which can be time-consuming and expensive to acquire.
-- Limited Generalization to Unseen Categories: The model's ability to generalize to unseen object categories is limited.
+- **Computational complexity** — training and inference are resource-heavy, especially on high-resolution images or large datasets.
+- **Small-object segmentation** — struggles with very small objects (limited pixel information).
+- **Data requirements** — needs a lot of annotated data; expensive to acquire.
+- **Limited generalisation** to unseen object categories.
 
 ### Semantic Segmentation
 
-Introduction to Semantic Segmentation
+Semantic segmentation classifies every pixel into a category (e.g. road / car / sky), without distinguishing individual instances.
 
-Semantic segmentation classifies object pixels on specific classes/category
+#### Case Study: U-Net
 
-**Input Image Semantic Segmentation Instance Segmentation**
+U-Net is a popular **encoder–decoder** architecture for semantic segmentation:
 
-#### Semantic Segmentation: UNet
+- Encoder progressively down-samples (CONV + POOL) to capture context.
+- Decoder progressively up-samples (transposed CONV / up-conv) to recover spatial resolution.
+- **Skip connections** copy feature maps from each encoder stage to the corresponding decoder stage, preserving fine spatial detail.
 
-00000000000001100000000000000000000000 00000000000001110000000011000000000000 00000000000011111111111111000000000000 00000000000011111111111111000000000000 00000000000011111111111110000000000000 00000000000011111111111111100000000000 00000000000011111111111111110000000000 00000000000011111111111111110000000000 00000000000001111111111111110000000000 00000000000000111111111111100000000000 00000000000000011111111111000000000000 00000000000000011111111111000000000000 00000000000000011111111100000000000000
+A predicted mask is a per-pixel binary (or per-class) map, e.g. a `cat` mask:
 
-...
-
-{
-
-{
-
-{
-
-#### Semantic Segmentation: UNet Architecture
-
-cs224d course
+```text
+. . . . . . . . . . . . . . . . . . . . . . . .
+. . . . . . . . . . . . . . . X X . . . . . . .
+. . . . . . . . . . . . . . . X X X . . . X X .
+. . . . . . . . . . . . X X X X X X X X X X X .
+. . . . . . . . . . . . X X X X X X X X X X X .
+. . . . . . . . . . . . X X X X X X X X X X X .
+. . . . . . . . . . . . . X X X X X X X X . . .
+. . . . . . . . . . . . . . X X X X X X . . . .
+. . . . . . . . . . . . . . . X X X X . . . . .
+. . . . . . . . . . . . . . . . X X . . . . . .
+```
 
 ______________________________________________________________________
 
@@ -2168,290 +1620,138 @@ Examples to motivate sequence modelling:
 - Predict where the ball will go next?
 - Complete the sentence: "This Sunday I went for a walk…"
 
-### Sequence modelling types and applications
+### Sequence modelling — types and applications
 
-Y’
+| Pattern | Example | Sample task |
+|----------------|--------------------------------------|--------------------------------------------------------------------------|
+| One to one | "Will it rain today?" → Yes/No | Binary classification |
+| Many to one | "42028 is the best subject so far!" | Sentiment analysis |
+| One to many | Image → "A woman is throwing frisbee" | Image captioning |
+| Many to many | "Hey Siri, what's the weather?" → reply | Q&A with LLMs, language translation |
 
-**Sequence-modelling task types**:
+Compared with a non-sequence task like house-price regression (`features = [size, #bedroom, #bathroom, garden, location] → price`), sequence tasks have variable-length input or output.
 
-- **Many to many** — Q&A with LLMs, language translation
-- **One to many** — image captioning
-- **One to one** — binary classification (e.g. "will it rain today?")
-- **Many to one** — sentiment analysis (e.g. "42028 is the best subject so far!")
-  “Will it rain today?” Yes/No?
+### Recurrent Neural Network (RNN) Basics
 
-“42028 is the best subject so far!”
+A recurrent cell consumes the current input `x_t` and the previous hidden state `h_{t-1}`, then emits an output `ŷ_t` and a new hidden state `h_t`. The same parameters are shared across time steps:
 
-Me: “Hey Siri what's the weather today ?” Siri: “Its Evening now! Don’t ask boring Qs”
+```text
+h_t = tanh(W_hh · h_{t-1} + W_xh · x_t)
+ŷ_t = W_y · h_t
+```
 
-“A womenisthrowingfrisbee”
+Visually:
 
-Size #Bedroom #Bathroom Garden Location
+```text
+x_0 → [ RNN ] → ŷ_0
+       │
+       h_0
+       ▼
+x_1 → [ RNN ] → ŷ_1
+       │
+       h_1
+       ▼
+…
+       │
+       h_{t-1}
+       ▼
+x_t → [ RNN ] → ŷ_t
+```
 
-Price
+Training uses **backpropagation through time (BPTT)**: forward through every time step accumulating losses `L_0, L_1, …, L_t` (total loss `L`), then backward through the unrolled graph to update `W_hh`, `W_xh`, `W_y`.
 
-Recurrent Neural Network (RNN) Basics
+### Sequence modelling — design criteria
 
-Output
+- Support for variable-length input.
+- Captures temporal dependency (short-term and long-term).
+- Preserves the order of information.
+- Shares parameters across time steps.
 
-y’t
+### RNN limitations
 
-y’0
+- Prone to **vanishing / exploding gradient** problems.
+- Long-term memory not well supported.
+- Slow — no parallelisation across time steps.
 
-y’1
+### Attention mechanism
 
-y’2
+**Idea**: forget recurrence; feed everything into a dense network and let it decide what to focus on. The 2017 paper title says it all — *Attention Is All You Need*.
 
-h0 h1
+**Why do we need attention?**
 
-Recurrent cell
+- RNNs process sequences one step at a time.
+- Long sentences lead to long-term memory loss.
+- Important words may be hidden in long dependencies.
+- Attention focuses on the relevant parts of the input.
 
-X0
+**Intuition** (mimicking human focus: "where should I look?"):
 
-X1
+- For each output token, attention decides which input tokens are most important.
+- Compute a **weighted sum** of all input vectors — higher weight = more relevant.
 
-X2
+For each attention step, compute the similarity between the **Query Q** and each **Key K_i**, then extract the **Values V_i** weighted by that similarity. Mathematically (scaled dot-product attention):
 
-Input
+`Attention(Q, K, V) = softmax(Q·Kᵀ / √d_k) · V`
 
-Output `y_t = f(x_t, h_t)` — from input `x_t` and past hidden state `h_t`.
+### Transformers
 
-Output Function+
+Self-attention is the foundation of the **Transformer** architecture:
 
-y’t
+- The entire sequence is processed in parallel.
+- Has an **encoder** and a **decoder** block (each is a stack of layers with self-attention and feed-forward sub-layers).
 
-Weights w
+### Case Study: Vision Transformer (ViT)
 
-Hidden state update `h_t = f(x_t, h_{t-1})` — recurrent cell consumes current input and the previous state.
+- Introduced in 2021: *"An Image is Worth 16×16 Words: Transformers for Image Recognition at Scale,"* ICLR 2021.
+- Treats an image like text — represents it as a **sequence of patches**.
 
-Xt
+**Steps**:
 
-Output vector `ŷ_t = W_y · h_t`
+1. Split the image into fixed-size patches.
+1. Flatten each patch.
+1. Produce lower-dimensional linear embeddings from the flattened patches.
+1. Add positional embeddings.
+1. Feed the sequence into a standard transformer encoder.
+1. Pre-train with image labels on a huge dataset (fully supervised).
+1. Fine-tune on the downstream dataset for image classification.
 
-y’t
+#### CNN vs. Vision Transformer
 
-Output
+| Aspect | CNN | Vision Transformer (ViT) |
+|---------------------|--------------------------------------------------|------------------------------------------------------|
+| Input handling | Processes the entire image with conv filters | Splits image into fixed-size patches (like tokens) |
+| Local vs. global | Focuses on local patterns first (edges, textures)| Uses **global self-attention** to relate all patches |
+| Architecture | Hierarchical (conv → pool → deeper features) | Flat stack of transformer encoders |
+| Training data need | Works well with limited data | Needs lots of data or strong pre-training |
+| Computation | Efficient on low-resolution inputs | Heavier, especially on large images |
+| Parallelism | Limited — sequential feature stacking | High — patch processing is highly parallelisable |
 
-`h_t = tanh(W_hh · h_{t-1} + W_xh · x_t)`
+### Case Study: RF-DETR (object detection with transformers)
 
-RNN
+- An improvement over the original **DETR** (Detection Transformer).
+- DETR looks at everything globally but misses small objects.
+- **RF-DETR** looks globally **and** understands the relationships between objects.
+- Real-time, transformer-based object-detection architecture.
+- Outperforms many object-detection models; 60+ mAP on COCO.
 
-Update Hidden State
+### Case Study: Diffusion Models — Intuition
 
-Input Vector
+**Goal**: generate new data samples (images, audio, text) that look like a training dataset by learning to **reverse a gradual noise process** — a generative model.
 
-Total Loss (L)
+**Generic steps**:
 
-Forward Pass Backward Pass
+1. Start with real data.
+1. Add noise step-by-step until the image becomes pure noise.
+1. Train a model to reverse this process — denoising to recover the original image.
+1. Once trained, the model can start from pure noise and generate new, realistic samples.
 
-L0 L1 Lt
+#### Diffusion in practice
 
-...
+Example training data: many sprite images. Task at inference time: generate a *new* sprite, or with a text-to-image variant generate an image from a text prompt (e.g. "butterfly image" → a butterfly).
 
-y’0
+- **Forward diffusion** — add Gaussian noise gradually over many steps until the image is pure noise. No learning is required here.
+- **Reverse diffusion (denoising)** — a model is trained to predict and reverse the noise. Given a noisy image it predicts a slightly less noisy version; after many steps it reconstructs a clean, new image from pure noise.
 
-y’1
+### Week 12 — Guest Lecture
 
-y’t
-
-y’t
-
-RNN ht
-
-W W
-
-≈
-
-RNN
-
-RNN
-
-RNN
-
-...
-
-X0
-
-X1
-
-Sequence Modelling: Design Criteria
-
-- Support for Variable-Length Input
-
-- Has Temporal Dependency (Long-term, Short-term)
-
-- Preserve the information order
-
-- Share parameters across sequence
-
-- RNN Limitations
-
-- Prone to vanishing and exploding gradient problem
-
-- Long term memory not supported
-
-- Slow and no parallelization
-
-Output
-
-y’0
-
-y’1
-
-y’2
-
-y’t
-
-y’t-2
-
-y'\_{t-1}, …
-
-Inputs (features) `X_0, X_1, X_2, …`
-
-Xt-2
-
-Xt-1
-
-y y y y y y
-
-Output
-
-...
-
-Features
-
-x x x x x x
-
-Input
-
-Idea:
-
-- No Recurrence
-- No Long-term memory
-- Feed Everything into the Dense network
-- Identify and focus on what’s important
-
-Attention Is All you Need!
-
-- Identify which parts of the image to focus on
-- Extract features with high attention
-
-Why do we need Attention?
-
-- RNNs process sequences one step at a time
-- Long sentences lead to Long-term memory loss
-- Important words can be hidden in long dependencies
-- Attention helps to focus on relevant parts of the input
-
-What is Attention? Intuition
-
-- Mimics human focus mechanism: “Where should I look?”
-- For each output word, attention decides which input word is most important
-- Computes a weighted sum of all input vectors
-- Higher weight = more important
-
-**Training Query (Q)**
-Key (K1)
-
-**Key (K2)**
-Compute similarity between Q and K
-
-For each attention step: compute similarity between the **Query Q** and each **Key K_i**, then extract **Values V_i** weighted by that similarity.
-
-Extract Values based On attention
-
-- Self-Attention is the foundation for Transformer architecture
-- Entire sequence is processed in parallel
-- Has Encode and a Decoder block
-- Stack of Layers with Self Attention and Feed Forward Neural
-
-### Case Studies
-
-- Introduced in 2021: "An Image is Worth 16\*16 Words: Transformers for Image Recognition at Scale," published at ICLR 2021
-
-- Vision transformer have extensive application in all computer vision tasks
-
-- ViT is a type of Deep Learning Model that’s looks at Images, like how language model looks at words
-
-- Images are represented as sequences of patches!
-
-1. Split an image into patches
-1. Flatten the patches
-1. Produce lower-dimensional linear embeddings from the flattened patches
-1. Add positional embeddings
-1. Feed the sequence as an input to a standard transformer encoder
-1. Pretrain the model with image labels (fully supervised on a huge dataset)
-1. Finetune on the downstream dataset for image classification
-
-Processes the entire image using filters (kernels)
-
-Splits image into fixed-size patches (like tokens)
-
-Focuses on local patterns first (edges, textures)
-
-Local vs. Global
-
-Uses global self-attention to relate all patches
-
-Hierarchical (convs → pools → deeper features)
-
-Architecture
-
-Flat transformer encoder stack Training Data Need Works well with limited data Needs lots of data or pretraining Computation Efficient with low-res inputs
-
-Computationally heavier, especially on large images
-
-Parallelism Limited; uses sequential feature stacking High; patch processing is highly parallelizable
-
-- Object Detection techniques using Transformers
-- An improvement over the original DETR (DEtection TRansformer)
-- DETR looks at everything globally but miss small things.
-- RF-DETR looks globally and understands the relationships between things.
-- Real-time Transformer-based object detection architecture
-- Outperforms all object detection models, 60+ mAP achieved on COCO dataset.
-
-#### Case Study: Diffusion Models - Intuition
-
-Goal: Generate new data samples (e.g. images, audio, text) that is similar to a training dataset by learning to reverse a gradual noise process! A generative model!
-
-**Generic steps:**
-
-1. Start with real data
-1. Add noise step-by-step, until the image becomes pure noise
-1. Train a model to reverse this process: denoising to recover the original image!
-1. Once trained, the model can start from pure noise and generate new and realistic samples.
-
-#### Diffusion Models
-
-Example: Given a lot of sprite sample images
-
-**Training Data**
-Task: Generate New Sprite images (New Image generation from image input)
-
-**Example prompt** (text-to-image): "Butterfly image" → Task: generate an image of a butterfly.
-
-- Forward Diffusion:
-
-- Add noise gradually to the original image for many steps
-
-- Iterate until the Image becomes pure noise
-
-- Gaussian noise used
-
-- No-learning
-
-- Reverse Diffusion:
-
-- Denoising: Model is trained to predict and reverse this noise
-
-- Use the prediction to denoise the image
-
-- Given a noisy image, it predicts a slightly less noisy image version
-
-- After several steps, it reconstructs a clean and new image! From pure noise
-
-Week 12 Guest Lecture
-
-Industry Guest Lecture will be presented by Amazon Web Services (AWS) on Week 12
-
-Topic: Build, Evaluate and Scale Production ready Agents
+Industry guest lecture by **Amazon Web Services (AWS)**. Topic: *Build, Evaluate and Scale Production-ready Agents.*
