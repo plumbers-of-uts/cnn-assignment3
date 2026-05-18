@@ -35,221 +35,109 @@ Outline
 - ML/DL Pipeline
 - Deep Learning and CNN @ UTS
 
-What is Artificial Intelligence?
+### What is Artificial Intelligence?
 
-Human Intelligence exhibited by machine!
+Human intelligence exhibited by machines:
 
-What is Artificial Intelligence?
+- A generic term for getting computers to perform human tasks; the scope changes over time.
+- There is no generic AI system that can do all human tasks.
+- Today's systems can perform one or a few well-defined tasks at (or beyond) human performance.
 
-- A generic term for getting computers to perform human tasks, and the scope is always changing overtime.
+### Popular AI/ML use cases
 
-- We don’t have a generic AI system which does multiple human tasks!
+- Image classification
+- Object detection and recognition
+- Image captioning
+- Face detection and recognition
+- Biometrics (fingerprint, retina, hand geometry, …)
+- Speech recognition (e.g. "Hey Google, what's the weather today?") — challenges include accents, noise, language variation
+- Natural language processing (NLP), incl. chatbots and ChatGPT
+- Language translation
+- Creative AI (learning to paint in the style of an artist)
 
-- The systems available today are able to perform one or few well defined tasks, which are at par with the human performance or sometimes better!
+### What is Machine Learning?
 
-- Popular Use Cases
+> "Machine Learning is the field of study that gives computers the ability to learn without being explicitly programmed."
+> — Arthur Samuel, 1958
 
-- Image Classification
+A more modern phrasing: **Machine Learning is the science (and art) of programming computers so that they can learn from data.**
 
-- Object Detection and Recognition
+### When to use Machine Learning
 
-- Image Captioning
+- Problems for which existing solutions require a lot of hand-tuning or a long list of rules
+- Complex problems with no good traditional solution
+- Fluctuating environments (ML systems adapt to new data)
+- Gaining insight from complex problems with large amounts of data
 
-- Face Detection and Recognition
+### Main challenges of Machine Learning
 
-- Biometrics (Fingerprint, Retina, Hand Geometry, etc.)
-
-- Speech Recognition
-
-- Natural Language Processing (NLP)
-
-- Language Translations
-
-- Creative (learn to draw an image in the style of an artist!) :
-
-- Speech Recognition
-
-**Hey Google... What’s the weather today? ...**
-
-- Speech Recognition - Technology Challenges!
-
-- Natural Language Processing
-
-“Beware though, bots have the illusion of simplicity on the front end but there are many hurdles to overcome to create a great experience. So much work to be done. Analytics, flow optimization, keeping up with ever changing platforms that have no standard. For deeper integrations and real commerce like Assist powers, you have error checking, integrations to APIs, routing and escalation to live human support, understanding NLP, no back buttons, no home button, etc etc. We have to unlearn everything we learned the past 20 years to create an amazing experience in this new browser.” —Shane Mac, CEO of Assist
-
-- ChatGPT!
-
-- Language translations
-
-What is Machine Learning?
-
-“Machine Leaning is the field of study that gives computer ability to learn without being explicitly programmed”
-
-**Machine Learning is a Science ( and art ) of programming computers so that they can learn from Data!**
-– Arthur Samuel, 1958
-
-Why and When to use Machine Learning?
-
-Problems for which existing solutions require a lot of hand-tuning or a long list of rules
-
-Complex Problems for which there is no good solution at all using traditional approach
-
-Fluctuating environments: Machine Learning systems can adapt on new data
-
-Getting insight about complex problems and a large amount of data
-
-- Insufficient amount of training data
-
+- Insufficient training data
 - Non-representative training data
+- Poor-quality data
+- Irrelevant features ("garbage in → garbage out")
+- Overfitting / underfitting the training data
 
-- Poor Quality data
+Most of these challenges are around the **data**. The classic question — *"data or algorithm, which matters more?"* — is largely answered by *The Unreasonable Effectiveness of Data* and its 2017 revisit by Google Research: more data tends to dominate algorithmic improvements past a point.
 
-- Irrelevant Features!: Garbage in → Garbage Out!
+### Overfitting vs. underfitting — open-book exam analogy
 
-- Overfitting the training data
-
-- Under fitting the training data
-
-- More of the challenges are around Data!
-
-- Data or Algorithm, which is more important?
-
-- Check:
-
-- The Unreasonable Effectiveness of Data
-
-- Revisiting the Unreasonable Effectiveness of Data
-
-- Overfitting example
-
-- Overfitting and Underfitting
-
-This is too complex.. Skip!
-
-Analogy:
-
-| Strategy | Open-book exam | Closed-book exam | Fit type |
-|--------------------------------------------|----------------|------------------|--------------|
+| Strategy | Open-book | Closed-book | Fit type |
+|-----------------------------------------|-----------|-------------|--------------|
 | Not interested in learning | 45% | 35% | Underfitting |
 | Memorising everything | 98% | 55% | Overfitting |
 | Learning the concept well with examples | 93% | 85% | Best fit |
-Computer Vision
 
-How computers see and understand digital images and videos.
+### Computer Vision
 
-**Human Brain**
-Apple, Pear, grapes, banana, oranges, basket
+How computers see and understand digital images and videos. Computer vision mimics the tasks of the biological vision system:
 
-**Human Eye**
-Apple, Pear, grapes, banana, oranges, basket
+- Eye / retina → camera / webcam
+- Extracting information → image processing
+- Understanding what is seen → image analysis & ML
 
-**Input image Output · Webcam image sensor · Interpreting device Computer**
-Computer Vision
+**Applications**: assistance to people with disabilities (bionic eye), drone surveillance, image search engines, human–robot interaction, autonomous driving.
 
-Computer vision includes all tasks performed by the biological vision system:
+**Popular tasks**: image classification, object detection + localization, instance segmentation, image captioning (CV + NLP), face detection & recognition, biometrics, creative AI (e.g. NVIDIA's GAN-generated portraits are entirely synthetic).
 
-- Eye/Retina → Camera/Webcam
-- Extracting information → Image Processing
-- understanding what is seen → Image Analysis and Understanding/ML
+### Generative AI
 
-Applications
+- Refers to the use of AI to create new content — text, images, audio/music, video.
+- Examples: LLMs, ChatGPT, Bard — conversational Gen AI that produces human-like responses.
 
-Assistance to differently abled humans (bionic eye)
+### Deep Learning
 
-Unmanned Surveillance using Drone
+- A class of ML algorithms that uses multiple layers to progressively extract higher-level features from raw input.
+- "Deep" refers to the number of layers through which data is transformed.
+- Also known as deep neural networks (DNNs); a technique for implementing ML.
 
-Human machine interaction/ Robotics
+### The Deep Learning evolution
 
-Autonomous driving
+DL was held back by slow computers and small datasets. What changed:
 
-Computer Vision: Popular tasks
+- Faster, cheaper GPUs
+- Very large datasets, easy to collect and store
+- Improved libraries, toolboxes, and modern architectures (e.g. Keras)
 
-Image Classification
-
-Image Classification Object Detection
-
-- Localization Instance Segmentation
-
-**DOG · CAT**
-DOG
-
-Single Object Multiple Object
-
-- Image Captioning (Computer Vision + NLP)
-
-• Face Detection and Recognition
-
-- Biometrics (Fingerprint, Retina, Hand Geometry, etc.) (Computer Vision)
-
-- Creative
-
-**This are fake images! → Generated using GAN**
-
-Generative AI
-
-Definition:
-
-- Refers to the use of AI to create new content such as text, images, audio/music, and videos.
-- Examples: LLMs, ChatGPT, Bard etc. are examples of Gen AI designed for conversational purpose, producing human like responses.
-
-Deep Learning
-
-Definition:
-
-- It is a class of machine learning algorithms that uses multiple layers to progressively extract higher level of features from the raw input.
-- The word “Deep” in deep learning refers to the number of layers through which data is transformed.
-
-The Deep Learning Evolution
-
-- Slow computers
-- Less data
-
-**Deep Learning is a technique for implementing Machine Learning! also know as Deep Neural Networks (DNNs)**
-So, What Changed Overtime?
-
-**Availability of faster computers! Cheap and fast GPUs · Very large datasets, Easy to collect and store**
-Improved libraries, toolboxes, modern architectures!
-
-AI, ML and DL relationship!
-
-Artificial Intelligence
-
-Machine Learning
-
-Deep Learning
+### AI / ML / DL relationship
 
 **AI → ML → DL** progression (1950s → 1980s → 2010s): ML *makes machines learn without explicit programming*; DL *learns using deep neural networks*.
 
-1950s 1980s 2010s
+### Features in ML — example
 
-Orange? Yes-40%
+Classifying *Orange* vs *Apple*:
 
-Orange? Yes-85%
+- Possible features: weight (e.g. 150 g) and colour.
+- Choosing appropriate, useful features has a significant impact on the performance of an ML system.
 
-No-55% Unsure- 5%
+### Typical ML pipeline
 
-No-14% Unsure- 1%
+`Study the problem → Collect data / features → Train ML algorithm → Evaluate solution → Analyse errors → Launch`.
 
-Weight: 150 grams Colour:Colour: OrangeOrange?
+### Traditional ML vs. Deep Learning pipeline
 
-**Feature dimension: 2 · Orange Apple**
-Weight
-
-**? · Choosing appropriate and useful features can have a significant impact on the performance of a Machine Learning system!**
-Colour
-
-Typical Machine Learning Pipeline
-
-Evaluate Solution
-
-Traditional ML Vs DL Pipeline
-
-**Traditional Machine Learning (ML) pipeline for object detection and classification · Result · Input video**
-End-to-End Deep Learning (DL) technique for Object Detection and Classification
-
-Deep Learning Pipeline example
-
-**More layers that loosely mimic human brain · No explicit feature engineering · Deep Learning System Pipeline**
+- **Traditional ML pipeline** for object detection / classification: hand-crafted feature engineering → classifier → result.
+- **End-to-end Deep Learning**: input image/video → deep network learns features and classifier together → result.
+- DL stacks many layers that loosely mimic the brain and removes the need for explicit feature engineering.
 
 ### Student Projects from previous iterations of 42028
 
