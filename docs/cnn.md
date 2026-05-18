@@ -74,15 +74,12 @@ What is Artificial Intelligence?
 - Speech Recognition
 
 **Hey Google… What’s the weather today? …**
-Image Source: https://medium.com/@joelgarciajr84/creating-an-application-that-uses-speech-recognition-76117a396b7d
 
 - Speech Recognition - Technology Challenges!
 
 - Natural Language Processing
 
 “Beware though, bots have the illusion of simplicity on the front end but there are many hurdles to overcome to create a great experience. So much work to be done. Analytics, flow optimization, keeping up with ever changing platforms that have no standard. For deeper integrations and real commerce like Assist powers, you have error checking, integrations to APIs, routing and escalation to live human support, understanding NLP, no back buttons, no home button, etc etc. We have to unlearn everything we learned the past 20 years to create an amazing experience in this new browser.” —Shane Mac, CEO of Assist
-
-Reference: https://becominghuman.ai/a-simple-introduction-to-natural-language-processing-ea66a1747b32
 
 - ChatGPT!
 
@@ -124,11 +121,8 @@ Getting insight about complex problems and a large amount of data
 - Check:
 
 **Unreasonable Effectiveness of data 2Revisiting the Unreasonable Effectiveness of Data**
-Reference: 1https://static.googleusercontent.com/media/research.google.com/en//pubs/archive/35179.pdf 2https://ai.googleblog.com/2017/07/revisiting-unreasonable-effectiveness.html
 
 - Overfitting example
-
-Image source: https://www.reddit.com/r/ProgrammerHumor/comments/8p96r8/yes/
 
 - Overfitting and Underfitting
 
@@ -186,8 +180,6 @@ DOG
 
 Single Object Multiple Object
 
-Images source: cs224d course
-
 - Image Captioning (Computer Vision + NLP)
 
 • Face Detection and Recognition
@@ -197,7 +189,6 @@ Images source: cs224d course
 - Creative
 
 **This are fake images! → Generated using GAN**
-Image source: https://research.nvidia.com/publication/2017-10_Progressive-Growing-of
 
 Generative AI
 
@@ -206,16 +197,12 @@ Definition:
 - Refers to the use of AI to create new content such as text, images, audio/music, and videos.
 - Examples: LLMs, ChatGPT, Bard etc. are examples of Gen AI designed for conversational purpose, producing human like responses.
 
-Reference: https://cloud.google.com/use-cases/generative-ai
-
 Deep Learning
 
 Definition:
 
 - It is a class of machine learning algorithms that uses multiple layers to progressively extract higher level of features from the raw input.
 - The word “Deep” in deep learning refers to the number of layers through which data is transformed.
-
-Reference: https://en.wikipedia.org/wiki/Deep_learning
 
 The Deep Learning Evolution
 
@@ -279,8 +266,6 @@ Typical Machine Learning Pipeline
 Evaluate Solution
 
 | |Analyse errors|
-
-Reference: Hands-On Machine Learning with Scikit-Learn and TensorFlow
 
 Traditional ML Vs DL Pipeline
 
@@ -409,9 +394,6 @@ Important Algorithms:
 
 - Suitable for small or medium sized datasets
 
-**Reference and Pre-Reading:**
-Theory: https://medium.com/machine-learning-101/chapter-2-svm-support-vector-machine-theory-f0812effc72 Implementation: https://medium.com/machine-learning-101/chapter-2-svm-support-vector-machine-coding-edd8f1cf8f2d
-
 **Feature dimension: 2**
 Orange Apple
 
@@ -421,9 +403,6 @@ Weight
 Colour
 
 **Example: Using sklearn for SVM classification (Partialcodesnippet)**
-Reference: https://scikit-learn.org/stable/auto_examples/svm/plot_iris.html#sphx-glr-auto-examples-svm-plot-iris-py
-
-https://en.wikipedia.org/wiki/Iris_flower_data_set
 
 **SVM Parameters: Kernel, Gamma, Regularization (C)**
 
@@ -435,12 +414,7 @@ ______________________________________________________________________
 
 High Regularization value
 
-Image source and Reference: https://medium.com/machine-learning-101/chapter-2-svm-support-vector-machine-theory-f0812effc72
-
 **Example: Using sklearn for SVM classification · Iris flower data set**
-Reference: https://scikit-learn.org/stable/auto_examples/svm/plot_iris_svc.html
-
-https://en.wikipedia.org/wiki/Iris_flower_data_set
 
 - Precision & Recall
 
@@ -489,7 +463,6 @@ Recall: TP/Cancer True States
 - Intersection over Union (IoU):
 
 **Intersection over Union is a metric used for the evaluation of an object detector, i.e. how good is the predicted bounding box for an object detected closely matches**
-Reference: https://www.pyimagesearch.com/2016/11/07/intersection-over-union-iou-for-object-detection/
 
 ### Image Processing Basics
 
@@ -585,7 +558,6 @@ Image Processing - Types
 ### Image Enhancement, Restoration
 
 **Enhancement Restoration**
-Source: https://www.mathworks.com/discovery/image-enhancement.html https://en.wikipedia.org/wiki/Image_restoration_by_artificial_intelligence
 
 - Easiest method for image segmentation!
 - Converts gray-scale image into a binary image If f(x,y) > Threshold, then f(x,y) = 0 else f(x,y) = 255
@@ -608,8 +580,6 @@ Thresholding
 
 Original Image Binary Image
 
-Image Source: https://en.wikipedia.org/wiki/Thresholding\_(image_processing)
-
 Image Thresholding methods
 
 **- Histogram shape:**
@@ -625,9 +595,6 @@ Gray-scale
 
 Instead of a single threshold, have thresholds for different regions in the image
 
-1Reference: https://en.wikipedia.org/wiki/Otsu%27s_method
-
-**Source https://scikit-image.org/docs/stable/auto_examples/segmentation/plot_multiotsu.html**
 Edge Detection (Image Filtering)
 
 **What is an edge?**
@@ -712,8 +679,6 @@ Canny Edge detection Sobel Edge detection
 
 ### Sobel edge detection - Example
 
-Image Source: https://docs.opencv.org/3.0-beta/doc/py_tutorials/py_imgproc/py_gradients/py_gradients.html
-
 Convolutions in CNN
 
 - Convolutions are very important operation in a Convolutional Neural Networks (CNN)
@@ -796,7 +761,6 @@ Direction
 - The bins are the gradient directions (Ꝋ) quantized into 9-bins
 
 **Pixel with blue circle has an angle of 80 degrees and magnitude of 2**
-Reference: https://tanasecucliciu.wordpress.com/2016/06/08/programming-histogram-of-oriented-gradients-hog-explained/ Image source: https://www.learnopencv.com/histogram-of-oriented-gradients/
 
 ______________________________________________________________________
 
@@ -822,8 +786,6 @@ Example: For an Image size: 64 X 128, will have 8 X 16 cells, and 7 X 15 block (
 
 **Example:**
 Visualisation of the histogram (Magnitude and direction)
-
-Reference: http://scikit-image.org/docs/0.6/auto_examples/plot_hog.html
 
 - An efficient texture operator which labels each pixels of an image by thresholding their neighbours.
 
@@ -857,8 +819,6 @@ CNNs
 
 Standard ANNs
 
-Image source: http://cs231n.github.io/assets/cnn/cnn.jpeg Reference & Image source: https://towardsdatascience.com/applied-deep-learning-part-1-artificial-neural-networks-d7834f67a4f6
-
 |House Price prediction| |
 |---|---|
 |y = 1.8537x - 15.783 0 500 1000 1500 2000 2500 0 200 400 600 800 1000 1200 1400 PriceinAUD$(in100Ks) Size in Sq. ft| |
@@ -869,7 +829,6 @@ Image source: http://cs231n.github.io/assets/cnn/cnn.jpeg Reference & Image sour
 Size X
 
 **“Neuron” · House Price prediction**
-Source and Reference: https://www.econstor.eu/bitstream/10419/113851/1/756619068.pdf
 
 **House Price prediction · Size #Bedroom #Bathroom Garden Location**
 FamilySize Facility Index
@@ -983,8 +942,6 @@ GDmin(w)
 For m Sample the loss function is: GD(w, b) =𝑥 = ∑ L (a, y)
 
 Question: Find w and b that will minimize GD(w, b)
-
-Image Source: https://subscription.packtpub.com/book/big_data_and_business_intelligence/9781788397872/1/ch01lvl1sec22/gradient-descent Source and Reference: http://cs230.stanford.edu/files/C1M2.pdf
 
 **Problem of Binary Classification → Logistic Regression (Shark ? → 1 | Not Shark? → 0) · Gradient Descent for learning parameters: It is an iterative approach for error correction in a machine learning model. · Where, dw = ( , ) db = ( , ) · Updating the w and b iteratively, : w = w - adw Updating the b: b = b - adb · a → Learning rate · Gradient Descent for learning parameters: Learning rate(a) issues:**
 GD(w) GD(w)
@@ -1107,22 +1064,14 @@ Required: Loss/cost function
 
 GDmin(w)
 
-Image Source: https://subscription.packtpub.com/book/big_data_and_business_intelligence/9781788397872/1/ch01lvl1sec22/gradient-descent
-
-Source and Reference: http://cs230.stanford.edu/files/C1M2.pdf
-
 **Gradient Descent for learning parameters: Learning rate() issues:**
 (L)LossFn
 
 (L)LossFn
 
 **- It is a hyper-parameter**
-Image Source: https://subscription.packtpub.com/book/big_data_and_business_intelligence/9781788397872/1/ch01lvl1sec22/gradient-descent
-
-Source and Reference: http://cs230.stanford.edu/files/C1M2.pdf
 
 **Learning rate(): more intuitions**
-Image Source: http://cs231n.github.io/neural-networks-3/
 
 Gradient Descent Types
 
@@ -1188,8 +1137,6 @@ minima.
 
 ## Gradient Descent (SGD) - intuition
 
-Image Source: https://towardsdatascience.com/gradient-descent-algorithm-and-its-variants-10f652806a3
-
 ## Gradient Descent (SGD) – loss function nature
 
 - One of the popular algorithm for smoothing sequential data
@@ -1249,8 +1196,6 @@ SGD Without Momentum SGD With Momentum
 
 Faster convergence and reduced oscillation
 
-Image Source and reference http://ruder.io/optimizing-gradient-descent/index.html#momentum
-
 - Root Mean Square Propagation
 - Unpublished adaptive learning method by Geoffrey Hinton
 - RMSProp also reduces oscillation but in a different way than Momentum
@@ -1296,7 +1241,6 @@ Activation Functions: Sigmoid
 Sigmoid function:
 
 **Characteristics: - Non-linear in nature - Range(0, 1) - Tends to bring the activations to either side of the curve: good for a classifier - Suffers from vanishing gradient problem · Vanishing Gradient: Towards to the end of the curve, the value of Y change very less to the changes in X values. Hence gradient at the region will be very small. The network will refuse or learning extremely slowly.**
-Source: https://medium.com/the-theory-of-everything/understanding-activation-functions-in-neural-networks-9491262884e0
 
 Activation Functions: tanh
 
@@ -1310,9 +1254,6 @@ i.e. : if x < 0, A(x) = 0, if x > 0, A(x) = x
 Activation Functions: Leaky ReLu
 
 **Leak · Leaky Rectified Linear Unit (Leaky ReLu) 𝐴(𝑥) = max(0.01𝑥,x) · i.e. : if x < 0, A(x) = 0.01x, if x > 0, A(x) = x · Characteristics: - Non-linear in nature - Range[0, inf] - Leaky ReLUs are one attempt to fix the “dying ReLU” problem**
-Source & Reference : http://cs231n.github.io/neural-networks-1/
-
-https://towardsdatascience.com/activation-functions-in-neural-networks-58115cda9c96
 
 Activation Functions: Softmax
 
@@ -1321,7 +1262,6 @@ Activation Functions: Softmax
 |Characteristics: - Non-linear in nature - Turns numbers in probabilities that sum to one. - Useful when we have more than one output - Used for classification in the output layer - Less computationally expensive than Sigmoid and Tanh | |Y|
 
 **Illustration: · = [ 2.0, 1.0, 0.1] Softmax(Y) = [0.7, 0.2, 0.1] (approx.)**
-Reference: https://medium.com/data-science-bootcamp/understand-the-softmax-function-in-minutes-f3a59641e86d
 
 Logistic Regression with Backpropagation
 
@@ -1344,8 +1284,6 @@ Y
 Hidden Layer→ Adding more neurons in between input and output layer
 
 Single layer perceptron 3-layered neural network with 2 hidden layers
-
-Image Source: https://towardsdatascience.com/multi-layer-neural-networks-with-sigmoid-function-deep-learning-for-rookies-2-bf464f09eb7f
 
 Example: 2-layered architecture for multi-class classification (e.g: Fashion MNIST dataset)
 
@@ -1390,16 +1328,12 @@ Dog
 - CNNs have neurons arranged in 3D
 - It is a sequence of layers which transforms input 3D volume to 3D outputs volume
 
-Image Source and reference to read : http://cs231n.github.io/convolutional-networks/
-
 **CNNs are the foundations of modern state-of-the-art deep · learning based computer vision. Layers in a CNN:**
 Three main type of layers used to build a CNN architecture
 
 - 1. Convolutional Layer (CONV)
 - 2. Pooling Layer (POOL)
 - 3. Fully Connected layer (FC) These three types of layers are stacked together to form a CNN architecture!
-
-Source and reference to read : http://cs231n.github.io/convolutional-networks/ https://medium.com/@pechyonkin/key-deep-learning-architectures-lenet-5-6fc3c59e6f4
 
 **Sample CNN architecture (LENET-5): · CONV Layer · FC Layer · POOL Layer · Sample CNN architecture:**
 
@@ -1408,8 +1342,6 @@ ______________________________________________________________________
 ______________________________________________________________________
 
 ______________________________________________________________________
-
-Image Source: https://medium.com/analytics-vidhya/ai-ml-dl-whats-what-ecb354967e63
 
 - CONVolution is the first layer to extract features from an input image
 - Core building block of a CNN
@@ -1462,8 +1394,6 @@ Convolution Operation
 Image Convolved Feature
 
 5 X 5 Image
-
-Image source: https://medium.com/@RaghavPrabhu/understanding-of-convolutional-neural-network-cnn-deep-learning-99760835f148
 
 |0|0|0|0|0|0|0|0|
 |---|---|---|---|---|---|---|---|
@@ -1530,8 +1460,6 @@ matrix Example:
 - 1. Stride(s) = 1: Move the filter by one pixel horizontally and vertically
 - 2. Stride(s) = 2: Move the filter by two pixels horizontally and vertically
 
-Source and Reference: https://ujjwalkarn.me/2016/08/11/intuitive-explanation-convnets/
-
 #### Stride and Padding illustration
 
 Convolution with stride (s)=2,
@@ -1541,8 +1469,6 @@ Convolution with stride (s) =2 padding (p) = 0
 Convolution with stride (s) =1 padding (p) = 1
 
 padding (p) = 1
-
-Image source: https://github.com/vdumoulin/conv_arithmetic
 
 Output size with Stride and padding
 
@@ -1556,7 +1482,6 @@ Input Matrix Dimension : 7 𝑥 7, Filter size: 3 𝑥 3
 Padding:0, Stride :2
 
 **Output Size= 3 X 3**
-Reference and Source: http://cs230.stanford.edu/files/C4M1.pdf
 
 - Pooling layer is a down sampling operation which reduces the dimensionality of a matrix.
 
@@ -1602,20 +1527,19 @@ Max pooling with 2X2 filter and Stride 2
 
 - In FC layer, the output matrix after convolution layer is flattened and feed into a fully connected layer similar to ANN
 
-Image source ad reference: https://medium.com/@RaghavPrabhu/understanding-of-convolutional-neural-network-cnn-deep-learning-99760835f148
-
 - It is a traditional Multi-layer Perception/Neural Network
-- For multi-class classification, usually Softmax activation is used.
-- Softmax ensures the output
-- Output of the CONV and POOL layers represent a high level features of the Input image
-- FC layer uses this feature to classify the input image into the desired class.
 
-Reference: https://ujjwalkarn.me/2016/08/11/intuitive-explanation-convnets/
+- For multi-class classification, usually Softmax activation is used.
+
+- Softmax ensures the output
+
+- Output of the CONV and POOL layers represent a high level features of the Input image
+
+- FC layer uses this feature to classify the input image into the desired class.
 
 CNN layers visualization and intuition
 
 **Example: Face recognition using CNNs · Uses simple shapes to form higher level features like facial shapes! · Uses edges to detect simple shapes · Low level feature like edges from raw pixels**
-Image Source: http://web.eecs.umich.edu/~honglak/icml09-ConvolutionalDeepBeliefNetworks.pdf
 
 ______________________________________________________________________
 
@@ -1667,8 +1591,6 @@ Rule of Thumb: Validation and Test set should come from the same distribution
 
 ### Bias and Variance
 
-Image Source: https://cv-tricks.com/machine-learning/bias-variance-trade-off/
-
 - It is a value that allows to shift the activation function to left or right, to better fit the data
 
 **With bias · Without bias · a = s(𝒘𝑻 𝒙) · a = s(𝒘𝑻 𝒙 + 𝒃)**
@@ -1690,8 +1612,6 @@ Variance
 - With high variance, models perform very well on training data but has high error rates on test data.
 
 ### Bias and Variance effect
-
-Reference and Source: http://snoek.ddns.net/~oliver/mysite/the-bias-variance-tradeoff.html
 
 - Bayesian Optimal Error (BOE):
 
@@ -1775,9 +1695,8 @@ What is Human-level error?
 
 - Dropout
 
-Source and reference: https://www.analyticsvidhya.com/blog/2018/04/fundamentals-deep-learning-regularization-techniques/
-
 - L2 and L1 regularization are common types and help in reducing the overfitting issue
+
 - Idea: Update the loss/cost function by adding a regularization term
 
 Loss function = Loss + Regularization term (l)
@@ -1852,8 +1771,6 @@ Blended Output
 
 Image B (1-λ=0.45)
 
-Reference: https://arxiv.org/pdf/1710.09412 | Zhang et. Al ICLR 2018
-
 CutMix:
 
 In CutMix augmentation strategy: patches are cut and pasted among training image; ground truth labels are also mixed proportionally to the area of the patch.
@@ -1871,8 +1788,6 @@ Image B (Patch Donor)
 
 Example images augment by RandAugment
 
-Reference: https://arxiv.org/pdf/1909.13719 | Cubuk et. Al, 2019
-
 - Generative Adversarial Networks (GANs):
 
   - Among the hottest topic is DL
@@ -1880,8 +1795,6 @@ Reference: https://arxiv.org/pdf/1909.13719 | Cubuk et. Al, 2019
   - Proven to be very effective
 
 Original image from MNIST GAN generated
-
-Source and reference: https://towardsdatascience.com/advanced-data-augmentation-strategies-383226cd11ba Image Source: https://towardsdatascience.com/having-fun-with-deep-convolutional-gans-f4f8393686ed
 
 Data Augmentation
 
@@ -1891,8 +1804,6 @@ Data Augmentation
 
 - Using CNN to separate style
 - transfer style to different image
-
-Source and reference: https://towardsdatascience.com/advanced-data-augmentation-strategies-383226cd11ba
 
 ______________________________________________________________________
 
@@ -1947,8 +1858,6 @@ Transfer Learning Benefits
 - 1. Less training data required: Don’t have enough data to train a Deep Learning model from scratch. Model trained using a large (similar) dataset can be used.
 - 2. Faster training : Training can converge faster, due the use to existing knowledge (weights) to start with rather than from scratch.
 - 3. Better model generalization: Model is trained to identify features which can be applied to new contexts.
-
-Source and reference: https://cs231n.github.io/transfer-learning/ https://missinglink.ai/guides/neural-network-concepts/transfer-learning-overview/
 
 #### Option-1: (VGG-16 considered as an example) Use pre-trained (ImageNet) model for prediction, without any training.
 
@@ -2027,8 +1936,6 @@ Activations: Relu after each CONV and FC layer Optimizer: SGD with Momentum Regu
 - A novel inception module was introduced.
 - Optimizer: RMSProp
 
-Source and reference: https://medium.com/@sidereal/cnns-architectures-lenet-alexnet-vgg-googlenet-resnet-and-more-666091488df5
-
 **Inception Module**
 
 ## Understanding Inception and ResNet
@@ -2050,8 +1957,6 @@ Source and reference: https://medium.com/@sidereal/cnns-architectures-lenet-alex
 3 X 3
 
 1 X 1
-
-Images source: https://iamaaditya.github.io/2016/03/one-by-one-convolution/
 
 ## **+ Relu**
 
@@ -2079,8 +1984,6 @@ X 32 (# of filters)
 - Large variation in object size
 - How to choose the right filter size?
 
-Images source: https://towardsdatascience.com/a-simple-guide-to-the-versions-of-the-inception-network-7fc52b863202
-
 **Designing CNN requires: - Deciding filter size and number - Number and type of layers etc. · Inception suggests: - Use filters with different size together! - Use different types of layers (CONV, POOL etc.) together Result → Complicated Architecture! & better performance · 28 X 28 X 64 · 1X1 · 3X3**
 64
 
@@ -2093,8 +1996,6 @@ ______________________________________________________________________
 32 28 32
 
 28 X 28 X 192 28 X 28 X 256 Max-Pooling
-
-Reference, Images source: https://towardsdatascience.com/a-simple-guide-to-the-versions-of-the-inception-network-7fc52b863202
 
 Computation cost
 
@@ -2133,7 +2034,6 @@ Computation Cost: 1X1: 28 X 28 X 16 X 192  2.4M multiplications! 5X5: 28 X 28
 ## Bottleneck Layer
 
 **192 · 32 · 16 · Bottleneck**
-Image adapted from and Reference: http://www.pabloruizruiz10.com/resources/CNNs/1x1Convolutions.pdf
 
 ## Inception Module V1
 
@@ -2159,16 +2059,10 @@ Aux_Loss1
 
 ## Inception V3 Architecture
 
-Image Source and reference: https://www.jeremyjordan.me/convnet-architectures/
-
-For More details: https://cloud.google.com/tpu/docs/inception-v3-advanced
-
 - Deep Residual networks (ResNet) → Skip connections
 - Enabled the development of the much deeper networks (100s of layers!)
 - ResNet is composed of Residual Blocks were introduced!
 - Degradation problem: Adding more layers eventually have negative effect on the final performance.
-
-Image Source and reference: https://www.jeremyjordan.me/convnet-architectures/
 
 What wrong with this curves? Overfitting?
 
@@ -2179,8 +2073,6 @@ What wrong with this curves? Overfitting?
 
 ## Summary
 
-Reference and image Source: http://cs231n.stanford.edu/slides/2017/cs231n_2017_lecture9.pdf
-
 - 15+ million labelled high-resolution images
 - 22000 categories
 - ILSVRC (Large Scale Visual Recognition Challenge) used a subset of ImageNet:
@@ -2190,16 +2082,9 @@ Reference and image Source: http://cs231n.stanford.edu/slides/2017/cs231n_2017_l
 - Validation: 50k images
 - Test : 150k images
 
-Source and reference: http://www.image-net.org/ http://cvml.ist.ac.at/courses/DLWT_W17/material/AlexNet.pdf
-
-**Source and reference https://cs.stanford.edu/people/karpathy/cnnembed/cnn_embed_full_1k.jpg**
 ImageNet Dataset Results:
 
-Image Source and reference: An Analysis of Deep Neural Network Models for Practical Applications, 2017, https://arxiv.org/abs/1605.07678
-
 ImageNet Dataset Results (current):
-
-Image Source and reference: https://paperswithcode.com/sota/image-classification-on-imagenet
 
 ______________________________________________________________________
 
@@ -2253,22 +2138,13 @@ Multiple Object
 
 - Large number classes complicates the task
 
-Images source: https://towardsdatascience.com/evolution-of-object-detection-and-localization-algorithms-e241021d8bad
-
 **Dataset Comparison**
-Images source: http://image-net.org/challenges/LSVRC/2014/
 
 - Intersection over Union (IoU): Intersection over Union is a metric used for the evaluation of an object detector, i.e. how good is the predicted bounding box for an object detected closely matches
 
-Reference: https://www.pyimagesearch.com/2016/11/07/intersection-over-union-iou-for-object-detection/
-
 ## Microsoft COCO Dataset
 
-Source: https://cocodataset.org/#home
-
 ## Microsoft COCO Evaluation metrics
-
-Source: https://cocodataset.org/#detection-eval
 
 ## Taxonomy of Object detectors
 
@@ -2281,7 +2157,6 @@ Source: https://cocodataset.org/#detection-eval
 |Region Proposal Based| |
 
 **Monocular Image · Point Cloud · Point Nets · RCNN family · SSD · Yolo**
-Refernce: https://medium.com/@saifhajsalem12/object-detection-state-of-the-art-and-modern-approaches-eaa5e6bfb46b
 
 Image Classification
 
@@ -2324,8 +2199,6 @@ Softmax Loss
 Regression Head L2 Loss
 
 Input Image
-
-Image Source and Reference: http://cs231n.stanford.edu/slides/2016/winter1516_lecture8.pdf
 
 Potential locations for Regression head in CNN
 
@@ -2378,8 +2251,6 @@ Detection as a regression problem
 - Find blobs in the image that are most likely to contain objects
 - E.g: Selective search → ~1000-2000 region proposals using CPU!
 
-Source and Reference: http://cs231n.stanford.edu/slides/2016/winter1516_lecture8.pdf
-
 Case Study: R-CNN
 
 Linear Regression for bounding box offsets
@@ -2416,7 +2287,6 @@ Region of Interest (ROIs) from proposal method
 Run whole image through ConvNet
 
 **ConvNet**
-Source and Reference: https://cs231n.stanford.edu/slides/2022/lecture_9_jiajun.pdf
 
 - 1. Reduce computation
 - 2. ROIs from feature maps using selective search
@@ -2446,15 +2316,11 @@ Case Study: FASTER- R-CNN
 
 ## Object Detection Techniques History
 
-Images source: https://arxiv.org/pdf/1807.05511.pdf
-
 Image Annotation for Object Detection
 
 **PASCAL VOC Format**
 
 ______________________________________________________________________
-
-Image Sources: https://en.wikipedia.org/wiki/Kangaroo#/media/File:RedRoo.JPG https://towardsdatascience.com/coco-data-format-for-object-detection-a4c5eaf518c5
 
 ______________________________________________________________________
 
@@ -2488,7 +2354,6 @@ Outline
 |Region Proposal Based| |
 
 **Monocular Image · Point Cloud · Point Nets · RCNN family · SSD · Yolo**
-Refernce: https://medium.com/@saifhajsalem12/object-detection-state-of-the-art-and-modern-approaches-eaa5e6bfb46b
 
 ## Object Detection Techniques History
 
@@ -2520,8 +2385,6 @@ Task:
 
 - Predict Bounding boxes from CNN
 
-Source and Reference: http://cs231n.stanford.edu/slides/2016/winter1516_lecture8.pdf
-
 - Place a grid over the image
 
 - Apply image classification and localization to each of the grid cells
@@ -2546,7 +2409,6 @@ Y = {po, x, y, h, w, c1, c2} for each cell e.g:
 - Cell(3,3) = {0, ?, ?, ?, ?, ?, ?}
 
 **Class : {car, bike} · Idea: Take the mid-point of the object and Assign it to a grid cell based on its location**
-Images source: https://yallacompare.com/car-deals/uae/en/two-cars-one-dnajaguar-xe-300-sport-and-xe-sv-project-8/ Source and Reference: https://www.youtube.com/watch?v=gKreZOUi-O0
 
 **Target output vector: 3 X 3 X 7 3 X 3: Grid size 7: (5 + Number-of-Classes) · Class : {car, bike}**
 3 X 3 X 7
@@ -2683,12 +2545,10 @@ Object Detection State-of-the-Art
 Yolo State-of-the-Art
 
 **Dataset: MS COCO**
-Source: https://docs.ultralytics.com/models/yolo11/#performance-metrics
 
 Object Detection Summary
 
 **Base Networks: • VGG16 • REsNet101 • Inception V2 • Inception V3 • ResNet • MobileNet • Alexnet • ZFNet Etc. · Object Detection FrameWorks: • RCNN Family (RCNN, Fast/Faster RCNN) • Yolo Family • SSD • F-RCN · Summary: • Faster-RCNN is more accurate but slower • Yolo/SSD are faster/real-time but may not be very accurate**
-Source: http://cs231n.stanford.edu/slides/2017/cs231n_2017_lecture11.pdf
 
 ______________________________________________________________________
 
@@ -2722,8 +2582,6 @@ Recap: Predicting Bounding Boxes
 - Class for each object
 
 Class : {car, bike}
-
-Images source: https://yallacompare.com/car-deals/uae/en/two-cars-one-dnajaguar-xe-300-sport-and-xe-sv-project-8/
 
 Recap: YOLO: You Only Look Once Algorithm
 
@@ -2807,8 +2665,6 @@ Anchor-free detector : Center-based
 - Finds positives in the centre
 - Predicts four distances from the positive to the potential object boundary
 
-Reference and image source: https://learnopencv.com/yolox-object-detector-paper-explanation-and-custom-training/
-
 YOLO Timeline
 
 **Yolo X · Yolo - NAS**
@@ -2856,25 +2712,30 @@ Yolo v9
 **Anchor Free**
 
 - YoloX: Exceeding the YOLO Series, 2021
+
 - Anchor-free detector in the Yolo Family
+
 - Decoupled head used
+
 - Label assignment using SimOTA
+
 - Uses YoloV3 SPP with DarkNet53 backbone
+
 - Uses advanced augmentation such as Mix-up & Mosaic
 
-Source: https://arxiv.org/pdf/1807.05511.pdf
-
 - Backbone Neck Head
+
 - Every Yolo Architecture consists of three parts: Backbone, neck, head
+
 - Backbone → Feature extraction
+
 - Neck → Aggregation of multi-scale feature
+
 - Head→ Localization and Classification scores
 
 ## Case Study: YoloX, Decoupled head
 
 ______________________________________________________________________
-
-Source: https://arxiv.org/pdf/2107.08430.pdf
 
 ### Mixup Augmentation
 
@@ -2882,11 +2743,7 @@ Source: https://arxiv.org/pdf/2107.08430.pdf
 
 ## Case Study: YoloX, Performace
 
-Source: https://arxiv.org/pdf/2107.08430.pdf
-
 ## Case Study: Yolo State-of-the-art, Performance
-
-Source: https://docs.ultralytics.com/models/yolo11/#performance-metrics
 
 Yolo26 – The Next Evolution
 
@@ -2941,8 +2798,6 @@ DOG
 
 Single Object Multiple Object
 
-Images source: cs224d course
-
 Semantic Segmentation Vs Instance Segmentation:
 
 - Semantic segmentation classifies object pixels to specific classes/category
@@ -2956,13 +2811,10 @@ Input Image Semantic Segmentation Instance Segmentation
 |Conditional Random Field (CRF) Fully Convolutional Network (FCN) U-Net Pyramid Scene Parsing Network (PSPNet) etc.|SegNet, DeepMask, SharpMask, MaskRCNN, etc.|
 
 **Applications: Autonomous Driving**
-Images source: https://slideplayer.com/slide/784090/3/images/2/Dense+CRF+construction.jpg
 
 **Applications: Scene Understanding**
-Images source: https://www.topbots.com/semantic-segmentation-guide/
 
 **Applications: Aerial Image processing**
-Images source: https://ai2-s2-public.s3.amazonaws.com/figures/2017-08-08/59cbe15b43e6ca172fce40786be68340f50be541/12-Figure1.1-1.png
 
 - Mask-RCNN → Mask-Region Convolutional Neural Network
 - An addition to the RCNN family, performing instance segmentation
@@ -2973,13 +2825,10 @@ Images source: https://ai2-s2-public.s3.amazonaws.com/figures/2017-08-08/59cbe15
 - Stage 2: Classify the Candidates, refine bounding boxes, and predict mask.
 
 **Faster-RCNN · Source and Reference: http://cs231n.stanford.edu/slides/2016/winter1516_lecture8.pdf**
-https://medium.com/zylapp/review-of-deep-learning-algorithms-for-object-detection-c1f3d437b852
 
 - Sample Results
 
 - Sample Results on video:
-
-Images source: https://github.com/matterport/Mask_RCNN
 
 ## Mask R-CNN Limitations
 
@@ -2988,8 +2837,6 @@ Images source: https://github.com/matterport/Mask_RCNN
 - Data Requirements: Training requires a large amount of annotated data, which can be time-consuming and expensive to acquire.
 - Limited Generalization to Unseen Categories: The model's ability to generalize to unseen object categories is limited.
 
-Images source: https://blog.roboflow.com/mask-rcnn/
-
 ## Semantic Segmentation
 
 Introduction to Semantic Segmentation
@@ -2997,7 +2844,6 @@ Introduction to Semantic Segmentation
 Semantic segmentation classifies object pixels on specific classes/category
 
 **Input Image Semantic Segmentation Instance Segmentation**
-Images source: https://datascience.stackexchange.com/questions/52015/what-is-the-difference-between-semantic-segmentation-object-detection-and-insta
 
 ## Semantic Segmentation: UNet
 
@@ -3012,8 +2858,6 @@ Images source: https://datascience.stackexchange.com/questions/52015/what-is-the
 {
 
 ## Semantic Segmentation: UNet Architecture
-
-Images source: https://arxiv.org/pdf/1505.04597.pdf
 
 cs224d course
 
@@ -3274,7 +3118,6 @@ Extract Values based On attention
 - 6. Pretrain the model with image labels (fully supervised on a huge dataset)
 - 7. Finetune on the downstream dataset for image classification
 
-**Reference: https://github.com/google-research/vision_transformer · Comparing CNN and Vision Transformer: · Key Aspects CNNs Vision Transformer (ViT) Input Handling**
 Processes the entire image using filters (kernels)
 
 Splits image into fixed-size patches (like tokens)
@@ -3301,8 +3144,6 @@ Parallelism Limited; uses sequential feature stacking High; patch processing is 
 - RF-DETR looks globally and understands the relationships between things.
 - Real-time Transformer-based object detection architecture
 - Outperforms all object detection models, 60+ mAP achieved on COCO dataset.
-
-Source: https://blog.roboflow.com/rf-detr/
 
 ### Case Study: Diffusion Models - Intuition
 
@@ -3349,7 +3190,5 @@ Week 12 Guest Lecture
 Industry Guest Lecture will be presented by Amazon Web Services (AWS) on Week 12
 
 Topic: Build, Evaluate and Scale Production ready Agents
-
-For more details please check Canvas!
 
 ______________________________________________________________________
