@@ -1751,7 +1751,3 @@ Example training data: many sprite images. Task at inference time: generate a *n
 
 - **Forward diffusion** — add Gaussian noise gradually over many steps until the image is pure noise. No learning is required here.
 - **Reverse diffusion (denoising)** — a model is trained to predict and reverse the noise. Given a noisy image it predicts a slightly less noisy version; after many steps it reconstructs a clean, new image from pure noise.
-
-### Week 12 — Guest Lecture
-
-Industry guest lecture by **Amazon Web Services (AWS)**. Topic: *Build, Evaluate and Scale Production-ready Agents.*
