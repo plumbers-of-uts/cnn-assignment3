@@ -92,7 +92,7 @@ What is Machine Learning?
 
 “Machine Leaning is the field of study that gives computer ability to learn without being explicitly programmed”
 
-**1Machine Learning is a Science ( and art ) of programming computers so that they can learn from Data!**
+**Machine Learning is a Science ( and art ) of programming computers so that they can learn from Data!**
 – Arthur Samuel, 1958
 
 Why and When to use Machine Learning?
@@ -111,7 +111,7 @@ Getting insight about complex problems and a large amount of data
 
 - Poor Quality data
 
-- Irrelevant Features!: Garbage in à Garbage Out!
+- Irrelevant Features!: Garbage in → Garbage Out!
 
 - Overfitting the training data
 
@@ -123,7 +123,7 @@ Getting insight about complex problems and a large amount of data
 
 - Check:
 
-**1Unreasonable Effectiveness of data 2Revisiting the Unreasonable Effectiveness of Data**
+**Unreasonable Effectiveness of data 2Revisiting the Unreasonable Effectiveness of Data**
 Reference: 1https://static.googleusercontent.com/media/research.google.com/en//pubs/archive/35179.pdf 2https://ai.googleblog.com/2017/07/revisiting-unreasonable-effectiveness.html
 
 - Overfitting example
@@ -140,9 +140,7 @@ Memorizing everything Open Book Exam: 98% Closed Book Exam: 55%
 
 Learning concept well with examples Open Book Exam: 93% Closed Book Exam: 85%
 
-**Underfitting/not learning**
-**Overfitting**
-**Best-Fit**
+**Underfitting/not learning · Overfitting · Best-Fit**
 Computer Vision
 
 How computers see and understand digital images and videos.
@@ -153,16 +151,14 @@ Apple, Pear, grapes, banana, oranges, basket
 **Human Eye**
 Apple, Pear, grapes, banana, oranges, basket
 
-**Input image Output**
-**Webcam image sensor**
-**Interpreting device Computer**
+**Input image Output · Webcam image sensor · Interpreting device Computer**
 Computer Vision
 
 Computer vision includes all tasks performed by the biological vision system:
 
-- Eye/Retina à Camera/Webcam
-- Extracting information à Image Processing
-- understanding what is seen à Image Analysis and Understanding/ML
+- Eye/Retina → Camera/Webcam
+- Extracting information → Image Processing
+- understanding what is seen → Image Analysis and Understanding/ML
 
 Applications
 
@@ -185,11 +181,7 @@ Image Classification Object Detection
 
 ______________________________________________________________________
 
-**DOG**
-**CAT**
-**DOG**
-**CAT**
-**DOG**
+**DOG · CAT**
 DOG
 
 Single Object Multiple Object
@@ -204,7 +196,7 @@ Images source: cs224d course
 
 - Creative
 
-**This are fake images! à Generated using GAN**
+**This are fake images! → Generated using GAN**
 Image source: https://research.nvidia.com/publication/2017-10_Progressive-Growing-of
 
 Generative AI
@@ -233,8 +225,7 @@ The Deep Learning Evolution
 **Deep Learning is a technique for implementing Machine Learning! also know as Deep Neural Networks (DNNs)**
 So, What Changed Overtime?
 
-**Availability of faster computers! Cheap and fast GPUs**
-**Very large datasets, Easy to collect and store**
+**Availability of faster computers! Cheap and fast GPUs · Very large datasets, Easy to collect and store**
 Improved libraries, toolboxes, modern architectures!
 
 **Keras**
@@ -270,12 +261,10 @@ No-14% Unsure- 1%
 
 Weight: 150 grams Colour:Colour: OrangeOrange?
 
-**Feature dimension: 2**
-**Orange Apple**
+**Feature dimension: 2 · Orange Apple**
 Weight
 
-**?**
-**Choosing appropriate and useful features can have a significant impact on the performance of a Machine Learning system!**
+**? · Choosing appropriate and useful features can have a significant impact on the performance of a Machine Learning system!**
 Colour
 
 Typical Machine Learning Pipeline
@@ -295,18 +284,12 @@ Reference: Hands-On Machine Learning with Scikit-Learn and TensorFlow
 
 Traditional ML Vs DL Pipeline
 
-**Traditional Machine Learning (ML) pipeline for object detection and classification**
-**Result**
-**Input video**
-**Result**
-**Input video**
+**Traditional Machine Learning (ML) pipeline for object detection and classification · Result · Input video**
 End-to-End Deep Learning (DL) technique for Object Detection and Classification
 
 Deep Learning Pipeline example
 
-**More layers that loosely mimic human brain**
-**No explicit feature engineering**
-**Deep Learning System Pipeline**
+**More layers that loosely mimic human brain · No explicit feature engineering · Deep Learning System Pipeline**
 
 ______________________________________________________________________
 
@@ -322,11 +305,9 @@ ______________________________________________________________________
 
 Signature and Logo detection
 
-**---**
-
 Logo and Signature detection result
 
-## **Drone detection for Security and Surveillance** **The Award winning**
+## Drone detection for Security and Surveillance — The Award winning
 
 ## Week 2 — Lecture
 
@@ -374,8 +355,7 @@ Mango
 **Classification Task**
 Labelled data for training (Object + Desired Output Label)
 
-**0 500 1000 1500 2000 2500 0 200 400 600 800 1000 1200 1400 PriceinAUD$(in100Ks) Size in Sq. ft**
-**House Price prediction Feature: - Size of the house To Predict: - Price of the house**
+**0 500 1000 1500 2000 2500 0 200 400 600 800 1000 1200 1400 PriceinAUD$(in100Ks) Size in Sq. ft · House Price prediction Feature: - Size of the house To Predict: - Price of the house**
 PriceinAUD$(in10
 
 **Regression Task**
@@ -412,8 +392,7 @@ Unsupervised Learning
 
 ______________________________________________________________________
 
-**Clustering Task**
-**Groups of similar fruits**
+**Clustering Task · Groups of similar fruits**
 Unlabelled data for training
 
 Unsupervised Learning
@@ -438,8 +417,7 @@ Orange Apple
 
 Weight
 
-**?**
-**SVM finds the best line or hyper-plane which will fairly separates the classes**
+**? · SVM finds the best line or hyper-plane which will fairly separates the classes**
 Colour
 
 **Example: Using sklearn for SVM classification (Partialcodesnippet)**
@@ -459,8 +437,7 @@ High Regularization value
 
 Image source and Reference: https://medium.com/machine-learning-101/chapter-2-svm-support-vector-machine-theory-f0812effc72
 
-**Example: Using sklearn for SVM classification**
-**Iris flower data set**
+**Example: Using sklearn for SVM classification · Iris flower data set**
 Reference: https://scikit-learn.org/stable/auto_examples/svm/plot_iris_svc.html
 
 https://en.wikipedia.org/wiki/Iris_flower_data_set
@@ -471,6 +448,7 @@ https://en.wikipedia.org/wiki/Iris_flower_data_set
 What are the “correct” cells?
 
 | |No Cancer|Cancer|
+|---|---|---|
 |No Cancer|TN|FP|
 |Cancer|FN|TP|
 
@@ -492,6 +470,7 @@ Recall: TP/Cancer True States
 what are the “error” cells are:
 
 | |No Cancer|Cancer|
+|---|---|---|
 |No Cancer|TN|FP|
 |Cancer|FN|TP|
 
@@ -505,8 +484,7 @@ Truestate
 
 Recall: TP/Cancer True States
 
-**Precision= (𝑇𝑃)/(𝑇𝑃+𝐹𝑃)**
-**Recall = (𝑇𝑃)/(𝑇𝑃+𝐹𝑁)**
+**Precision= (𝑇𝑃)/(𝑇𝑃+𝐹𝑃) · Recall = (𝑇𝑃)/(𝑇𝑃+𝐹𝑁)**
 
 - Intersection over Union (IoU):
 
@@ -533,7 +511,7 @@ A (24 X 16) Matrix which represents the number ’8’
 ### Colour Images
 
 |170|170|55|170|170|
-|170|55|170|55|170|
+|---|---|---|---|---|
 |170|55|170|55|170|
 |55|140|140|140|55|
 |55|170|170|170|55|
@@ -614,15 +592,14 @@ Source: https://www.mathworks.com/discovery/image-enhancement.html https://en.wi
 
 **Binary Image (8-bit) has only two possible values of pixel intensity ( 0 and 1, or B & W)**
 |170|170|55|170|170|
-|170|55|170|55|170|
+|---|---|---|---|---|
 |170|55|170|55|170|
 |55|140|140|140|55|
 |55|170|170|170|55|
 
 |255|255|0|255|255|
+|---|---|---|---|---|
 |255|0|255|0|255|
-|255|0|255|0|255|
-|0|255|255|255|0|
 |0|255|255|255|0|
 
 Threshold = 100
@@ -643,8 +620,7 @@ No.ofPixels
 **- Clustering based:**
 The 1Otsu method, very good for bimodal distribution
 
-**Threshold**
-**- Adaptive thresholding:**
+**Threshold · - Adaptive thresholding:**
 Gray-scale
 
 Instead of a single threshold, have thresholds for different regions in the image
@@ -668,19 +644,9 @@ ______________________________________________________________________
 Canny Edge detection Sobel Edge detection
 
 |100|100|100|0|0|0|
-|100|100|100|0|0|0|
-|100|100|100|0|0|0|
-|100|100|100|0|0|0|
-|100|100|100|0|0|0|
-|100|100|100|0|0|0|
 
 |0|300|300|0|
-|0|300|300|0|
-|0|300|300|0|
-|0|300|300|0|
 
-|1|0|-1|
-|1|0|-1|
 |1|0|-1|
 
 # \*
@@ -695,19 +661,11 @@ Canny Edge detection Sobel Edge detection
 
 **(100 X 1 + 100 X 1 + 100 X 1) + (100 X 0 + 100 X 0 + 100 X 0) + (100 X -1 + 100 X -1 + 100 X -1)**
 |1100|0100|-1100|0|0|0|
-|1100|0100|-1100|0|0|0|
-|1100|0100|-1100|0|0|0|
-|100|100|100|0|0|0|
-|100|100|100|0|0|0|
+|---|---|---|---|---|---|
 |100|100|100|0|0|0|
 
 |0|300|300|0|
-|0|300|300|0|
-|0|300|300|0|
-|0|300|300|0|
 
-|1|0|-1|
-|1|0|-1|
 |1|0|-1|
 
 -
@@ -715,18 +673,16 @@ Canny Edge detection Sobel Edge detection
 # \*
 
 |100|100|100|100|100|100|
-|100|100|100|100|100|100|
-|100|100|100|100|100|100|
-|0|0|0|0|0|0|
-|0|0|0|0|0|0|
+|---|---|---|---|---|---|
 |0|0|0|0|0|0|
 
 |0|0|0|0|
-|300|300|300|300|
+|---|---|---|---|
 |300|300|300|300|
 |0|0|0|0|
 
 |1|1|1|
+|---|---|---|
 |0|0|0|
 |-1|-1|-1|
 
@@ -737,7 +693,7 @@ Canny Edge detection Sobel Edge detection
 ### Edge detection filters
 
 ||1|0|-1|
-|1|0|-1|
+|---|---|---|---|
 |1|0|-1|
 |1|1|1|
 |0|0|0|
@@ -745,10 +701,12 @@ Canny Edge detection Sobel Edge detection
 3 X 3 filter/Kernel For Horizontal edges 3 X 3 filter/Kernel For Vertical edges Prewitt Filters|
 
 ||1|2|1|
+|---|---|---|---|
 |0|0|0|
 |-1|-2|-1|
 3 X 3 filter/Kernel For Horizontal edges |1|0|-1|
 |2|0|-2|
+|---|---|---|
 |1|0|-1|
 3 X 3 filter/Kernel For Vertical edges Sobel Filters|
 
@@ -803,10 +761,7 @@ Change is Y-directions
 
 Combining both X and Y direction to estimate if changes are in both directions
 
-Y
-
-**Step -1: Computing Image Gradient:**
-**1. Use the horizontal and vertical filters to compute gradient values**
+**Step -1: Computing Image Gradient: · 1. Use the horizontal and vertical filters to compute gradient values**
 Gradientisy-directions
 
 gx= * I
@@ -821,6 +776,7 @@ Gradient is X-directions
 
 **2. Compute the strength/magnitude and direction of gradient.**
 |X|100|X|
+|---|---|---|
 |70|60|120|
 |X|50|X|
 
@@ -832,8 +788,7 @@ Direction
 
 |gx= |-70 + 120| = 50 gy = |-100 + 50| = 50 |
 
-**Gradient Magnitude = ~70.7 Direction/Angle = 45o**
-**Step -2: Create orientation histogram:**
+**Gradient Magnitude = ~70.7 Direction/Angle = 45o · Step -2: Create orientation histogram:**
 
 - Divide the image into small connected regions called Cells which is a 8 X 8 patch
 - Create cell histogram based on gradient direction and magnitude
@@ -852,7 +807,7 @@ ______________________________________________________________________
 - Each block will represent 36 X 1 element vector
 
 **Step -3: Block Normalization:**
-Normalization example: (3, 9) à 3 + 9 = 9.48 (3/9.48 , 9/9.48) = (0.32, 0.95) Multiple (3, 9) by 2 to increase brightness (6, 18) à 6 + 18 = 18.97 (6/18.97, 18/18.97) = (~0.32, ~0.95)
+Normalization example: (3, 9) → 3 + 9 = 9.48 (3/9.48 , 9/9.48) = (0.32, 0.95) Multiple (3, 9) by 2 to increase brightness (6, 18) → 6 + 18 = 18.97 (6/18.97, 18/18.97) = (~0.32, ~0.95)
 
 Brightness reduced Brightness increased
 
@@ -878,20 +833,18 @@ Reference: http://scikit-image.org/docs/0.6/auto_examples/plot_hog.html
 
 - The basic LBPP,R operator is defined as follows:
 
-**Where, S(x) à a thresholding function (xc , yc) à the centre pixel in the 8 pixel neighbourhood, gcàgray level of the centre pixel gpàgray value of a sampling point in an equally spaced circular neighbourhood of P sampling points and radius R around the point (xc , yc)**
-**An Example of LBP Computation:**
-**An Example of LBP Computation:**
+**Where, S(x) → a thresholding function (xc , yc) → the centre pixel in the 8 pixel neighbourhood, gc→gray level of the centre pixel gp→gray value of a sampling point in an equally spaced circular neighbourhood of P sampling points and radius R around the point (xc , yc) · An Example of LBP Computation:**
 An 8-digit binary number is obtained by consideringthe thresholding result, starting from pixel 1 to 8, as marked in red.
 
 |8|1|2|
+|---|---|---|
 |7|62|3|
 |6|5|4|
 
 - There can be 28 = 256 possible values
-- Hence, the LBP histogram will have 256 bins àfeature vector
+- Hence, the LBP histogram will have 256 bins →feature vector
 
-**00111110 = (0 × 2⁷) + (0 × 2⁶) + (1 × 2⁵) + (1 × 2⁴) + (1 × 2³) + (1 × 2²) + (1 × 2¹) + (0 × 2⁰) = 62**
-**An Example of LBP Computation:**
+**00111110 = (0 × 2⁷) + (0 × 2⁶) + (1 × 2⁵) + (1 × 2⁴) + (1 × 2³) + (1 × 2²) + (1 × 2¹) + (0 × 2⁰) = 62 · An Example of LBP Computation:**
 
 ## Neural Network Basics
 
@@ -907,6 +860,7 @@ Standard ANNs
 Image source: http://cs231n.github.io/assets/cnn/cnn.jpeg Reference & Image source: https://towardsdatascience.com/applied-deep-learning-part-1-artificial-neural-networks-d7834f67a4f6
 
 |House Price prediction| |
+|---|---|
 |y = 1.8537x - 15.783 0 500 1000 1500 2000 2500 0 200 400 600 800 1000 1200 1400 PriceinAUD$(in100Ks) Size in Sq. ft| |
 
 |y = 1.8537x - 15.783| | |
@@ -914,28 +868,20 @@ Image source: http://cs231n.github.io/assets/cnn/cnn.jpeg Reference & Image sour
 **Price Y**
 Size X
 
-**“Neuron”**
-**House Price prediction**
+**“Neuron” · House Price prediction**
 Source and Reference: https://www.econstor.eu/bitstream/10419/113851/1/756619068.pdf
 
-**House Price prediction**
-**Size #Bedroom #Bathroom Garden Location**
+**House Price prediction · Size #Bedroom #Bathroom Garden Location**
 FamilySize Facility Index
 
 Price
 
-**Y**
 LocationIndex
 
-**X**
-**House Price prediction**
+**X · House Price prediction**
 Size #Bedroom #Bathroom Garden Location
 
 Price
-
-Y
-
-X
 
 |Data/ Features | |
 
@@ -951,7 +897,7 @@ Evaluate Solution
 Function to calculate the loss/error
 
 **Problem of Binary Classification:**
-Shark ? à 1 Not Shark? à 0
+Shark ? → 1 Not Shark? → 0
 
 Error/ Loss
 
@@ -973,13 +919,9 @@ Input (x)
 
 ANN Introduction – Learning Process: Example
 
-**T Target Position: (x, y)**
-**S**
-**Position: (x+dx, y+dx)**
-**UTS Building-1**
+**T Target Position: (x, y) · S · Position: (x+dx, y+dx) · UTS Building-1**
 d
 
-**D**
 Distance need to cover to reach target
 
 Distance remaining = (D – d) (Error/Loss to minimize)
@@ -989,7 +931,7 @@ Update Position (parameter):
 - x = x + dx
 - y = y + dy
 
-**Problem of Binary Classification à Logistic Regression (Shark ? à 1 | Not Shark? à 0)**
+**Problem of Binary Classification → Logistic Regression (Shark ? → 1 | Not Shark? → 0)**
 Image dimension: 64X128 = 8192 Pixels
 
 image.reshape(image.shape[0]\*image.shape[1]\*image.shape[2],1)
@@ -1004,11 +946,9 @@ x1 x2 x3 … xn-1 xn
 
 … … Shark
 
-X
+## **Problem of Binary Classification → Logistic Regression (Shark ? → 1 | Not Shark? → 0)** **𝑤𝑇 𝑥** **𝑏**
 
-## **Problem of Binary Classification à Logistic Regression (Shark ? à 1 | Not Shark? à 0)** **𝑤𝑇 𝑥** **𝑏**
-
-à Linear function of input x
+→ Linear function of input x
 
 s =
 
@@ -1017,25 +957,21 @@ s =
 
 Where, Weighted sum of inputs
 
-- W à Weights
-- X à Inputs b à Bias term s à Activation function
+- W → Weights
+- X → Inputs b → Bias term s → Activation function
 
 **Rule of thumb: In case of binary classification, Sigmoid function is the obvious choice for output layer**
-Problem of Binary Classification à Logistic Regression (Shark ? à 1 | Not Shark? à 0)
+Problem of Binary Classification → Logistic Regression (Shark ? → 1 | Not Shark? → 0)
 
-**Parameters: 1. w (weight) 2. b (bias) 3. Output a = s(𝒘𝑻𝒙+𝒃)**
-**Loss function for Logistic Regression:**
+**Parameters: 1. w (weight) 2. b (bias) 3. Output a = s(𝒘𝑻𝒙+𝒃) · Loss function for Logistic Regression:**
 L (a, y) =- 𝑦 log𝑎 + 1 − 𝑦 log(1 − 𝑎)
 
 Logistic Regression pipeline with the math looks like:
 
-**X W B**
-**L**
+**X W B · L**
 |𝒘𝑻 𝒙 + 𝒃| |
 
-**a = s(𝒘𝑻 𝒙 + 𝒃)**
-**L (a, y)**
-**Problem of Binary Classification à Logistic Regression (Shark ? à 1 | Not Shark? à 0)**
+**a = s(𝒘𝑻 𝒙 + 𝒃) · L (a, y) · Problem of Binary Classification → Logistic Regression (Shark ? → 1 | Not Shark? → 0)**
 Gradient Descent for learning parameters: It is an iterative approach for error correction in a machine learning model.
 
 GD(w)
@@ -1046,19 +982,11 @@ GDmin(w)
 
 For m Sample the loss function is: GD(w, b) =𝑥 = ∑ L (a, y)
 
-w
-
 Question: Find w and b that will minimize GD(w, b)
 
 Image Source: https://subscription.packtpub.com/book/big_data_and_business_intelligence/9781788397872/1/ch01lvl1sec22/gradient-descent Source and Reference: http://cs230.stanford.edu/files/C1M2.pdf
 
-**Problem of Binary Classification à Logistic Regression (Shark ? à 1 | Not Shark? à 0)**
-**Gradient Descent for learning parameters: It is an iterative approach for error correction in a machine learning model.**
-**Where, dw = ( , ) db = ( , )**
-**Updating the w and b iteratively, : w = w - adw Updating the b: b = b - adb**
-**a à Learning rate**
-**Problem of Binary Classification à Logistic Regression (Shark ? à 1 | Not Shark? à 0)**
-**Gradient Descent for learning parameters: Learning rate(a) issues:**
+**Problem of Binary Classification → Logistic Regression (Shark ? → 1 | Not Shark? → 0) · Gradient Descent for learning parameters: It is an iterative approach for error correction in a machine learning model. · Where, dw = ( , ) db = ( , ) · Updating the w and b iteratively, : w = w - adw Updating the b: b = b - adb · a → Learning rate · Gradient Descent for learning parameters: Learning rate(a) issues:**
 GD(w) GD(w)
 
 ______________________________________________________________________
@@ -1108,22 +1036,16 @@ Input (x)
 **Activation function**
 Problem of Binary Classification → Logistic Regression (Dog ? → 1 | Not Dog? → 0)
 
-**Parameters: 1. w (weight) 2. b (bias) 3. Output a= (𝒘𝑻𝒙+𝒃)**
-**Loss function for Logistic Regression:**
-**L (a, y) =- 𝑦 log𝑎 + 1 − 𝑦 log(1 − 𝑎)**
+**Parameters: 1. w (weight) 2. b (bias) 3. Output a= (𝒘𝑻𝒙+𝒃) · Loss function for Logistic Regression: · L (a, y) =- 𝑦 log𝑎 + 1 − 𝑦 log(1 − 𝑎)**
 Logistic Regression pipeline with the math looks like:
 
 **X W B**
 |𝒘𝑻 𝒙 + 𝒃| |
 
-**a = (𝒘𝑻 𝒙 + 𝒃)**
-**L (a, y)**
-**L**
+**a = (𝒘𝑻 𝒙 + 𝒃) · L (a, y) · L**
 Logistic Regression pipeline with the math looks like:
 
-**Where, W → Weights X → Inputs b → Bias term  → Activation function**
-**X**
-**ŷ**
+**Where, W → Weights X → Inputs b → Bias term  → Activation function · X · ŷ**
 |𝒘𝑻 𝒙 + 𝒃| |
 
 |a = (𝒘𝑻 𝒙 + 𝒃)| |
@@ -1135,16 +1057,12 @@ Logistic Regression pipeline with the math looks like:
 **Parameters: 1. w (weight) 2. b (bias) 3. Output a=(𝑤𝑇 𝑥 +𝑏)**
 Activation function
 
-**a= = 1+𝑒1−𝑥**
-**Loss function for Logistic Regression:**
-**L (a, y) =- 𝑦 log𝑎 + 1 − 𝑦 log(1 − 𝑎)**
+**a= = 1+𝑒1−𝑥 · Loss function for Logistic Regression: · L (a, y) =- 𝑦 log𝑎 + 1 − 𝑦 log(1 − 𝑎)**
 Logistic Regression pipeline with the math looks like:
 
-**X**
 Activation function
 
-**a= = 1+𝑒1−𝑥**
-**ŷ**
+**a= = 1+𝑒1−𝑥 · ŷ**
 |𝒘𝑻 𝒙 + 𝒃| |
 
 |a = (𝒘𝑻 𝒙 + 𝒃)| |
@@ -1161,8 +1079,7 @@ If y = 0:L (a, y) =-log (1– a)
 **L (a, y) =- 𝑦 log𝑎 + 1 − 𝑦 log(1 − 𝑎)**
 Logistic Regression pipeline with the math looks like:
 
-**Where, W → Weights X → Inputs b → Bias term  → Activation function**
-**X**
+**Where, W → Weights X → Inputs b → Bias term  → Activation function · X**
 |𝒘𝑻 𝒙 + 𝒃| |
 
 |a = (𝒘𝑻 𝒙 + 𝒃)||L |(a, y)|
@@ -1173,29 +1090,22 @@ W b
 
 Forward Pass
 
-**Back Propagation**
-**Parameters: 1. w (weight) 2. b (bias) 3. Output a=(𝑤𝑇 𝑥 +𝑏)**
-**repeatedly adjust the weights to minimize the difference between actual output and desired output**
+**Back Propagation · Parameters: 1. w (weight) 2. b (bias) 3. Output a=(𝑤𝑇 𝑥 +𝑏) · repeatedly adjust the weights to minimize the difference between actual output and desired output**
 Activation function
 
-**a= = 1+𝑒1−𝑥**
-**Loss function for Logistic Regression:**
-**L (a, y) =- 𝑦 log𝑎 + 1 − 𝑦 log(1 − 𝑎)**
+**a= = 1+𝑒1−𝑥 · Loss function for Logistic Regression: · L (a, y) =- 𝑦 log𝑎 + 1 − 𝑦 log(1 − 𝑎)**
 
 #### Optimization techniques
 
-**Generic Algorithm: Step 1: Initialize w and b Step 2: Perform Forward pass operation/calculations Step 3: Compute Loss/Cost function L (a, y) Step 4: Compute change in w and b (Take the partial derivative of the cost function with respect to Weights and bias (dw and db). Step 5: Update w and b w := w – dw b := b – db Step 6: Repeat from Step 2 with new values of w and b for ‘n’ number of iterations.**
-**Gradient Descent for learning parameters: It is an iterative approach for error correction in a machine learning model.**
-**Question: Find w and b that will minimize GD(w, b)**
+**Generic Algorithm: Step 1: Initialize w and b Step 2: Perform Forward pass operation/calculations Step 3: Compute Loss/Cost function L (a, y) Step 4: Compute change in w and b (Take the partial derivative of the cost function with respect to Weights and bias (dw and db). Step 5: Update w and b w := w – dw b := b – db Step 6: Repeat from Step 2 with new values of w and b for ‘n’ number of iterations. · Gradient Descent for learning parameters: It is an iterative approach for error correction in a machine learning model. · Question: Find w and b that will minimize GD(w, b)**
 Required: Loss/cost function
 
 **(L)LossFn**
 |Example the loss function is: L (a, y)=- 𝑦log𝑎 + 1 − 𝑦 log(1 − 𝑎) | | |
+|---|---|---|
 | | → Learning rate| |
 
 GDmin(w)
-
-w
 
 Image Source: https://subscription.packtpub.com/book/big_data_and_business_intelligence/9781788397872/1/ch01lvl1sec22/gradient-descent
 
@@ -1224,16 +1134,14 @@ There are three main types of Gradient Descent Algorithms:
 
 Batch Gradient Descent (BGD)
 
-**Issues:**
-**Generic steps: -Process each input sample and find the cost -Find the average cost over all input samples -Update w and b, and -repeat the steps for ‘n’ epochs(iterations)**
+**Issues: · Generic steps: -Process each input sample and find the cost -Find the average cost over all input samples -Update w and b, and -repeat the steps for ‘n’ epochs(iterations)**
 
 - 1. It uses the complete dataset to calculate the gradients at every steps
 - 2. Slow when training set is large
 - 3. Difficult to find the learning rate
 - 4. Difficult to ascertain the number of epochs(iterations)
 
-**Advantage:**
-**Stochastic → Random**
+**Advantage: · Stochastic → Random**
 
 - 1. Computes gradient based on single input sample: memory efficient
 - 2. Much faster compared to BGD
@@ -1246,8 +1154,7 @@ Algorithm is much less regular than
 
 BGD
 
-**Generic steps: -Process a random input sample and find the cost -Update w and b, and -repeat the steps for ‘n’ iterations on the training samples**
-**Issues:**
+**Generic steps: -Process a random input sample and find the cost -Update w and b, and -repeat the steps for ‘n’ iterations on the training samples · Issues:**
 
 1. Might not reach the optimal value,
 
@@ -1265,8 +1172,7 @@ my form 1 epoch
 
 Mini-Batch Gradient Descent (MBGD)
 
-**Advantage:**
-**Generic steps: -Divide the training set into mini-batches (set of random samples on fixed number) -Process all the samples in a Mini-batch and find the average cost -Update w and b, and -repeat the steps for ‘n’ iterations/epochs on the training samples**
+**Advantage: · Generic steps: -Divide the training set into mini-batches (set of random samples on fixed number) -Process all the samples in a Mini-batch and find the average cost -Update w and b, and -repeat the steps for ‘n’ iterations/epochs on the training samples**
 
 - 1. Computes gradient based on small sets of input sample
 - 2. Much faster compared to BGD
@@ -1350,24 +1256,16 @@ Image Source and reference http://ruder.io/optimizing-gradient-descent/index.htm
 - RMSProp also reduces oscillation but in a different way than Momentum
 - RMSprop as well divides the learning rate by an exponentially decaying average of squared gradients.
 
-**Algorithm: At iteration t: Calculate 𝑑𝑤 𝑎𝑛𝑑 𝑑𝑏 on the current mini-batch S𝑑𝑤 = 2 S𝑑w + (1 - 2) 𝑑𝑤2 S𝑑𝑏= 2 S𝑑𝑏 + (1 - 2) 𝑑𝑏2 Update w and b: w = w -  𝑑𝑤S 𝑑𝑤 , b = b -  𝑑𝑏S 𝑑𝑏 Squaring the derivatives Square root of derivatives**
-**Intuition:**
-**→Slow**
+**Algorithm: At iteration t: Calculate 𝑑𝑤 𝑎𝑛𝑑 𝑑𝑏 on the current mini-batch S𝑑𝑤 = 2 S𝑑w + (1 - 2) 𝑑𝑤2 S𝑑𝑏= 2 S𝑑𝑏 + (1 - 2) 𝑑𝑏2 Update w and b: w = w -  𝑑𝑤S 𝑑𝑤 , b = b -  𝑑𝑏S 𝑑𝑏 Squaring the derivatives Square root of derivatives · Intuition: · →Slow**
 S𝑑𝑤 → Smaller number expected S𝑑𝑏→ Larger number expected
 
-b
-
-**W**
 So,
 
 **Fast →**
 w = w -  𝑑𝑤S
 
-**, b = b -  𝑑𝑏S**
-**In Practice add ε :**
+**, b = b -  𝑑𝑏S · In Practice add ε :**
 𝑑𝑤
-
-𝑑𝑏
 
 w = w -  S𝑑𝑤
 
@@ -1384,9 +1282,7 @@ Larger number So, b is small
 - Combination of RMSProp and Momentum
 - Work well for a wide range of deep learning architecture
 
-**Algorithm: Initialize V𝑑𝑤 = 0, V𝑑𝑏= 0, S𝑑𝑤 = 0, S𝑑𝑏 = 0 At iteration t: Calculate 𝑑𝑤 𝑎𝑛𝑑 𝑑𝑏 on the current mini-batch V𝑑𝑤 = 1 V𝑑w + (1 - 1) 𝑑𝑤, V𝑑𝑏= 1 V𝑑𝑏 + (1 - 1) 𝑑𝑏  From Momentum, 1 S𝑑𝑤 = 2 S𝑑w + (1 - 2) 𝑑𝑤2, S𝑑𝑏= 2 S𝑑𝑏 + (1 - 2) 𝑑𝑏2  From RMSProp, 2 Update w and b: w = w -  V 𝑑𝑤 S𝑑𝑤+ε, b = b -  V 𝑑𝑏 S𝑑𝑏+ ε**
-**In practice: Bias correction is required as V𝑑𝑤, V𝑑𝑏, S𝑑𝑤, S𝑑𝑏 are initialized to 0 and are biased towards zero. Hence, a bias correction is required as follows: V′𝑑𝑤 = V 𝑑w ( 1− 1 ) , V′𝑑b = V 𝑑b (1− 1) S′𝑑𝑤 = S 𝑑w (1 − 2) , S′𝑑b = S 𝑑b (1 − 2) Update w and b: w = w -  V ′ 𝑑𝑤 S′𝑑𝑤+ε , b = b -  V ′ 𝑑𝑏 S′𝑑𝑏+ ε**
-**https://vis.ensmallen.org/ Hyper parameter guide:  (Learning rate)→ should be tunned, start with 0.001 1(Momentum term) → 0.9 (dw) 2(moving weighted average) → 0.999 (dw2) ε → 10-8 Optimization Demo: https://vis.ensmallen.org/**
+**Algorithm: Initialize V𝑑𝑤 = 0, V𝑑𝑏= 0, S𝑑𝑤 = 0, S𝑑𝑏 = 0 At iteration t: Calculate 𝑑𝑤 𝑎𝑛𝑑 𝑑𝑏 on the current mini-batch V𝑑𝑤 = 1 V𝑑w + (1 - 1) 𝑑𝑤, V𝑑𝑏= 1 V𝑑𝑏 + (1 - 1) 𝑑𝑏  From Momentum, 1 S𝑑𝑤 = 2 S𝑑w + (1 - 2) 𝑑𝑤2, S𝑑𝑏= 2 S𝑑𝑏 + (1 - 2) 𝑑𝑏2  From RMSProp, 2 Update w and b: w = w -  V 𝑑𝑤 S𝑑𝑤+ε, b = b -  V 𝑑𝑏 S𝑑𝑏+ ε · In practice: Bias correction is required as V𝑑𝑤, V𝑑𝑏, S𝑑𝑤, S𝑑𝑏 are initialized to 0 and are biased towards zero. Hence, a bias correction is required as follows: V′𝑑𝑤 = V 𝑑w ( 1− 1 ) , V′𝑑b = V 𝑑b (1− 1) S′𝑑𝑤 = S 𝑑w (1 − 2) , S′𝑑b = S 𝑑b (1 − 2) Update w and b: w = w -  V ′ 𝑑𝑤 S′𝑑𝑤+ε , b = b -  V ′ 𝑑𝑏 S′𝑑𝑏+ ε · https://vis.ensmallen.org/ Hyper parameter guide:  (Learning rate)→ should be tunned, start with 0.001 1(Momentum term) → 0.9 (dw) 2(moving weighted average) → 0.999 (dw2) ε → 10-8 Optimization Demo: https://vis.ensmallen.org/**
 Learning Rate Decay
 
 **Speed-up the learning algorithm by slowing decreasing the 𝛼 (Learning rate)**
@@ -1399,27 +1295,21 @@ Activation Functions: Sigmoid
 
 Sigmoid function:
 
-**Characteristics: - Non-linear in nature - Range(0, 1) - Tends to bring the activations to either side of the curve: good for a classifier - Suffers from vanishing gradient problem**
-**Vanishing Gradient: Towards to the end of the curve, the value of Y change very less to the changes in X values. Hence gradient at the region will be very small. The network will refuse or learning extremely slowly.**
+**Characteristics: - Non-linear in nature - Range(0, 1) - Tends to bring the activations to either side of the curve: good for a classifier - Suffers from vanishing gradient problem · Vanishing Gradient: Towards to the end of the curve, the value of Y change very less to the changes in X values. Hence gradient at the region will be very small. The network will refuse or learning extremely slowly.**
 Source: https://medium.com/the-theory-of-everything/understanding-activation-functions-in-neural-networks-9491262884e0
 
 Activation Functions: tanh
 
-**Hyperbolic tangent: tanh 𝑥 = 2 1 + 𝑒−2𝑥 − 1**
-**Characteristics: - Non-linear in nature - Range(-1, 1) - Stronger gradient than sigmoid - Also suffers from vanishing gradient problem**
+**Hyperbolic tangent: tanh 𝑥 = 2 1 + 𝑒−2𝑥 − 1 · Characteristics: - Non-linear in nature - Range(-1, 1) - Stronger gradient than sigmoid - Also suffers from vanishing gradient problem**
 Activation Functions: ReLu
 
 **Rectified Linear Unit (ReLu) 𝐴(𝑥) = max(0, x)**
 i.e. : if x < 0, A(x) = 0, if x > 0, A(x) = x
 
-**Characteristics: - Non-linear in nature - Range[0, inf] - Stronger gradient than sigmoid - Computationally less expensive than Sigmoid and Tanh - Best used in hidden layers - Dying ReLu problem**
-**Avoids and rectifies vanishing gradient problem**
+**Characteristics: - Non-linear in nature - Range[0, inf] - Stronger gradient than sigmoid - Computationally less expensive than Sigmoid and Tanh - Best used in hidden layers - Dying ReLu problem · Avoids and rectifies vanishing gradient problem**
 Activation Functions: Leaky ReLu
 
-**Leak**
-**Leaky Rectified Linear Unit (Leaky ReLu) 𝐴(𝑥) = max(0.01𝑥,x)**
-**i.e. : if x < 0, A(x) = 0.01x, if x > 0, A(x) = x**
-**Characteristics: - Non-linear in nature - Range[0, inf] - Leaky ReLUs are one attempt to fix the “dying ReLU” problem**
+**Leak · Leaky Rectified Linear Unit (Leaky ReLu) 𝐴(𝑥) = max(0.01𝑥,x) · i.e. : if x < 0, A(x) = 0.01x, if x > 0, A(x) = x · Characteristics: - Non-linear in nature - Range[0, inf] - Leaky ReLUs are one attempt to fix the “dying ReLU” problem**
 Source & Reference : http://cs231n.github.io/neural-networks-1/
 
 https://towardsdatascience.com/activation-functions-in-neural-networks-58115cda9c96
@@ -1427,10 +1317,10 @@ https://towardsdatascience.com/activation-functions-in-neural-networks-58115cda9
 Activation Functions: Softmax
 
 | |Softmax 𝑆 𝑦𝑖 = 𝑒𝑦𝑖  𝑗 𝑒𝑦𝑗 for j = 1, …, K.| |
+|---|---|---|
 |Characteristics: - Non-linear in nature - Turns numbers in probabilities that sum to one. - Useful when we have more than one output - Used for classification in the output layer - Less computationally expensive than Sigmoid and Tanh | |Y|
 
-**Illustration:**
-**= [ 2.0, 1.0, 0.1] Softmax(Y) = [0.7, 0.2, 0.1] (approx.)**
+**Illustration: · = [ 2.0, 1.0, 0.1] Softmax(Y) = [0.7, 0.2, 0.1] (approx.)**
 Reference: https://medium.com/data-science-bootcamp/understand-the-softmax-function-in-minutes-f3a59641e86d
 
 Logistic Regression with Backpropagation
@@ -1448,14 +1338,8 @@ X W
 **Avg Loss(J) = 𝟏 𝒎 ෍ 𝒊=𝟏 𝒎 L(ai,yi)**
 b
 
-**Batch GD Step 1: Initialize w and b Step 2: Perform Forward pass operation/calculations Step 2: Compute Loss/Cost function L (a, y) Step 3: Find the average cost over all input samples (Take the partial derivative of the cost function with respect to Weights and bias (dw and db). Step 4: Update w and b w := w – dw b := b – db Step 5: Repeat from Step 2 with new values of w and b for ‘n’ number of iterations.**
-**dw = 𝜕𝑤𝜕𝐽 , db = 𝜕𝑏𝜕𝐽**
-**𝑤 ≔ 𝑤 − dw b := b – db**
-**Size #Bedroom #Bathroom Garden Location**
-**Price**
+**Batch GD Step 1: Initialize w and b Step 2: Perform Forward pass operation/calculations Step 2: Compute Loss/Cost function L (a, y) Step 3: Find the average cost over all input samples (Take the partial derivative of the cost function with respect to Weights and bias (dw and db). Step 4: Update w and b w := w – dw b := b – db Step 5: Repeat from Step 2 with new values of w and b for ‘n’ number of iterations. · dw = 𝜕𝑤𝜕𝐽 , db = 𝜕𝑏𝜕𝐽 · 𝑤 ≔ 𝑤 − dw b := b – db · Size #Bedroom #Bathroom Garden Location · Price**
 Y
-
-X
 
 Hidden Layer→ Adding more neurons in between input and output layer
 
@@ -1496,8 +1380,7 @@ Dog
 
 ### Deep-NNs Vs CNNs
 
-**ANN with 3-layers**
-**CNN with 3-layers**
+**ANN with 3-layers · CNN with 3-layers**
 
 - Fully connected
 - Not great for images as input
@@ -1509,8 +1392,7 @@ Dog
 
 Image Source and reference to read : http://cs231n.github.io/convolutional-networks/
 
-**CNNs are the foundations of modern state-of-the-art deep**
-**learning based computer vision. Layers in a CNN:**
+**CNNs are the foundations of modern state-of-the-art deep · learning based computer vision. Layers in a CNN:**
 Three main type of layers used to build a CNN architecture
 
 - 1. Convolutional Layer (CONV)
@@ -1519,11 +1401,7 @@ Three main type of layers used to build a CNN architecture
 
 Source and reference to read : http://cs231n.github.io/convolutional-networks/ https://medium.com/@pechyonkin/key-deep-learning-architectures-lenet-5-6fc3c59e6f4
 
-**Sample CNN architecture (LENET-5):**
-**CONV Layer**
-**FC Layer**
-**POOL Layer**
-**Sample CNN architecture:**
+**Sample CNN architecture (LENET-5): · CONV Layer · FC Layer · POOL Layer · Sample CNN architecture:**
 
 ______________________________________________________________________
 
@@ -1541,19 +1419,9 @@ Image Source: https://medium.com/analytics-vidhya/ai-ml-dl-whats-what-ecb354967e
 Convolution Operation
 
 |100|100|100|0|0|0|
-|100|100|100|0|0|0|
-|100|100|100|0|0|0|
-|100|100|100|0|0|0|
-|100|100|100|0|0|0|
-|100|100|100|0|0|0|
 
 |0|300|300|0|
-|0|300|300|0|
-|0|300|300|0|
-|0|300|300|0|
 
-|1|0|-1|
-|1|0|-1|
 |1|0|-1|
 
 # \*
@@ -1566,22 +1434,13 @@ Convolution Operation
 
 6 X 6 dimension image
 
-**Convolution Operation**
-**(100 X 1 + 100 X 1 + 100 X 1) + (100 X 0 + 100 X 0 + 100 X 0) + (100 X -1 + 100 X -1 + 100 X -1)**
+**Convolution Operation · (100 X 1 + 100 X 1 + 100 X 1) + (100 X 0 + 100 X 0 + 100 X 0) + (100 X -1 + 100 X -1 + 100 X -1)**
 |1100|0100|-1100|0|0|0|
-|1100|0100|-1100|0|0|0|
-|1100|0100|-1100|0|0|0|
-|100|100|100|0|0|0|
-|100|100|100|0|0|0|
+|---|---|---|---|---|---|
 |100|100|100|0|0|0|
 
 |0|300|300|0|
-|0|300|300|0|
-|0|300|300|0|
-|0|300|300|0|
 
-|1|0|-1|
-|1|0|-1|
 |1|0|-1|
 
 # \*
@@ -1594,7 +1453,7 @@ Convolution Operation
 
 6 X 6 dimension image
 
-## **Vertical Edge detector** **Convolution Operation**
+## Vertical Edge detector — Convolution Operation
 
 # →
 
@@ -1607,19 +1466,10 @@ Image Convolved Feature
 Image source: https://medium.com/@RaghavPrabhu/understanding-of-convolutional-neural-network-cnn-deep-learning-99760835f148
 
 |0|0|0|0|0|0|0|0|
-|0|100|100|100|0|0|0|0|
-|0|100|100|100|0|0|0|0|
-|0|100|100|100|0|0|0|0|
-|0|100|100|100|0|0|0|0|
-|0|100|100|100|0|0|0|0|
+|---|---|---|---|---|---|---|---|
 |0|100|100|100|0|0|0|0|
 |0|0|0|0|0|0|0|0|
 
-|100|100|100|0|0|0|
-|100|100|100|0|0|0|
-|100|100|100|0|0|0|
-|100|100|100|0|0|0|
-|100|100|100|0|0|0|
 |100|100|100|0|0|0|
 
 **Padding (p) = 1**
@@ -1628,23 +1478,17 @@ Image source: https://medium.com/@RaghavPrabhu/understanding-of-convolutional-ne
 8 X 8 dimension matrix with padding
 
 |0|0|0|0|0|0|0|0|
-|0|100|100|100|0|0|0|0|
-|0|100|100|100|0|0|0|0|
-|0|100|100|100|0|0|0|0|
-|0|100|100|100|0|0|0|0|
-|0|100|100|100|0|0|0|0|
+|---|---|---|---|---|---|---|---|
 |0|100|100|100|0|0|0|0|
 |0|0|0|0|0|0|0|0|
 
 |-200|0|200|200|0|0|
-|-300|0|300|300|0|0|
-|-300|0|300|300|0|0|
-|-300|0|300|300|0|0|
+|---|---|---|---|---|---|
 |-300|0|300|300|0|0|
 |-200|0|200|200|0|0|
 
 |1|0|-1|
-|1|0|-1|
+|---|---|---|
 || |3 X 3 1|
 |Convolution operator| |
 |0|-1|
@@ -1652,12 +1496,14 @@ Image source: https://medium.com/@RaghavPrabhu/understanding-of-convolutional-ne
 # \*
 
 | |3 X 3 1|
+|---|---|
 |Convolution operator| |
 
 filter/Kernel
 
 **6 X 6 dimension matrix 8 X 8 dimension matrix == Input Matrix dimension**
 ||(𝒏 + 𝟐𝒑 − 𝒇 + 𝟏) 𝑿 (𝒏 + 𝟐𝒑 − 𝒇 + 𝟏)|
+|---|---|
 |(𝒏 𝑿 𝒏) ∗ (𝒇 𝑿 𝒇)|
 Input Matrix Dimension : 𝑛 𝑥 𝑛 Filter size: 𝑓 𝑥 𝑓 Padding (𝑝) : 1 So, ( will produce ( e.g.: 6 𝑋 6 ∗ 3 𝑋 3 → 6 𝑋 6 Output matrix Input Matrix Output Matrix |
 
@@ -1702,9 +1548,7 @@ Output size with Stride and padding
 
 Given: Input Matrix Dimension : 𝑛 𝑥 𝑛
 
-**Filter size: 𝑓 𝑥 𝑓**
-**Padding:p Stride :s**
-**Output Size = 𝑛 +2𝑝𝑠 −𝑓 + 𝟏 𝑿 𝑛 +2𝑝𝑠 −𝑓 + 𝟏**
+**Filter size: 𝑓 𝑥 𝑓 · Padding:p Stride :s · Output Size = 𝑛 +2𝑝𝑠 −𝑓 + 𝟏 𝑿 𝑛 +2𝑝𝑠 −𝑓 + 𝟏**
 Example:
 
 Input Matrix Dimension : 7 𝑥 7, Filter size: 3 𝑥 3
@@ -1730,11 +1574,13 @@ Reference and Source: http://cs230.stanford.edu/files/C4M1.pdf
 
 **Max(7, 8, 1, 5) = 8**
 |7|8|9|0|
+|---|---|---|---|
 |1|5|8|3|
 |5|9|3|2|
 |5|6|6|2|
 
 |8|9|
+|---|---|
 |9|6|
 
 Max pooling with 2X2 filter and Stride 2
@@ -1743,11 +1589,13 @@ Max pooling with 2X2 filter and Stride 2
 
 **(7+8+1+5)/4 = 5.25**
 |7|8|9|0|
+|---|---|---|---|
 |1|5|8|3|
 |5|9|3|2|
 |5|6|6|2|
 
 |5.25|5|
+|---|---|
 |6.25|3.25|
 
 Max pooling with 2X2 filter and Stride 2
@@ -1766,10 +1614,7 @@ Reference: https://ujjwalkarn.me/2016/08/11/intuitive-explanation-convnets/
 
 CNN layers visualization and intuition
 
-**Example: Face recognition using CNNs**
-**Uses simple shapes to form higher level features like facial shapes!**
-**Uses edges to detect simple shapes**
-**Low level feature like edges from raw pixels**
+**Example: Face recognition using CNNs · Uses simple shapes to form higher level features like facial shapes! · Uses edges to detect simple shapes · Low level feature like edges from raw pixels**
 Image Source: http://web.eecs.umich.edu/~honglak/icml09-ConvolutionalDeepBeliefNetworks.pdf
 
 ______________________________________________________________________
@@ -1817,9 +1662,7 @@ Or,
 
 - In case of Large dataset (Range : 500K - 1M+)
 
-**Example: Total data sample : 1M+ Train: 98% ! Validation: 10,000 samples Test: 10,000 samples**
-**Popular dataset spit choice in DL era! Or BIG Data era!**
-**Train, validation and test set distribution:**
+**Example: Total data sample : 1M+ Train: 98% ! Validation: 10,000 samples Test: 10,000 samples · Popular dataset spit choice in DL era! Or BIG Data era! · Train, validation and test set distribution:**
 Rule of Thumb: Validation and Test set should come from the same distribution
 
 ### Bias and Variance
@@ -1828,23 +1671,18 @@ Image Source: https://cv-tricks.com/machine-learning/bias-variance-trade-off/
 
 - It is a value that allows to shift the activation function to left or right, to better fit the data
 
-**With bias**
-**Without bias**
-**a = s(𝒘𝑻 𝒙)**
-**a = s(𝒘𝑻 𝒙 + 𝒃)**
+**With bias · Without bias · a = s(𝒘𝑻 𝒙) · a = s(𝒘𝑻 𝒙 + 𝒃)**
 
 - Changes in ‘w’ alters the steepness of the curve, keeping the origin at (0,0) or same/unchanged
 - Without bias we may get a poor fit to training data
 
-**a = s(𝒘𝑻 𝒙)**
-**Without bias**
+**a = s(𝒘𝑻 𝒙) · Without bias**
 
 - Changes in ‘b’ shifts the curve to left or right
 - With bias the curve/line will not always pass through origin
 - We get a better fit to training data
 
-**a = s(𝒘𝑻 𝒙 + 𝒃)**
-**With bias**
+**a = s(𝒘𝑻 𝒙 + 𝒃) · With bias**
 Variance
 
 - It is the change in prediction accuracy of Machine Learning model between training data and test data.
@@ -1878,6 +1716,7 @@ Time
 Medical diagnosis of fractures on arms Consider the performance by these groups:
 
 |A|Untrained human|16 % error|
+|---|---|---|
 |B|General practitioner (GP)|5 % error|
 |C|Orthopedic doctor (Specialist)|2 % error|
 |D|Team of experienced doctors|0.4 % error|
@@ -2006,8 +1845,7 @@ Mixup:
 
 Trains a neural network on convex combinations of pairs of examples and their labels. By doing so, mixup regularizes the neural network to favour simple linear behaviour in-between training examples
 
-**+**
-**=**
+**+ · =**
 Image A (λ=0.55)
 
 Blended Output
@@ -2020,8 +1858,7 @@ CutMix:
 
 In CutMix augmentation strategy: patches are cut and pasted among training image; ground truth labels are also mixed proportionally to the area of the patch.
 
-**+**
-**=**
+**+ · =**
 Image A
 
 Pasted Patch
@@ -2132,9 +1969,7 @@ Train/Fine-Tune
 
 ______________________________________________________________________
 
-**Option-3: (VGG-16 considered as an example)**
-**Partially Train CONV layers (usually last layer(s) which have specialised**
-**features) + Full Connection (FC) layer (with modifications)**
+**Option-3: (VGG-16 considered as an example) · Partially Train CONV layers (usually last layer(s) which have specialised · features) + Full Connection (FC) layer (with modifications)**
 →Useful when your dataset distribution is not similar to ImageNet (or original dataset), number of classes are different and your dataset is small.
 
 **Train/Fine-Tune**
@@ -2199,20 +2034,10 @@ Source and reference: https://medium.com/@sidereal/cnns-architectures-lenet-alex
 ## Understanding Inception and ResNet
 
 |100|100|100|0|0|0|
-|100|100|100|0|0|0|
-|100|100|100|0|0|0|
-|100|100|100|0|0|0|
-|100|100|100|0|0|0|
-|100|100|100|0|0|0|
 
 |300|300|300|0|0|0|
-|300|300|300|0|0|0|
-|300|300|300|0|0|0|
-|300|300|300|0|0|0|
-|300|300|300|0|0|0|
-|300|300|300|0|0|0|
 
-## **Is this useful?** **3**
+## Is this useful? — 3
 
 |Convolution operator| |
 
@@ -2256,11 +2081,7 @@ X 32 (# of filters)
 
 Images source: https://towardsdatascience.com/a-simple-guide-to-the-versions-of-the-inception-network-7fc52b863202
 
-**Designing CNN requires: - Deciding filter size and number - Number and type of layers etc.**
-**Inception suggests: - Use filters with different size together! - Use different types of layers (CONV, POOL etc.) together Result → Complicated Architecture! & better performance**
-**28 X 28 X 64**
-**1X1**
-**3X3**
+**Designing CNN requires: - Deciding filter size and number - Number and type of layers etc. · Inception suggests: - Use filters with different size together! - Use different types of layers (CONV, POOL etc.) together Result → Complicated Architecture! & better performance · 28 X 28 X 64 · 1X1 · 3X3**
 64
 
 ______________________________________________________________________
@@ -2271,7 +2092,6 @@ ______________________________________________________________________
 
 32 28 32
 
-**5X5**
 28 X 28 X 192 28 X 28 X 256 Max-Pooling
 
 Reference, Images source: https://towardsdatascience.com/a-simple-guide-to-the-versions-of-the-inception-network-7fc52b863202
@@ -2280,7 +2100,6 @@ Computation cost
 
 28 X 28 X 32
 
-**5X5**
 28
 
 32 28
@@ -2294,10 +2113,8 @@ Computation cost
 **Computation Cost: 28 X 28 X 32 X 5 X 5 X 192  120M multiplications! Quite expensive !**
 Reduce Computation cost using 1X1 CONV
 
-**1X1**
 28 X 28 X 32
 
-**5X5**
 28
 
 32 28
@@ -2315,10 +2132,7 @@ Computation Cost: 1X1: 28 X 28 X 16 X 192  2.4M multiplications! 5X5: 28 X 28
 
 ## Bottleneck Layer
 
-**192**
-**32**
-**16**
-**Bottleneck**
+**192 · 32 · 16 · Bottleneck**
 Image adapted from and Reference: http://www.pabloruizruiz10.com/resources/CNNs/1x1Convolutions.pdf
 
 ## Inception Module V1
@@ -2341,11 +2155,7 @@ Aux_Loss2
 
 Aux_Loss1
 
-**Auxiliary Classifiers**
-**Total Loss/cost = Real_Loss + 0.3 X Aux_Loss1 + 0.3 X Aux_Loss1**
-**Authors suggested 3 different modules -Factorizing Convolutions: Reducing the number of parameters**
-**1 layer of 5×5 filter, #parameters = 5×5=25 2 layers of 3×3 filters, #parameters = 3×3+3×3=18 Number of parameters is reduced by 28%**
-**3×3 filter, #parameters = 3×3=9 3×1 and 1×3 filters, #parameters = 3×1+1×3=6 Number of parameters is reduced by 33%**
+**Auxiliary Classifiers · Total Loss/cost = Real_Loss + 0.3 X Aux_Loss1 + 0.3 X Aux_Loss1 · Authors suggested 3 different modules -Factorizing Convolutions: Reducing the number of parameters · 1 layer of 5×5 filter, #parameters = 5×5=25 2 layers of 3×3 filters, #parameters = 3×3+3×3=18 Number of parameters is reduced by 28% · 3×3 filter, #parameters = 3×3=9 3×1 and 1×3 filters, #parameters = 3×1+1×3=6 Number of parameters is reduced by 33%**
 
 ## Inception V3 Architecture
 
@@ -2365,9 +2175,7 @@ What wrong with this curves? Overfitting?
 - 56 layer model is not better than the 20 layers!
 - What happens when we keep add more layers to a plain CNN to make it deeper?
 
-**In principle deeper model should perform better than shallow CNNs**
-**Residual Block**
-**Plain Layers**
+**In principle deeper model should perform better than shallow CNNs · Residual Block · Plain Layers**
 
 ## Summary
 
@@ -2424,11 +2232,7 @@ Image Classification Object Detection
 
 ______________________________________________________________________
 
-**DOG**
-**CAT**
-**DOG**
-**CAT**
-**DOG**
+**DOG · CAT**
 DOG
 
 Single Object
@@ -2468,24 +2272,15 @@ Source: https://cocodataset.org/#detection-eval
 
 ## Taxonomy of Object detectors
 
-**Object Detection**
-**Network type**
-**Data type**
+**Object Detection · Network type · Data type**
 |Single stage| |
 
 |Two Stage| |
 
-**3D Object Detector**
-**2D Object detectors**
-**Regression/Classification Based**
+**D Object Detector · 2D Object detectors · Regression/Classification Based**
 |Region Proposal Based| |
 
-**Monocular Image**
-**Point Cloud**
-**Point Nets**
-**RCNN family**
-**SSD**
-**Yolo**
+**Monocular Image · Point Cloud · Point Nets · RCNN family · SSD · Yolo**
 Refernce: https://medium.com/@saifhajsalem12/object-detection-state-of-the-art-and-modern-approaches-eaa5e6bfb46b
 
 Image Classification
@@ -2496,11 +2291,7 @@ Image Classification Object Detection
 
 ______________________________________________________________________
 
-**DOG**
-**CAT**
-**DOG**
-**CAT**
-**DOG**
+**DOG · CAT**
 DOG
 
 Single Object
@@ -2510,8 +2301,7 @@ Multiple Object
 **Classification Task:**
 Input : Image Output: Label Performance Evaluation: Accuracy
 
-**Output : Dog**
-**Localization Task:**
+**Output : Dog · Localization Task:**
 
 ______________________________________________________________________
 
@@ -2519,19 +2309,14 @@ Input : Image Output: Bounding Box in the image
 
 (x, y, Ht, Wd) or (x, y, x’, y’) Performance Evaluation: IoU
 
-**Output : (x, y, Ht, Wd)**
-**Output : 4 numbers (x’, y’, Ht’, Wd’)**
+**Output : (x, y, Ht, Wd) · Output : 4 numbers (x’, y’, Ht’, Wd’)**
 
 ______________________________________________________________________
 
-**Calculate Loss L2 Loss**
-**CNN**
-**Ground Truth: 4 numbers (x, y, Ht, Wd)**
+**Calculate Loss L2 Loss · CNN · Ground Truth: 4 numbers (x, y, Ht, Wd)**
 Input Image
 
-**Input Image**
-**We need to modify this CNN pipeline to output Class Label and Bounding Box (4 numbers)**
-**Pre-trained model or ImageNet, AlexNet, VGG16, ResNet, etc. Classification Head**
+**Input Image · We need to modify this CNN pipeline to output Class Label and Bounding Box (4 numbers) · Pre-trained model or ImageNet, AlexNet, VGG16, ResNet, etc. Classification Head**
 Softmax Loss
 
 #### + MultitaskLoss
@@ -2557,11 +2342,7 @@ Image Classification Object Detection
 
 ______________________________________________________________________
 
-**DOG**
-**CAT**
-**DOG**
-**CAT**
-**DOG**
+**DOG · CAT**
 DOG
 
 Single Object
@@ -2570,29 +2351,22 @@ Multiple Object
 
 Detection as a regression problem
 
-**Output : Dog, (x, y, Ht, Wd)**
-**Output : Dog, (x, y, Ht, Wd)**
-**Cat, (x, y, Ht, Wd) Cat, (x, y, Ht, Wd)**
+**Output : Dog, (x, y, Ht, Wd) · Cat, (x, y, Ht, Wd) Cat, (x, y, Ht, Wd)**
 
 - 1. Apply Sliding Window technique
 - 2. Apply CNN to different Windows and get a prediction
 
-**Output : Dog? No Cat? No**
-**CNN**
-**Background? Yes**
+**Output : Dog? No Cat? No · CNN · Background? Yes**
 
 - 1. Apply Sliding Window technique
 - 2. Apply CNN to different Windows and get a prediction
 
-**Output : Dog? No Cat? Yes Background? No**
-**CNN**
+**Output : Dog? No Cat? Yes Background? No · CNN**
 
 - 1. Apply Sliding Window technique
 - 2. Apply CNN to different Windows and get a prediction
 
-**Output : Dog? No Cat? Yes Background? No**
-**CNN**
-**Issue with Sliding Window technique**
+**Output : Dog? No Cat? Yes Background? No · CNN · Issue with Sliding Window technique**
 
 - 1. Apply CNN on large number of windows
 - 2. Multiple scale and locations of windows
@@ -2602,7 +2376,7 @@ Detection as a regression problem
 **Region Proposal Technique:**
 
 - Find blobs in the image that are most likely to contain objects
-- E.g: Selective search à ~1000-2000 region proposals using CPU!
+- E.g: Selective search → ~1000-2000 region proposals using CPU!
 
 Source and Reference: http://cs231n.stanford.edu/slides/2016/winter1516_lecture8.pdf
 
@@ -2613,10 +2387,7 @@ Linear Regression for bounding box offsets
 **R-CNN: Region based CNN**
 Classify each region with SVMs
 
-**SVMs**
-**Bbox Reg**
-**SVMs**
-**Bbox Reg**
+**SVMs · Bbox Reg**
 
 - 1. Resized to match the input to CNN requirement.
 - 2. mAP: 62.4% for 2007 PASCAL VOC
@@ -2624,11 +2395,7 @@ Classify each region with SVMs
 
 Pass each region through ConvNet
 
-**SVMs**
-**Bbox Reg**
-**Conv -Net**
-**Conv -Net**
-**Conv -Net**
+**SVMs · Bbox Reg · Conv -Net**
 Warped image regions
 
 Region-of-interest (ROI) from proposal method around ~2K
@@ -2639,7 +2406,6 @@ Object category
 **Linear**
 Box offset
 
-**CNN**
 Per-Region Network
 
 **Slow RCNN**
@@ -2664,14 +2430,15 @@ Case Study: FASTER- R-CNN
 
 - 3. mAP: 78.8% for 2007 PASCAL VOC
 
-- RCNN à Look at every patch one by one
+- RCNN → Look at every patch one by one
 
-- Fast R-CNN à Look once, and then inspect patches on feature map
+- Fast R-CNN → Look once, and then inspect patches on feature map
 
-- Faster R-CNN à Propose patches using a neural network (RPN)
+- Faster R-CNN → Propose patches using a neural network (RPN)
 
 **Feature R-CNN Fast R-CNN Fater R-CNN**
 |Region proposal Selective search Selective search RPN (learned)|
+|---|
 |CNN Usage Per region Once per image Once per image|
 |Speed Very slow Faster Can work in realtime|
 |Training Multi-stage, discreate Partially en-to-end Fully end-to-end|
@@ -2712,24 +2479,15 @@ Outline
 
 ## Taxonomy of Object detectors
 
-**Object Detection**
-**Network type**
-**Data type**
+**Object Detection · Network type · Data type**
 |Single stage| |
 
 |Two Stage| |
 
-**3D Object Detector**
-**2D Object detectors**
-**Regression/Classification Based**
+**D Object Detector · 2D Object detectors · Regression/Classification Based**
 |Region Proposal Based| |
 
-**Monocular Image**
-**Point Cloud**
-**Point Nets**
-**RCNN family**
-**SSD**
-**Yolo**
+**Monocular Image · Point Cloud · Point Nets · RCNN family · SSD · Yolo**
 Refernce: https://medium.com/@saifhajsalem12/object-detection-state-of-the-art-and-modern-approaches-eaa5e6bfb46b
 
 ## Object Detection Techniques History
@@ -2739,8 +2497,6 @@ ______________________________________________________________________
 **Sliding Window technique**
 
 ______________________________________________________________________
-
-**---**
 
 #### Sliding Window technique
 
@@ -2776,8 +2532,7 @@ Source and Reference: http://cs231n.stanford.edu/slides/2016/winter1516_lecture8
   - Bounding box information for each object
   - Class for each object
 
-**Class : {car, bike}**
-**Target:**
+**Class : {car, bike} · Target:**
 Y = {po, x, y, h, w, c1, c2} for each cell e.g:
 
 - Cell(1,1) = {0, ?, ?, ?, ?, ?, ?} :
@@ -2790,12 +2545,10 @@ Y = {po, x, y, h, w, c1, c2} for each cell e.g:
 
 - Cell(3,3) = {0, ?, ?, ?, ?, ?, ?}
 
-**Class : {car, bike}**
-**Idea: Take the mid-point of the object and Assign it to a grid cell based on its location**
+**Class : {car, bike} · Idea: Take the mid-point of the object and Assign it to a grid cell based on its location**
 Images source: https://yallacompare.com/car-deals/uae/en/two-cars-one-dnajaguar-xe-300-sport-and-xe-sv-project-8/ Source and Reference: https://www.youtube.com/watch?v=gKreZOUi-O0
 
-**Target output vector: 3 X 3 X 7 3 X 3: Grid size 7: (5 + Number-of-Classes)**
-**Class : {car, bike}**
+**Target output vector: 3 X 3 X 7 3 X 3: Grid size 7: (5 + Number-of-Classes) · Class : {car, bike}**
 3 X 3 X 7
 
 #### Training Strategy:
@@ -2804,7 +2557,6 @@ Target: Y
 
 Input: X
 
-**CNN**
 3 X 3 X 7
 
 Class : {car, bike}
@@ -2819,22 +2571,18 @@ In practice: The grid is finer, 19 X 19 instead of 3 X 3 So, Target will be of s
 - 4. Hence, Multiple detection bounding box
 
 **Sample prediction: For C1: Box1: 0.9 (Confidence Score) Box2: 0.79 Box3: 0.82**
-|C1| |
 
-**For C2: Box1: 0.92 Box2: 0.85 Box3: 0.7**
-**C2**
+**For C2: Box1: 0.92 Box2: 0.85 Box3: 0.7 · C2**
 
 NMS cleans/removes the multiple detection and only keeps the one with very high confidence
 
 - 1. Check the probabilities of each detection and keep ones with score > Threshold (0.7)
+
 - 2. For remaining boxes:
 
-|C1| |
-
 - Box with highest score is the detection results.
-- Discard any remaining boxes with IoU > 0.5 with final detected box, i.e: overlap with the box with highest score.
 
-**C2**
+- Discard any remaining boxes with IoU > 0.5 with final detected box, i.e: overlap with the box with highest score.
 
 YOLO: You Only Look Once Algorithm
 
@@ -2846,8 +2594,7 @@ YOLO: You Only Look Once Algorithm
 **So, Currently the Target Y = {1, x, y, h, w, C1, C2}, As the mid-points for both the objects are on the same grid cell, only one of the objects will be associated**
 Anchor Box 1 Anchor Box 2
 
-**Anchor Box 1**
-**Associate each object to:**
+**Anchor Box 1 · Associate each object to:**
 Predicted BB
 
 - 1. A cell which contains its mid-point and
@@ -2876,10 +2623,7 @@ Class : {1:car, 2:bike} Y size : (
 
 X 2 X 7 )
 
-**19 X 19**
-**Grid Size**
-**#Anchor Box**
-**5(Po, x,y,h,w) + #Classes(2)**
+**19 X 19 · Grid Size · #Anchor Box · 5(Po, x,y,h,w) + #Classes(2)**
 
 #### Training:
 
@@ -2887,22 +2631,16 @@ Target: Y
 
 Input: X
 
-**CNN**
 19 X 19 X 2 X 7
 
 Class : {car, bike}
 
-**Input: X**
-**Y = {Po, x, y, h, w, C1, C2, Po, x, y, h, w, C1, C2} {0, ?, ?, ?, ?, ?, ?, 0, ?, ?, ?, ?, ?, ?} : {0, ?, ?, ?, ?, ?, ?, 1, x, y, h, w, 1, 0} : {0, ?, ?, ?, ?, ?, ?, 1, x, y, h, w, 1, 0} : {0, ?, ?, ?, ?, ?, ?, 0, ?, ?, ?, ?, ?, ?}**
+**Input: X · Y = {Po, x, y, h, w, C1, C2, Po, x, y, h, w, C1, C2} {0, ?, ?, ?, ?, ?, ?, 0, ?, ?, ?, ?, ?, ?} : {0, ?, ?, ?, ?, ?, ?, 1, x, y, h, w, 1, 0} : {0, ?, ?, ?, ?, ?, ?, 1, x, y, h, w, 1, 0} : {0, ?, ?, ?, ?, ?, ?, 0, ?, ?, ?, ?, ?, ?}**
 
-**CNN**
 19 X 19 X 2 X 7
 
-**Class : {car, bike}**
-**Input: X**
-**Y = {Po, x, y, h, w, C1, C2, Po, x, y, h, w, C1, C2} {0, ?, ?, ?, ?, ?, ?, 0, ?, ?, ?, ?, ?, ?} : {0, ?, ?, ?, ?, ?, ?, 1, x, y, h, w, 1, 0} : {0, ?, ?, ?, ?, ?, ?, 1, x, y, h, w, 1, 0} : {0, ?, ?, ?, ?, ?, ?, 0, ?, ?, ?, ?, ?, ?}**
+**Class : {car, bike} · Input: X · Y = {Po, x, y, h, w, C1, C2, Po, x, y, h, w, C1, C2} {0, ?, ?, ?, ?, ?, ?, 0, ?, ?, ?, ?, ?, ?} : {0, ?, ?, ?, ?, ?, ?, 1, x, y, h, w, 1, 0} : {0, ?, ?, ?, ?, ?, ?, 1, x, y, h, w, 1, 0} : {0, ?, ?, ?, ?, ?, ?, 0, ?, ?, ?, ?, ?, ?}**
 
-**CNN**
 19 X 19 X 2 X 7
 
 **Class : {car, bike}**
@@ -2933,6 +2671,7 @@ Object Detection State-of-the-Art
 
 **Dataset: PASCAL VOC 2007 and 2017 Test Dataset : PASCAL VOC 2007**
 |Method|Train Dataset|mAP|Time in sec/image|Time Frame /sec|
+|---|---|---|---|---|
 |RCNN (VGG16)|Pascal VOC 2007|66.0|50|-|
 |Fast RCNN|VOC 2007+2012|70.0|2|-|
 |Faster RCNN (VGG16)|VOC 2007+2012|73.2|0.11|9|
@@ -2948,9 +2687,7 @@ Source: https://docs.ultralytics.com/models/yolo11/#performance-metrics
 
 Object Detection Summary
 
-**Base Networks: • VGG16 • REsNet101 • Inception V2 • Inception V3 • ResNet • MobileNet • Alexnet • ZFNet Etc.**
-**Object Detection FrameWorks: • RCNN Family (RCNN, Fast/Faster RCNN) • Yolo Family • SSD • F-RCN**
-**Summary: • Faster-RCNN is more accurate but slower • Yolo/SSD are faster/real-time but may not be very accurate**
+**Base Networks: • VGG16 • REsNet101 • Inception V2 • Inception V3 • ResNet • MobileNet • Alexnet • ZFNet Etc. · Object Detection FrameWorks: • RCNN Family (RCNN, Fast/Faster RCNN) • Yolo Family • SSD • F-RCN · Summary: • Faster-RCNN is more accurate but slower • Yolo/SSD are faster/real-time but may not be very accurate**
 Source: http://cs231n.stanford.edu/slides/2017/cs231n_2017_lecture11.pdf
 
 ______________________________________________________________________
@@ -2998,8 +2735,7 @@ Recap: YOLO: You Only Look Once Algorithm
 **So, Currently the Target Y = {1, x, y, h, w, C1, C2}, As the mid-points for both the objects are on the same grid cell, only one of the objects will be associated**
 Anchor Box 1 Anchor Box 2
 
-**Anchor Box 1**
-**Associate each object to:**
+**Anchor Box 1 · Associate each object to:**
 Predicted BB
 
 - 1. A cell which contains its mid-point and
@@ -3030,17 +2766,12 @@ Class : {1:car, 2:bike} Y size : (
 
 X 2 X 7 )
 
-**19 X 19**
-**Grid Size**
-**#Anchor Box**
-**5(Po, x,y,h,w) + #Classes(2)**
+**19 X 19 · Grid Size · #Anchor Box · 5(Po, x,y,h,w) + #Classes(2)**
 Drawbacks of Anchor-based detectors
 
 • Sensitive to:
 
-**4**
-**2**
-**1**
+**4 · 2 · 1**
 2
 
 - Size
@@ -3051,7 +2782,6 @@ Drawbacks of Anchor-based detectors
 - May not generalize due to pre-defined anchor boxes
 - Computation expensive
 
-**3**
 Anchor-free detector
 
 Localize objects without using boxes as proposals Two board categories:
@@ -3081,14 +2811,12 @@ Reference and image source: https://learnopencv.com/yolox-object-detector-paper-
 
 YOLO Timeline
 
-**Yolo X**
-**Yolo - NAS**
+**Yolo X · Yolo - NAS**
 Yolo v12
 
 Yolo R
 
-**Yolo v8**
-**Yolo v3**
+**Yolo v8 · Yolo v3**
 Yolo v1
 
 2016
@@ -3138,9 +2866,9 @@ Source: https://arxiv.org/pdf/1807.05511.pdf
 
 - Backbone Neck Head
 - Every Yolo Architecture consists of three parts: Backbone, neck, head
-- Backbone à Feature extraction
-- Neck à Aggregation of multi-scale feature
-- Headà Localization and Classification scores
+- Backbone → Feature extraction
+- Neck → Aggregation of multi-scale feature
+- Head→ Localization and Classification scores
 
 ## Case Study: YoloX, Decoupled head
 
@@ -3208,11 +2936,7 @@ Image Classification Object Detection
 
 ______________________________________________________________________
 
-**DOG**
-**CAT**
-**DOG**
-**CAT**
-**DOG**
+**DOG · CAT**
 DOG
 
 Single Object Multiple Object
@@ -3228,6 +2952,7 @@ Input Image Semantic Segmentation Instance Segmentation
 
 **Popular Techniques:**
 |Semantic Segmentation|Instance Segmentation|
+|---|---|
 |Conditional Random Field (CRF) Fully Convolutional Network (FCN) U-Net Pyramid Scene Parsing Network (PSPNet) etc.|SegNet, DeepMask, SharpMask, MaskRCNN, etc.|
 
 **Applications: Autonomous Driving**
@@ -3239,7 +2964,7 @@ Images source: https://www.topbots.com/semantic-segmentation-guide/
 **Applications: Aerial Image processing**
 Images source: https://ai2-s2-public.s3.amazonaws.com/figures/2017-08-08/59cbe15b43e6ca172fce40786be68340f50be541/12-Figure1.1-1.png
 
-- Mask-RCNN à Mask-Region Convolutional Neural Network
+- Mask-RCNN → Mask-Region Convolutional Neural Network
 - An addition to the RCNN family, performing instance segmentation
 - Improved over FasterRCNN
 - A Full Convolutional Network (FCN) for predicting Mask for each class/object.
@@ -3247,8 +2972,7 @@ Images source: https://ai2-s2-public.s3.amazonaws.com/figures/2017-08-08/59cbe15
 - Stage 1: RPN proposes candidate object bounding boxes.
 - Stage 2: Classify the Candidates, refine bounding boxes, and predict mask.
 
-**Faster-RCNN**
-**Source and Reference: http://cs231n.stanford.edu/slides/2016/winter1516_lecture8.pdf**
+**Faster-RCNN · Source and Reference: http://cs231n.stanford.edu/slides/2016/winter1516_lecture8.pdf**
 https://medium.com/zylapp/review-of-deep-learning-algorithms-for-object-detection-c1f3d437b852
 
 - Sample Results
@@ -3279,7 +3003,6 @@ Images source: https://datascience.stackexchange.com/questions/52015/what-is-the
 
 00000000000001100000000000000000000000 00000000000001110000000011000000000000 00000000000011111111111111000000000000 00000000000011111111111111000000000000 00000000000011111111111110000000000000 00000000000011111111111111100000000000 00000000000011111111111111110000000000 00000000000011111111111111110000000000 00000000000001111111111111110000000000 00000000000000111111111111100000000000 00000000000000011111111111000000000000 00000000000000011111111111000000000000 00000000000000011111111100000000000000
 
-**CAT**
 …
 
 {
@@ -3325,11 +3048,7 @@ Sequence modelling types and applications
 
 Y’
 
-**X**
-**Many to Many Q&A with LLMs, Language translations**
-**One to Many Image Captioning**
-**One to One Binary classification**
-**Many to One Sentiment Analysis**
+**X · Many to Many Q&A with LLMs, Language translations · One to Many Image Captioning · One to One Binary classification · Many to One Sentiment Analysis**
 “Will it rain today?” Yes/No?
 
 “42028 is the best subject so far!”
@@ -3342,8 +3061,7 @@ Size #Bedroom #Bathroom Garden Location
 
 Price
 
-**Y**
-**House Price prediction**
+**Y · House Price prediction**
 Recurrent Neural Network (RNN) Basics
 
 Output
@@ -3358,10 +3076,7 @@ y’2
 
 h0 h1
 
-**ht**
 Recurrent cell
-
-Xt
 
 X0
 
@@ -3383,8 +3098,6 @@ Weights w
 
 ℎ = 𝑓 (𝑥 , ℎ )
 
-ht
-
 RNN
 
 Output Input Past state
@@ -3398,17 +3111,11 @@ y’t
 
 Output
 
-ht
-
 ℎ = 𝑡𝑎𝑛ℎ (𝑊 ℎ + 𝑊 𝑥 )
 
 RNN
 
 Update Hidden State
-
-𝑥
-
-Xt
 
 Input Vector
 
@@ -3428,12 +3135,6 @@ y’t
 
 y’t
 
-𝑊
-
-𝑊
-
-𝑊
-
 RNN ht
 
 𝑊 𝑊
@@ -3446,17 +3147,7 @@ RNN
 
 RNN
 
-𝑊
-
-𝑊
-
-𝑊
-
 …
-
-Xt
-
-Xt
 
 X0
 
@@ -3506,8 +3197,6 @@ X1
 
 X2
 
-Xt
-
 Xt-2
 
 Xt-1
@@ -3556,26 +3245,13 @@ Key (K1)
 **Key (K2)**
 Compute similarity between Q and K
 
-**Key (K3)**
-**Training Query (Q)**
-**Value (V)**
-**Key (K2)**
+**Key (K3) · Training Query (Q) · Value (V) · Key (K2)**
+
 Extract Values based On attention
 
 - Self-Attention is the foundation for Transformer architecture
-
 - Entire sequence is processed in parallel
-
 - Has Encode and a Decoder block
-
-- Stack of Layers with Self Attention and Feed Forward Neural
-
-- Self-Attention is the foundation for Transformer architecture
-
-- Entire sequence is processed in parallel
-
-- Has Encode and a Decoder block
-
 - Stack of Layers with Self Attention and Feed Forward Neural
 
 ## Case Studies
@@ -3598,9 +3274,7 @@ Extract Values based On attention
 - 6. Pretrain the model with image labels (fully supervised on a huge dataset)
 - 7. Finetune on the downstream dataset for image classification
 
-**Reference: https://github.com/google-research/vision_transformer**
-**Comparing CNN and Vision Transformer:**
-**Key Aspects CNNs Vision Transformer (ViT) Input Handling**
+**Reference: https://github.com/google-research/vision_transformer · Comparing CNN and Vision Transformer: · Key Aspects CNNs Vision Transformer (ViT) Input Handling**
 Processes the entire image using filters (kernels)
 
 Splits image into fixed-size patches (like tokens)
@@ -3628,7 +3302,7 @@ Parallelism Limited; uses sequential feature stacking High; patch processing is 
 - Real-time Transformer-based object detection architecture
 - Outperforms all object detection models, 60+ mAP achieved on COCO dataset.
 
-**Source: ttps://blog.roboflow.com/rf-detr/**
+Source: https://blog.roboflow.com/rf-detr/
 
 ### Case Study: Diffusion Models - Intuition
 
