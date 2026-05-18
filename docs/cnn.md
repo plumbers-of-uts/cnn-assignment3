@@ -455,7 +455,7 @@ How computer sees Image?
 
 A (24 X 16) Matrix which represents the number ’8’
 
-### Colour Images
+#### Colour Images
 
 |170|170|55|170|170|
 |---|---|---|---|---|
@@ -644,7 +644,7 @@ Horizontal edges      Vertical edges
 [ -1  -2  -1 ]        [  1   0  -1 ]
 ```
 
-### Sobel edge detection - Example
+#### Sobel edge detection - Example
 
 Convolutions in CNN
 
@@ -672,7 +672,7 @@ Outline
 - Logistic Regression using ANN
 - Gradient Descent
 
-## Features Extraction
+### Features Extraction
 
 **What is an Image Gradient?**
 
@@ -769,7 +769,7 @@ An 8-digit binary number is obtained by consideringthe thresholding result, star
 
 **00111110 = (0 × 27) + (0 × 26) + (1 × 25) + (1 × 24) + (1 × 23) + (1 × 22) + (1 × 21) + (0 × 20) = 62 · An Example of LBP Computation:**
 
-## Neural Network Basics
+### Neural Network Basics
 
 What is Artificial Neural Network (ANN)?
 
@@ -851,7 +851,7 @@ x1 x2 x3 ... xn-1 xn
 
 ... ... Shark
 
-## Problem of Binary Classification — Logistic Regression (Shark = 1 / Not Shark = 0)
+### Problem of Binary Classification — Logistic Regression (Shark = 1 / Not Shark = 0)
 
 → Linear function of input x
 
@@ -981,7 +981,7 @@ Activation function
 
 Activation: `a = σ(wᵀx + b) = 1 / (1 + e^(-(wᵀx + b)))`. Loss: `L(a, y) = −[y · log(a) + (1 − y) · log(1 − a)]`.
 
-#### Optimization techniques
+### Optimization techniques
 
 **Generic Algorithm: Step 1: Initialize w and b Step 2: Perform Forward pass operation/calculations Step 3: Compute Loss/Cost function L (a, y) Step 4: Compute change in w and b (Take the partial derivative of the cost function with respect to Weights and bias (dw and db). Step 5: Update w and b w := w – αdw b := b – αdb Step 6: Repeat from Step 2 with new values of w and b for ‘n’ number of iterations. · Gradient Descent for learning parameters: It is an iterative approach for error correction in a machine learning model. · Question: Find w and b that will minimize GD(w, b)**
 Required: Loss/cost function
@@ -1056,9 +1056,9 @@ Mini-Batch Gradient Descent (MBGD)
 
 minima.
 
-## Gradient Descent (SGD) - intuition
+#### Gradient Descent (SGD) - intuition
 
-## Gradient Descent (SGD) – loss function nature
+#### Gradient Descent (SGD) – loss function nature
 
 - One of the popular algorithm for smoothing sequential data
 - Also called Moving Average
@@ -1184,7 +1184,7 @@ Hyper-parameter guide:
 
 **Speed-up the learning algorithm by slowing decreasing the α (Learning rate)**
 
-#### Activation Functions
+### Activation Functions
 
 Activation Functions: Sigmoid
 
@@ -1556,7 +1556,7 @@ Variance
 - Model with high variance pays a lot of attention to training data and does not generalize on the data which it hasn’t seen before.
 - With high variance, models perform very well on training data but has high error rates on test data.
 
-### Bias and Variance effect
+#### Bias and Variance effect
 
 - Bayesian Optimal Error (BOE):
 
@@ -1735,9 +1735,9 @@ Pasted Patch
 
 Image B (Patch Donor)
 
-#### Overview of Mixup, Cutout and CutMix
+### Overview of Mixup, Cutout and CutMix
 
-#### RandAugment:
+### RandAugment:
 
 Example images augment by RandAugment
 
@@ -1884,7 +1884,7 @@ Activations: Relu after each CONV and FC layer Optimizer: SGD with Momentum Regu
 
 **Inception Module**
 
-## Understanding Inception and ResNet
+### Understanding Inception and ResNet
 
 **1×1 Convolution — is this useful?**
 
@@ -1946,11 +1946,11 @@ Reduce Computation cost using 1X1 CONV
 
 Computation Cost: 1X1: 28 X 28 X 16 X 192 ≈ 2.4M multiplications! 5X5: 28 X 28 X 32 X 5 X 5 X 16 ≈ 10M multiplications! Total : 12.4M multiplications! → Reduced by 10 times!
 
-## Bottleneck Layer
+#### Bottleneck Layer
 
 **192 · 32 · 16 · Bottleneck**
 
-## Inception Module V1
+#### Inception Module V1
 
 **GoogleNet(2014): 9 Inception modules stacked together**
 
@@ -1962,7 +1962,7 @@ Aux_Loss1
 
 **Auxiliary Classifiers · Total Loss/cost = Real_Loss + 0.3 X Aux_Loss1 + 0.3 X Aux_Loss1 · Authors suggested 3 different modules -Factorizing Convolutions: Reducing the number of parameters · 1 layer of 5×5 filter, #parameters = 5×5=25 2 layers of 3×3 filters, #parameters = 3×3+3×3=18 Number of parameters is reduced by 28% · 3×3 filter, #parameters = 3×3=9 3×1 and 1×3 filters, #parameters = 3×1+1×3=6 Number of parameters is reduced by 33%**
 
-## Inception V3 Architecture
+#### Inception V3 Architecture
 
 - Deep Residual networks (ResNet) → Skip connections
 - Enabled the development of the much deeper networks (100s of layers!)
@@ -1976,7 +1976,7 @@ What wrong with this curves? Overfitting?
 
 **In principle deeper model should perform better than shallow CNNs · Residual Block · Plain Layers**
 
-## Summary
+### Summary
 
 - 15+ million labelled high-resolution images
 - 22000 categories
@@ -2041,11 +2041,11 @@ Multiple Object
 
 - Intersection over Union (IoU): Intersection over Union is a metric used for the evaluation of an object detector, i.e. how good is the predicted bounding box for an object detected closely matches
 
-## Microsoft COCO Dataset
+### Microsoft COCO Dataset
 
-## Microsoft COCO Evaluation metrics
+### Microsoft COCO Evaluation metrics
 
-## Taxonomy of Object detectors
+### Taxonomy of Object detectors
 
 **Object Detection · Network type · Data type**
 
@@ -2198,7 +2198,7 @@ Case Study: FASTER- R-CNN
 | Training | Multi-stage, discrete | Partially end-to-end | Fully end-to-end |
 | Accuracy | Good | Better | Best of all three |
 
-## Object Detection Techniques History
+### Object Detection Techniques History
 
 Image Annotation for Object Detection
 
@@ -2221,7 +2221,7 @@ Outline
 - SSD (Single Shot Detector)
 - Object detection state-of-the-art
 
-## Taxonomy of Object detectors
+### Taxonomy of Object detectors
 
 **Object Detection · Network type · Data type**
 
@@ -2229,7 +2229,7 @@ Outline
 
 **Monocular Image · Point Cloud · Point Nets · RCNN family · SSD · Yolo**
 
-## Object Detection Techniques History
+### Object Detection Techniques History
 
 **Sliding Window technique**
 
@@ -2598,17 +2598,17 @@ Yolo v9
 
 - Head→ Localization and Classification scores
 
-## Case Study: YoloX, Decoupled head
+### Case Study: YoloX, Decoupled head
 
-### Mixup Augmentation
+#### Mixup Augmentation
 
-### Mosaic Augmentation
+#### Mosaic Augmentation
 
-## Case Study: YoloX, Performace
+#### Case Study: YoloX, Performance
 
-## Case Study: Yolo State-of-the-art, Performance
+#### Case Study: Yolo State-of-the-art, Performance
 
-Yolo26 – The Next Evolution
+### Yolo26 — The Next Evolution
 
 - Real-time computer vision model by Ultralytics
 
@@ -2640,13 +2640,13 @@ Yolo26 – Key Changes
 - Better speed–accuracy trade-off than many previous YOLO models
 - Ideal for robotics, drones, surveillance, and edge devices
 
-## Yolo26 – High Level Architecture (Inference)
+#### Yolo26 – High Level Architecture (Inference)
 
-## Yolo26 – Training Pipeline
+#### Yolo26 – Training Pipeline
 
-## Yolo26 – Performance
+#### Yolo26 – Performance
 
-## Instance Segmentation
+### Instance Segmentation
 
 Image Classification
 
@@ -2691,14 +2691,14 @@ Input Image Semantic Segmentation Instance Segmentation
 
 - Sample Results on video:
 
-## Mask R-CNN Limitations
+#### Mask R-CNN Limitations
 
 - Computational Complexity: Training and inference can be computationally intensive, requiring substantial resources, especially for high-resolution images or large datasets.
 - Small-Object Segmentation: may struggle to accurately segment very small objects due to limited pixel information.
 - Data Requirements: Training requires a large amount of annotated data, which can be time-consuming and expensive to acquire.
 - Limited Generalization to Unseen Categories: The model's ability to generalize to unseen object categories is limited.
 
-## Semantic Segmentation
+### Semantic Segmentation
 
 Introduction to Semantic Segmentation
 
@@ -2706,7 +2706,7 @@ Semantic segmentation classifies object pixels on specific classes/category
 
 **Input Image Semantic Segmentation Instance Segmentation**
 
-## Semantic Segmentation: UNet
+#### Semantic Segmentation: UNet
 
 00000000000001100000000000000000000000 00000000000001110000000011000000000000 00000000000011111111111111000000000000 00000000000011111111111111000000000000 00000000000011111111111110000000000000 00000000000011111111111111100000000000 00000000000011111111111111110000000000 00000000000011111111111111110000000000 00000000000001111111111111110000000000 00000000000000111111111111100000000000 00000000000000011111111111000000000000 00000000000000011111111111000000000000 00000000000000011111111100000000000000
 
@@ -2718,7 +2718,7 @@ Semantic segmentation classifies object pixels on specific classes/category
 
 {
 
-## Semantic Segmentation: UNet Architecture
+#### Semantic Segmentation: UNet Architecture
 
 cs224d course
 
@@ -2944,7 +2944,7 @@ Extract Values based On attention
 - Has Encode and a Decoder block
 - Stack of Layers with Self Attention and Feed Forward Neural
 
-## Case Studies
+### Case Studies
 
 - Introduced in 2021: "An Image is Worth 16\*16 Words: Transformers for Image Recognition at Scale," published at ICLR 2021
 
@@ -2991,7 +2991,7 @@ Parallelism Limited; uses sequential feature stacking High; patch processing is 
 - Real-time Transformer-based object detection architecture
 - Outperforms all object detection models, 60+ mAP achieved on COCO dataset.
 
-### Case Study: Diffusion Models - Intuition
+#### Case Study: Diffusion Models - Intuition
 
 Goal: Generate new data samples (e.g. images, audio, text) that is similar to a training dataset by learning to reverse a gradual noise process! A generative model!
 
@@ -3002,7 +3002,7 @@ Goal: Generate new data samples (e.g. images, audio, text) that is similar to a 
 1. Train a model to reverse this process: denoising to recover the original image!
 1. Once trained, the model can start from pure noise and generate new and realistic samples.
 
-### Diffusion Models
+#### Diffusion Models
 
 Example: Given a lot of sprite sample images
 
