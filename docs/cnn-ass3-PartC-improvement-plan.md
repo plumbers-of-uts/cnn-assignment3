@@ -358,3 +358,90 @@ Realistic next experiment:
 3. Source higher-resolution frames from Roboflow (1024×1024 or original)
    only if the project requires sub-10-pixel defect detection that the
    current 640 input cannot resolve.
+
+## 8. Joint Offset — Confusion Analysis (2026-05-18)
+
+### 8.1 Why this section exists
+
+The PartC retrospective and the earlier sections of this plan framed Joint
+offset as a **classification** problem — "the network confuses Joint offset
+with other defects, so we need clearer label guidance to separate it from
+Crack / Debris." This section revises that framing using the actual test-
+split confusion matrix from the trained `yolo26m-seg` model
+(`model/confusion_matrix.png`).
+
+**Headline**: Joint offset's failure mode is **missed detection**, not
+inter-class confusion. Relabelling would not help; recall-side fixes
+(class weighting + lower inference threshold) will.
+
+### 8.2 What the confusion matrix actually shows
+
+| True class      | TP (predicted as itself) | Confused with → other defect classes | Missed → background |
+|---|---:|---|---:|
+| Joint offset    | 25                       | 2 → Hole only                        | **65**              |
+| Crack           | 86                       | 4 → Buckling                         | 123                 |
+| Buckling        | 14                       | 3 → Crack                            | 30                  |
+| Hole            | 3                        | 0                                    | 8                   |
+| Debris          | 21                       | 1 → Obstacle                         | 16                  |
+| Obstacle        | 30                       | 0                                    | 10                  |
+| Utility intrusion | 34                     | 0                                    | 14                  |
+
+For Joint offset, **96 % of all failures are missed-detection**
+(65 of 67 errors), not confusion with another defect class. Only 2 of 92
+ground-truth Joint offset instances were misclassified as Hole — well under
+the noise floor of 7-class confusion at this dataset size.
+
+Recall (TP / (TP + bg-miss)):
+
+| Class | Recall |
+|---|---:|
+| Joint offset | **27.8 %** (worst, tied with Hole) |
+| Hole | 27.3 % |
+| Buckling | 31.8 % |
+| Crack | 41.1 % |
+| Debris | 56.8 % |
+| Utility intrusion | 70.8 % |
+| Obstacle | 75.0 % |
+
+### 8.3 Implication for the next experiment
+
+| Original assumption | Revised conclusion based on the matrix |
+|---|---|
+| Joint offset needs a clearer **label definition** (pixel-distance threshold, dual-pipe-edge visibility, …). | Label definition is **not** the bottleneck — when the network does fire, only 2 of 27 firings land on the wrong class. |
+| Re-curate 30–50 ambiguous Joint offset GT images. | **Skip** — the GT is fine; the network simply isn't firing on most Joint offsets. |
+| Bump `cls_weights['Joint offset']` modestly (1.7 from the legacy CIW table). | Bump to **2.5** to match the empirical recall failure (already applied in `sagemaker_seg_train.ipynb` Cell 10). |
+| Lower `conf_threshold` only globally. | Same — Joint offset is one of four classes that lose >50 % of GT to background under the default 0.25; consider 0.15 for deployment. |
+
+### 8.4 What stays as a follow-up
+
+- Hand-inspect the 65 missed Joint offset frames to verify the network
+  produces *no* low-confidence detection at the right location. If a
+  detection exists below the 0.001 evaluation conf, the issue is purely
+  thresholding; if no detection exists at all, the backbone is failing on
+  the defect type, and the Joint-offset weight should be pushed beyond 2.5
+  (try 3.0–3.5) plus an additional `copy_paste` boost for that class.
+- Re-evaluate after the 8.4.51 retrain (`cls_weights` re-enabled,
+  refined SAM polygons): if Joint offset recall does not move past
+  ~45 %, escalate to per-class thresholding in `metadata.yaml`
+  (`conf_threshold` of 0.15 for Joint offset / Hole / Buckling, 0.25
+  for the rest).
+
+### 8.5 Field guide (for future labelling rounds, if needed)
+
+Only reach for label re-curation if the next training run's confusion
+matrix shows the *off-diagonal* numbers grow — i.e. Joint offset gets
+predicted as Crack / Debris in non-trivial counts. In that case the
+following objective criteria are worth standardising:
+
+1. **Step height** of at least one full pipe-wall thickness must be
+   visible at the joint.
+2. Both upstream and downstream pipe rims must be partially in frame; a
+   single-rim view is Debris (or no defect) rather than Joint offset.
+3. Annotate the bbox tightly around the visible step, not the full pipe
+   diameter — SAM 2.1_b currently over-grows masks when the bbox includes
+   undamaged pipe interior.
+
+For the **current** dataset, none of these refinements are necessary; the
+next training run is expected to close the recall gap using the changes
+already shipped in Cell 10 of `sagemaker_seg_train.ipynb` and the refined
+labels produced by `src/refine_seg_labels.py`.
