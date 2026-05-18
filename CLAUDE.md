@@ -66,3 +66,28 @@ Read the relevant file from `.agents/rules/` when working on matching code.
 | quality | `.agents/rules/quality.md` | on request |
 
 <!-- OMA:END -->
+
+## Project-Specific Rules
+
+### No Memory-Based Claims About Libraries
+
+In this repository, **never rely on memory or inference** when answering questions about library APIs, parameters, behavior, or version history. Always verify first.
+
+**Required workflow before making any factual claim about a third-party library** (e.g., Ultralytics, PyTorch, ONNX, SAHI):
+
+1. Run `WebSearch` against the official docs/GitHub, **or**
+2. Read the actual installed library source under `site-packages/` (use `Read`/`Grep`), **or**
+3. Fetch the official documentation page directly via `WebFetch`.
+
+**Forbidden phrasings without verification:**
+- "I believe X doesn't support Y"
+- "As of version N, this parameter was added/removed"
+- "This argument has always been called Z"
+
+**Required phrasings when uncertain:**
+- "Let me verify this by checking the source / docs."
+- Then perform the lookup, then answer with the citation.
+
+When citing findings, include the source URL or the exact file path + line number you read.
+
+This rule overrides any default behavior. Confident-sounding but unverified answers about library internals are treated as bugs.
