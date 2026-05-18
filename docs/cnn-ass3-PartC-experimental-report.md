@@ -722,3 +722,141 @@ Libraries") requiring `WebSearch`, direct `site-packages` reads, or
 `WebFetch` before any factual claim about third-party library APIs.
 This section was itself written under that rule — every file:line
 citation in §11.5 was read directly before being included.
+
+---
+
+## 12. Tier-3 Motivation — Overfitting and Class Imbalance in the Tier-2 Artefact
+
+§11 documents *how* we now apply per-class loss weighting. This section
+documents *why* a Tier-3 retraining is justified, based on direct
+inspection of the Tier-2 artefact files committed under `model/`:
+`results.csv`, `per_class_metrics.csv`, and `metadata.yaml`. Every
+number below is read from those files (not estimated, not recalled).
+
+### 12.1 Symptom 1 — Severe Overfit on the Mask Head
+
+`results.csv` covers the final continuous training segment from
+epoch 102 to epoch 200. Train losses decrease monotonically; validation
+losses do not.
+
+| Loss | Epoch 102 | Epoch 150 | Epoch 200 | Δ (102→200) |
+|---|---:|---:|---:|---:|
+| train/box_loss | 1.123 | 0.884 | 0.812 | −28% |
+| train/seg_loss | 1.389 | 1.098 | 1.012 | −27% |
+| train/cls_loss | 1.141 | 0.780 | 0.518 | **−55%** |
+| train/sem_loss | 0.687 | 0.401 | 0.139 | −80% |
+| val/box_loss | 1.763 | 1.749 | 1.814 | +3% |
+| **val/seg_loss** | **3.046** | **3.567** | **3.756** | **+23%** |
+| val/cls_loss | 2.280 | 2.357 | 2.493 | +9% |
+| val/sem_loss | 0.0207 | 0.0207 | 0.0217 | +5% |
+
+`val/seg_loss` rises monotonically from 3.05 to 3.76 over 98 epochs.
+That is the classic "model is memorising the training masks". The
+classification side is less pronounced but moves the same direction
+(`val/cls_loss` 2.28 → 2.49). The boxhead is stable — overfit is
+concentrated on the mask head, consistent with the upstream noise of
+SAM 2.1_b pseudo-polygons.
+
+A second giveaway: at epoch 181 (`close_mosaic=20` kicks in for the
+last 20 epochs and disables mosaic augmentation), `train/sem_loss`
+drops sharply from 0.41 → 0.15 in a single step, while validation
+metrics do not improve in step. That implies the model was relying on
+mosaic-augmented synthetic compositions during training rather than on
+the true distribution — a textbook augmentation-dependence failure.
+
+### 12.2 Symptom 2 — Two Classes Are Effectively Ignored
+
+`per_class_metrics.csv` on the test split (98 images, 229 instances)
+shows a severe long tail in recall:
+
+| Class | R_box | AP50_box | AP_box (0.5:0.95) |
+|---|---:|---:|---:|
+| Utility intrusion | 0.858 | 0.901 | 0.594 |
+| Obstacle | 0.793 | 0.704 | 0.347 |
+| Hole | 0.714 | 0.832 | 0.555 |
+| Debris | 0.474 | 0.597 | 0.260 |
+| Crack | 0.398 | 0.397 | 0.208 |
+| Joint offset | **0.167** | 0.225 | 0.104 |
+| Buckling | **0.118** | 0.080 | **0.044** |
+
+Buckling at 11.8% recall and Joint offset at 16.7% recall are not
+"underperforming" — the model is failing to predict these classes at
+all on most images that contain them. AP50 of 0.080 for Buckling means
+the precision-recall curve barely lifts off the floor.
+
+This is the exact failure mode (positives lost to background) that
+`pos_weight` in BCEWithLogitsLoss is designed to mitigate, and the
+classes are the same ones the original `CLASS_IMPORTANCE_WEIGHTS`
+dictionary up-weighted (Buckling 3.0, Joint offset 2.5). The dictionary
+existed in the notebook but the weights were never applied — the
+`cls_weights=` kwarg was silently rejected by Ultralytics and the
+`try/except TypeError` block masked the failure (see §11.1, §11.5).
+
+### 12.3 Symptom 3 — Best Epoch Was Not Epoch 200
+
+The combination of monotonic train-loss decrease and monotonic
+val-loss increase means the actual best generalisation checkpoint was
+not the last one. Tracking `metrics/mAP50-95(M)` over the same segment:
+
+| Epoch | val mask mAP50-95 |
+|---:|---:|
+| 102 | 0.221 |
+| 120 | 0.221 |
+| 130 | 0.227 |
+| 150 | 0.222 |
+| 180 | 0.214 |
+| 200 | 0.223 |
+
+The metric is essentially flat from epoch 102 onwards, oscillating
+within ~0.01. Training another ~100 epochs after epoch 100 spent
+compute without lifting validation mask mAP. `patience=50` was too
+permissive given that val/seg_loss was actively rising; a stricter
+stopping rule (`patience=20` against `val/seg_loss` rather than the
+default fitness metric) would have terminated near epoch 130 and
+shipped a comparable artefact for half the wall-clock cost.
+
+### 12.4 Implications for the Tier-3 Configuration
+
+The above three symptoms motivate four concurrent changes for the next
+run, on top of the §11 weighted-BCE work:
+
+1. **Apply `pos_weight` for real** (§11). Targets Symptom 2 directly.
+   Buckling/Joint-offset/Crack/Hole get amplified positive-sample
+   gradient; Obstacle/Debris/Utility intrusion stay near baseline.
+2. **Earlier termination**. Reduce `epochs` from 200 → 150 and
+   `patience` from 50 → 20. Past epoch ~130 nothing improves, only
+   memorisation continues.
+3. **Damp the mask-side augmentation**. `copy_paste` 0.30 → 0.10 and
+   `degrees` 10 → 5 to reduce the share of training signal coming from
+   synthetic mask compositions, since the mask head is the worst
+   overfitter.
+4. **Push `close_mosaic` earlier**. Either raise `close_mosaic` from
+   20 → 30 (keeps mosaic off for the final third of training) or lower
+   `mosaic` from 1.0 → 0.7 throughout. Both reduce the train-only
+   mosaic dependence visible in §12.1.
+
+A more conservative ablation path is to apply (1) alone first, retrain,
+and verify that minority-class recall actually rises before bundling
+(2)–(4) into a second run. Single-variable runs make the per-change
+attribution defensible in the report.
+
+### 12.5 Limits of What Tier-3 Can Prove
+
+- **Test set is small**. Buckling has ~17 test boxes; Joint offset has
+  ~24. Even a meaningful recall lift (say 12% → 30%) translates to only
+  a handful of additional true positives, so per-class AP numbers will
+  remain noisy. Confidence intervals on per-class AP50 in this regime
+  are wide — treat Tier-3 deltas as directional, not as evidence of
+  statistical significance.
+- **Pseudo-label noise is upstream of every loss-side fix**. The mask
+  overfit (Symptom 1) is partially attributable to SAM 2.1_b polygons
+  being inconsistent on thin / ambiguous classes (Crack, Buckling). No
+  loss reweighting will fix label noise; that requires either polygon
+  cleanup or replacing the pseudo-label generator. Tier-3 reduces the
+  *symptom* (overfit on bad masks) but does not fix the *cause*.
+- **Class-weighting can also hurt majority classes**. Up-weighting
+  Buckling/Joint-offset shifts gradient share away from Utility
+  intrusion and Obstacle, which are currently the best-performing
+  classes (AP@0.5:0.95 of 0.594 and 0.347). Tier-3 should report
+  per-class deltas, not just headline mAP, so a regression on majority
+  classes is visible.
