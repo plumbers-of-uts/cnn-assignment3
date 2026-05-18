@@ -1112,10 +1112,10 @@ b = b − α · V'_db / (√S'_db + ε)
 
 Hyper-parameter guide:
 
-- α (learning rate) — tune; start with 0.001
-- β_1 (momentum term, on dw) — 0.9
-- β_2 (squared-grad average, on dw^2) — 0.999
-- ε — 10⁻⁸
+- `α` (learning rate): tune; start with 0.001
+- `β_1` (momentum term, on `dw`): 0.9
+- `β_2` (squared-grad average, on `dw²`): 0.999
+- `ε`: 10⁻⁸
 
 ### Learning Rate Decay
 
@@ -1210,7 +1210,7 @@ Example: 2-layered architecture for multi-class classification (e.g: Fashion MNI
 
 Intuition: In a multi-layer neural network, the first hidden layer will be able to learn some very simple patterns. Each additional hidden layer will somehow be able to learn progressively more complicated patterns.
 
-**Example: 2-layered architecture for multi-class classification (e.g. MNIST digit dataset) — intuition.**
+**Example: 2-layered architecture for multi-class classification (e.g. MNIST digit dataset).**
 
 ______________________________________________________________________
 
