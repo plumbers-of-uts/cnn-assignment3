@@ -35,6 +35,9 @@ src/data/sewage-yolo26-seg/
 # Refined seg dataset (derived from sewage-yolo26-seg via src/refine_seg_labels.py).
 src/data/sewage-yolo26-seg-refined/
 
+# Oversampled seg dataset (derived from sewage-yolo26-seg via src/data/over_sampling_seg.py).
+src/data/sewage-yolo26-seg-oversample/
+
 # Training run artifacts
 runs/
 
