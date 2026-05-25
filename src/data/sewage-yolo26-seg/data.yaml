@@ -1,0 +1,7 @@
+path: ../sewage-yolo26-seg
+train: train/images
+val: valid/images
+test: test/images
+task: segment
+nc: 7
+names: ['Buckling', 'Crack', 'Debris', 'Hole', 'Joint offset', 'Obstacle', 'Utility intrusion']
